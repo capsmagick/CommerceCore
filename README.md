@@ -1,0 +1,1 @@
+# CommerceCore Django Project
