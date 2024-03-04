@@ -1,19 +1,24 @@
 # Project Notes
 
-## TODO
-* `Need add requirments.txt file`
-
 
 ### GIT
-``<GIT URL>``
+``git clone https://github.com/capsmagick/CommerceCore``
+
+## Django Project Run
+* ``Clone the project``
+* ``Need to Create and activate Virtual Environment for the project (Different methods available)``
+* ``Install Requirements``
+  * ``pip install -r requirement.txt``
+* ``Migrate the project``
+  * ``python manage.py migrate``
+* ``Run the server``
+  * ``python manage.py runserver``
+
 
 ### API DOC PATH
 * ``docs/api/schema/ -> SCHEMA``
 * ``docs/api/schema/swagger-ui/ -> UI DOC``
 * ``docs/api/schema/redoc/ -> DOCUMENT``
-
-## Django Run
-* ``python manage.py runserver``
 
 
 ### Developer Note
