@@ -8,13 +8,17 @@ class BaseManager(models.Manager):
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    created_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Created At')
+    updated_at = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Updated At')
 
-    deleted = models.BooleanField(default=False)
-    deleted_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+    deleted = models.BooleanField(default=False, verbose_name='Deleted')
+    deleted_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Deleted At')
 
     objects = BaseManager()
+
+    def delete(self, *args, **kwargs):
+        self.deleted = True
+        self.save()
 
     class Meta:
         abstract = True
