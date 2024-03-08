@@ -16,7 +16,7 @@ class Signup(APIView):
 
     def post(self, request, *args, **kwargs):
 
-        serializer = self.serializer_class(request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({

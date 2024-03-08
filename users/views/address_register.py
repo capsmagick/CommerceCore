@@ -1,12 +1,9 @@
-from rest_framework.permissions import IsAuthenticated
-from setup.permissions import IsSuperUser
 from setup.views import BaseModelViewSet
 from users.models import AddressRegister
 from users.serializers import AddressRegisterModelSerializer
 
 
 class AddressRegisterModelViewSet(BaseModelViewSet):
-    permission_classes = (IsAuthenticated, IsSuperUser)
     queryset = AddressRegister.objects.all()
     serializer_class = AddressRegisterModelSerializer
     default_fields = [

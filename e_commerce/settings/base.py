@@ -52,15 +52,16 @@ INSTALLED_APPS += [
     'corsheaders',
 ]
 
+# Documentation
+INSTALLED_APPS += [
+    'drf_spectacular',
+]
+
 # Our Apps
 INSTALLED_APPS += [
     'setup',
     'users',
-]
-
-# Documentation
-INSTALLED_APPS += [
-    'drf_spectacular',
+    'masterdata',
 ]
 
 MIDDLEWARE = [

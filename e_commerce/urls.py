@@ -25,6 +25,7 @@ urlpatterns = [
 # Application Urls
 urlpatterns += [
     path('setup/', include('setup.urls')),
+    path('account/', include('users.urls')),
 
-    path('account/', include('users.urls'))
+    path('masterdata/', include('masterdata.urls')),
 ]

@@ -4,20 +4,24 @@ from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .utils import generate_column
+from setup.permissions import IsSuperUser
+from setup.utils import generate_column
 
 
 class BaseModelViewSet(
     GenericViewSet, mixins.RetrieveModelMixin, mixins.ListModelMixin
 ):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = None
     serializer_class = None
     default_fields = []
     include_actions = True
     multiple_lookup_fields = []
+    search_fields = []
 
     @action(detail=False, methods=['POST'])
     def create_record(self, request, *args, **kwargs):
