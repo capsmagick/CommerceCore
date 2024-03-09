@@ -11,7 +11,7 @@ def generate_customer_id():
     return "".join(now.strftime("%Y%b%d%H%M%S%f"))
 
 
-class User(AbstractUser, BaseModel):
+class User(AbstractUser):
     GENDER = (
         ('Men', 'Men'),
         ('Women', 'Women'),
@@ -29,7 +29,26 @@ class User(AbstractUser, BaseModel):
 
     is_suspended = models.BooleanField(default=False)
 
-    class Meta(AbstractUser.Meta, BaseModel.Meta):
+    # created_by = models.ForeignKey('setup.User',
+    #                                on_delete=models.SET_NULL,
+    #                                null=True, blank=True, related_name='user_createdby',
+    #                                verbose_name='Created By')
+    # created_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Created At')
+    #
+    # updated_by = models.ForeignKey('setup.User',
+    #                                on_delete=models.SET_NULL,
+    #                                null=True, blank=True, related_name='user_updatedby',
+    #                                verbose_name='Updated By')
+    # updated_at = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Updated At')
+    #
+    # deleted = models.BooleanField(default=False, verbose_name='Deleted')
+    # deleted_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='Deleted At')
+    # deleted_by = models.ForeignKey('setup.User',
+    #                                on_delete=models.SET_NULL,
+    #                                null=True, blank=True, related_name='user_deletedby',
+    #                                verbose_name='Deleted By')
+
+    class Meta(AbstractUser.Meta):
         pass
 
     def __str__(self):
@@ -58,7 +77,8 @@ class AddressRegister(BaseModel):
 
     full_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='Full Name')
     contact_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Contact Number')
-    alternative_contact_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Alternative Contact Number')
+    alternative_contact_number = models.CharField(max_length=20, blank=True, null=True,
+                                                  verbose_name='Alternative Contact Number')
 
     address_line_1 = models.CharField(max_length=256, blank=True, null=True, verbose_name='House Address')
     address_line_2 = models.CharField(max_length=256, blank=True, null=True, verbose_name='Area Address')
@@ -70,8 +90,7 @@ class AddressRegister(BaseModel):
 
     pin_code = models.IntegerField(blank=True, null=True, verbose_name='Pincode')
 
-    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE, blank=True, null=True, verbose_name='Full Name')
+    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE, blank=True, null=True,
+                                    verbose_name='Full Name')
 
     is_default = models.BooleanField(default=False)
-
-
