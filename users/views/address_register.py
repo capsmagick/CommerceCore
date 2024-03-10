@@ -1,5 +1,5 @@
 from setup.views import BaseModelViewSet
-from users.models import AddressRegister
+from users.models.other import AddressRegister
 from users.serializers import AddressRegisterModelSerializer
 
 

@@ -29,7 +29,7 @@ class Batch(BaseModel):
     stock = models.IntegerField(default=0, verbose_name='stock')
     is_perishable = models.BooleanField(default=False, verbose_name='Perishable')
     is_disabled = models.BooleanField(default=False, verbose_name='Disabled')
-    tax_inclusive_ = models.BooleanField(default=True, verbose_name='Tax Inclusive')
+    tax_inclusive = models.BooleanField(default=True, verbose_name='Tax Inclusive')
     purchase_amount_tax_inclusive = models.BooleanField(default=True, verbose_name='Purchase Amount Tax Inclusive')
     tax = models.ForeignKey(Tax, on_delete=models.SET_NULL, related_name='tax', verbose_name='Tax', null=True, blank=True)
 
@@ -39,7 +39,7 @@ class Batch(BaseModel):
 
 class Inventory(BaseModel):
     variants = models.ManyToManyField(Variant,
-                                      related_name='variants',
+                                      related_name='inventoryvariants',
                                       verbose_name='Variants')
 
     stock = models.IntegerField(default=0, verbose_name='stock')
