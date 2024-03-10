@@ -64,3 +64,26 @@ class Category(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Dimension(BaseModel):
+    DIMENSION_UNIT = (
+        ('mm', 'mm'),
+        ('cm', 'cm'),
+        ('inch', 'inch'),
+        ('M', 'M'),
+    )
+
+    WEIGHT_UNIT = (
+        ('gm', 'gm'),
+        ('Kg', 'Kg'),
+    )
+
+    length = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Length')
+    breadth = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Breadth')
+    height = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Height')
+
+    dimension_unit = models.CharField(choices=DIMENSION_UNIT, verbose_name='Dimension Unit', null=True, blank=True)
+
+    weight = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Weight')
+    weight_unit = models.CharField(choices=WEIGHT_UNIT, verbose_name='Weight Unit', null=True, blank=True)
