@@ -1,5 +1,5 @@
 from django.db import models
-from setup.models import BaseModel
+from users.models.base_model import BaseModel
 from django.contrib.auth import get_user_model
 
 User = get_user_model()

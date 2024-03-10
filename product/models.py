@@ -1,7 +1,7 @@
 from django.db import models
 
 from masterdata.models import Category, Brand
-from setup.models import BaseModel
+from users.models.base_model import BaseModel
 from masterdata.models import Tag, Attribute
 
 

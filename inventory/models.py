@@ -1,7 +1,7 @@
 from django.db import models
 
 from product.models import Variant
-from setup.models import BaseModel
+from users.models.base_model import BaseModel
 
 
 class Tax(BaseModel):

@@ -1,5 +1,8 @@
 from django.db import models
-from setup.models import BaseModel
+from django.contrib.auth import get_user_model
+from .base_model import BaseModel
+
+User = get_user_model()
 
 
 class AddressRegister(BaseModel):
@@ -8,7 +11,7 @@ class AddressRegister(BaseModel):
         ('Shipping', 'Shipping')
     )
 
-    user = models.ForeignKey('User', related_name='useraddress', on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, related_name='useraddress', on_delete=models.SET_NULL, null=True)
 
     full_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='Full Name')
     contact_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='Contact Number')
@@ -29,3 +32,6 @@ class AddressRegister(BaseModel):
                                     verbose_name='Address Type')
 
     is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.full_name
