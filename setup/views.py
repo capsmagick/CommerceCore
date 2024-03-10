@@ -18,10 +18,16 @@ class BaseModelViewSet(
     permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = None
     serializer_class = None
+    retrieve_serializer_class = None
     default_fields = []
     include_actions = True
     multiple_lookup_fields = []
     search_fields = []
+
+    def get_serializer_class(self):
+        if self.action == 'list' and self.retrieve_serializer_class:
+            return self.retrieve_serializer_class
+        return self.serializer_class
 
     @action(detail=False, methods=['POST'])
     def create_record(self, request, *args, **kwargs):
