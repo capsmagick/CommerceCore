@@ -1,6 +1,6 @@
 from django.db import models
 
-from masterdata.models import Category, Brand
+from masterdata.models import Category, Brand, Dimension
 from setup.models import BaseModel
 from masterdata.models import Tag, Attribute
 
@@ -29,6 +29,10 @@ class Products(BaseModel):
     rating = models.IntegerField(verbose_name='Rating', blank=True, null=True)
     no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True, null=True, verbose_name='Tags')
+
+    dimension = models.ForeignKey(Dimension, related_name='product_dimensions',
+                              on_delete=models.SET_NULL,
+                              verbose_name='Brand')
 
     # reviews = models.ManyToManyField('Review',
     #                                  related_name='product_reviews',
