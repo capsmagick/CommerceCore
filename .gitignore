@@ -10,6 +10,7 @@ media
 *.bak
 
 #custom
+*.idea
 .idea/**/e_commerce.iml
 .idea/**/misc.xml
 # If you are using PyCharm #
