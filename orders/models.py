@@ -1,5 +1,5 @@
 from django.db import models
-from setup.models import BaseModel
+from users.models.base_model import BaseModel
 from users.models.other import AddressRegister
 from product.models import Variant
 
@@ -16,7 +16,7 @@ class Order(BaseModel):
 
     order_id = models.CharField(max_length=20, verbose_name='Order Id')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
-    currency = models.CharField(default='INR', null=True, blank=True, verbose_name='Currency')
+    currency = models.CharField(max_length=10,default='INR', null=True, blank=True, verbose_name='Currency')
 
     user = models.CharField(max_length=150, verbose_name='User')
     address = models.ForeignKey(AddressRegister, related_name='order_address', null=True, verbose_name='Address', on_delete=models.SET_NULL)
