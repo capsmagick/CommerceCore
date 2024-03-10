@@ -29,5 +29,6 @@ urlpatterns += [
 
     path('masterdata/', include('masterdata.urls')),
     path('inventory/', include('inventory.urls')),
-    path('product/', include('product.urls')),
+    path('products/', include('product.urls')),
+    path('customer/', include('customer.urls')),
 ]
