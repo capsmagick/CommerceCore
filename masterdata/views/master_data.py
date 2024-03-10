@@ -14,7 +14,8 @@ class CategoryModelViewSet(BaseModelViewSet):
     serializer_class = CategoryModelSerializer
     search_fields = ['name', 'parent_category__name', 'description']
     default_fields = [
-        'name', 'description', 'is_active', 'parent_category'
+        'name', 'description', 'is_active', 'parent_category',
+        'second_parent_category', 'attribute_group'
     ]
 
 
