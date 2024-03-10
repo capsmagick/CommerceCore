@@ -11,6 +11,9 @@ else:
 router.register('category', views.CategoryModelViewSet)
 router.register('brand', views.BrandModelViewSet)
 router.register('tag', views.TagModelViewSet)
+router.register('attribute', views.AttributeModelViewSet)
+router.register('attributegroup', views.AttributeGroupModelViewSet)
+router.register('dimension', views.DimensionModelViewSet)
 
 urlpatterns = []
 urlpatterns += router.urls
