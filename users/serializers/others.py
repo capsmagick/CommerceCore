@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import AddressRegister
+from users.models.other import AddressRegister
 from users.models import User
 
 

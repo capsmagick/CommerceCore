@@ -2,6 +2,7 @@ from django.db import models
 
 from masterdata.models import Category, Brand
 from setup.models import BaseModel
+from masterdata.models import Tag, Attribute
 
 
 class Products(BaseModel):
@@ -27,7 +28,7 @@ class Products(BaseModel):
     hsn_code = models.CharField(max_length=20, blank=True, null=True, verbose_name='HSN Code')
     rating = models.IntegerField(verbose_name='Rating', blank=True, null=True)
     no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
-    tags = models.ManyToManyField('Tags', related_name='tags', blank=True, null=True, verbose_name='Tags')
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True, null=True, verbose_name='Tags')
 
     # reviews = models.ManyToManyField('Review',
     #                                  related_name='product_reviews',
@@ -41,7 +42,7 @@ class Variant(BaseModel):
     product = models.ForeignKey(Products, related_name='product_variant',
                                 on_delete=models.CASCADE,
                                 verbose_name='Variant')
-    attributes = models.ManyToManyField('Attribute', related_name='variant_attributes', blank=True, null=True,
+    attributes = models.ManyToManyField(Attribute, related_name='variant_attributes', blank=True, null=True,
                                         verbose_name='Attributes')
 
     def __str__(self):
@@ -51,12 +52,12 @@ class Variant(BaseModel):
 class ProductImage(BaseModel):
     product = models.ForeignKey(
         Products, related_name='product_images', verbose_name='Product Image',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL, null=True, blank=True
     )
 
     variant = models.ForeignKey(
         Variant, related_name='variant_images', verbose_name='Variant Image',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL, null=True, blank=True
     )
 
     image = models.FileField(upload_to='product_images/',

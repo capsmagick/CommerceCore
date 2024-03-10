@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from rest_framework import serializers
 from users.models import User
-from users.models import AddressRegister
+from users.models.other import AddressRegister
 
 
 class LoginSerializer(serializers.Serializer):

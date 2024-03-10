@@ -1,5 +1,8 @@
 from django.db import models
 from setup.models import BaseModel
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Brand(BaseModel):
@@ -20,7 +23,7 @@ class Tag(BaseModel):
 
 class Attribute(BaseModel):
     name = models.CharField(max_length=80, null=True, verbose_name='Name')
-    value = models.JSONField(default=[], null=True, verbose_name='Values')
+    value = models.JSONField(default=list, null=True, verbose_name='Values')
 
     def __str__(self):
         return self.name
@@ -46,7 +49,7 @@ class Category(BaseModel):
     )
 
     second_parent_category = models.ForeignKey(
-        'Category', related_name='subcategory', verbose_name='Second Parent Category',
+        'Category', related_name='secondsubcategory', verbose_name='Second Parent Category',
         on_delete=models.SET_NULL, blank=True, null=True
     )
 
@@ -56,7 +59,7 @@ class Category(BaseModel):
     )
 
     tags = models.ManyToManyField(
-        Tag, related_name='tags', verbose_name='Tags', blank=True, null=True
+        Tag, related_name='category_tags', verbose_name='Tags', blank=True, null=True
     )
 
     def __str__(self):

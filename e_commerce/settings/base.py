@@ -62,6 +62,9 @@ INSTALLED_APPS += [
     'setup',
     'users',
     'masterdata',
+    'product',
+    'inventory',
+    'vendor', # Not using
 ]
 
 MIDDLEWARE = [
