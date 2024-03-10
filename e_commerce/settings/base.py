@@ -64,7 +64,8 @@ INSTALLED_APPS += [
     'masterdata',
     'product',
     'inventory',
-    'vendor', # Not using
+    'customer',
+    'orders',
 ]
 
 MIDDLEWARE = [

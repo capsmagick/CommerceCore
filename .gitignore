@@ -7,9 +7,13 @@ db.sqlite3
 media
 
 # Backup files # 
-*.bak 
+*.bak
 
-# If you are using PyCharm # 
+#custom
+*.idea
+.idea/**/e_commerce.iml
+.idea/**/misc.xml
+# If you are using PyCharm #
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml

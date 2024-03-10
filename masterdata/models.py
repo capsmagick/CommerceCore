@@ -1,5 +1,5 @@
 from django.db import models
-from setup.models import BaseModel
+from users.models.base_model import BaseModel
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -83,7 +83,9 @@ class Dimension(BaseModel):
     breadth = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Breadth')
     height = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Height')
 
-    dimension_unit = models.CharField(choices=DIMENSION_UNIT, verbose_name='Dimension Unit', null=True, blank=True)
+    dimension_unit = models.CharField(max_length=20, choices=DIMENSION_UNIT, verbose_name='Dimension Unit', null=True,
+                                      blank=True)
 
     weight = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Weight')
-    weight_unit = models.CharField(choices=WEIGHT_UNIT, verbose_name='Weight Unit', null=True, blank=True)
+    weight_unit = models.CharField(max_length=20, choices=WEIGHT_UNIT, verbose_name='Weight Unit', null=True,
+                                   blank=True)

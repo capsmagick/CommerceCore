@@ -1,7 +1,7 @@
 from django.db import models
 
 from masterdata.models import Category, Brand, Dimension
-from setup.models import BaseModel
+from users.models.base_model import BaseModel
 from masterdata.models import Tag, Attribute
 
 
@@ -31,8 +31,9 @@ class Products(BaseModel):
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True, null=True, verbose_name='Tags')
 
     dimension = models.ForeignKey(Dimension, related_name='product_dimensions',
-                              on_delete=models.SET_NULL,
-                              verbose_name='Brand')
+                                  on_delete=models.SET_NULL,
+                                  blank=True, null=True,
+                                  verbose_name='Brand')
 
     # reviews = models.ManyToManyField('Review',
     #                                  related_name='product_reviews',
