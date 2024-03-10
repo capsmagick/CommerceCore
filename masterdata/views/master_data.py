@@ -11,8 +11,11 @@ from masterdata.serializers import CategoryModelSerializer
 from masterdata.serializers import BrandModelSerializer
 from masterdata.serializers import TagModelSerializer
 from masterdata.serializers import AttributeModelSerializer
+from masterdata.serializers import RetrieveAttributeModelSerializer
 from masterdata.serializers import AttributeGroupModelSerializer
+from masterdata.serializers import RetrieveAttributeGroupModelSerializer
 from masterdata.serializers import DimensionModelSerializer
+from masterdata.serializers import RetrieveDimensionModelSerializer
 
 
 class CategoryModelViewSet(BaseModelViewSet):
@@ -42,6 +45,7 @@ class TagModelViewSet(BaseModelViewSet):
 class AttributeModelViewSet(BaseModelViewSet):
     queryset = Attribute.objects.all()
     serializer_class = AttributeModelSerializer
+    retrieve_serializer_class = RetrieveAttributeModelSerializer
     search_fields = ['name']
     default_fields = ['name', 'value']
 
@@ -49,6 +53,7 @@ class AttributeModelViewSet(BaseModelViewSet):
 class AttributeGroupModelViewSet(BaseModelViewSet):
     queryset = AttributeGroup.objects.all()
     serializer_class = AttributeGroupModelSerializer
+    retrieve_serializer_class = RetrieveAttributeGroupModelSerializer
     search_fields = ['name']
     default_fields = ['name', 'attributes']
 
@@ -56,6 +61,7 @@ class AttributeGroupModelViewSet(BaseModelViewSet):
 class DimensionModelViewSet(BaseModelViewSet):
     queryset = Dimension.objects.all()
     serializer_class = DimensionModelSerializer
+    retrieve_serializer_class = RetrieveDimensionModelSerializer
     search_fields = ['name']
     default_fields = [
         'length', 'breadth', 'height',

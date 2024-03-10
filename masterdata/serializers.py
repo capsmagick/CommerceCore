@@ -35,6 +35,12 @@ class AttributeModelSerializer(serializers.ModelSerializer):
         )
 
 
+class RetrieveAttributeModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attribute
+        fields = '__all__'
+
+
 class AttributeGroupModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttributeGroup
@@ -42,6 +48,12 @@ class AttributeGroupModelSerializer(serializers.ModelSerializer):
             'name',
             'attributes',
         )
+
+
+class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AttributeGroup
+        fields = '__all__'
 
 
 class DimensionModelSerializer(serializers.ModelSerializer):
@@ -55,3 +67,9 @@ class DimensionModelSerializer(serializers.ModelSerializer):
             'weight',
             'weight_unit',
         )
+
+
+class RetrieveDimensionModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dimension
+        fields = '__all__'
