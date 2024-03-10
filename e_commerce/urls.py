@@ -28,4 +28,7 @@ urlpatterns += [
     path('account/', include('users.urls')),
 
     path('masterdata/', include('masterdata.urls')),
+    path('inventory/', include('inventory.urls')),
+    path('products/', include('product.urls')),
+    path('customer/', include('customer.urls')),
 ]
