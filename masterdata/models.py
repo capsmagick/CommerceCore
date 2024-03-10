@@ -1,6 +1,7 @@
 from django.db import models
 from users.models.base_model import BaseModel
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.fields import ArrayField
 
 User = get_user_model()
 
@@ -23,6 +24,7 @@ class Tag(BaseModel):
 
 class Attribute(BaseModel):
     name = models.CharField(max_length=80, null=True, verbose_name='Name')
+    # value = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list, verbose_name='Values')
     value = models.JSONField(default=list, null=True, verbose_name='Values')
 
     def __str__(self):

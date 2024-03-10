@@ -3,10 +3,16 @@ from setup.views import BaseModelViewSet
 from masterdata.models import Category
 from masterdata.models import Brand
 from masterdata.models import Tag
+from masterdata.models import Attribute
+from masterdata.models import AttributeGroup
+from masterdata.models import Dimension
 
 from masterdata.serializers import CategoryModelSerializer
 from masterdata.serializers import BrandModelSerializer
 from masterdata.serializers import TagModelSerializer
+from masterdata.serializers import AttributeModelSerializer
+from masterdata.serializers import AttributeGroupModelSerializer
+from masterdata.serializers import DimensionModelSerializer
 
 
 class CategoryModelViewSet(BaseModelViewSet):
@@ -31,6 +37,30 @@ class TagModelViewSet(BaseModelViewSet):
     serializer_class = TagModelSerializer
     search_fields = ['name']
     default_fields = ['name']
+
+
+class AttributeModelViewSet(BaseModelViewSet):
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeModelSerializer
+    search_fields = ['name']
+    default_fields = ['name', 'value']
+
+
+class AttributeGroupModelViewSet(BaseModelViewSet):
+    queryset = AttributeGroup.objects.all()
+    serializer_class = AttributeGroupModelSerializer
+    search_fields = ['name']
+    default_fields = ['name', 'attributes']
+
+
+class DimensionModelViewSet(BaseModelViewSet):
+    queryset = Dimension.objects.all()
+    serializer_class = DimensionModelSerializer
+    search_fields = ['name']
+    default_fields = [
+        'length', 'breadth', 'height',
+        'dimension_unit', 'weight', 'weight_unit'
+    ]
 
 
 
