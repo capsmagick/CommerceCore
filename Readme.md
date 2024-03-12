@@ -6,6 +6,7 @@
 
 ## Django Project Run
 * ``Clone the project``
+  * ``From Above URL``
 * ``Need to Create and activate Virtual Environment for the project (Different methods available)``
 * ``Install Requirements``
   * ``pip install -r requirement.txt``
@@ -16,9 +17,9 @@
 
 
 ### API DOC PATH
-* ``docs/api/schema/ -> SCHEMA``
-* ``docs/api/schema/swagger-ui/ -> UI DOC``
-* ``docs/api/schema/redoc/ -> DOCUMENT``
+* ``setup/docs/api/schema/ -> SCHEMA``
+* ``setup/docs/api/schema/swagger-ui/ -> UI DOC``
+* ``setup/docs/api/schema/redoc/ -> DOCUMENT``
 
 
 ### Developer Note

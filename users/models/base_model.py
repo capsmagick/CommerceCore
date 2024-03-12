@@ -32,8 +32,22 @@ class BaseModel(models.Model):
     objects = BaseManager()
 
     def delete(self, *args, **kwargs):
+        from setup.middleware.request import CurrentRequestMiddleware
+        user = CurrentRequestMiddleware.get_request().user
+
         self.deleted = True
+        self.deleted_by = user
         self.save()
+
+    def save(self, *args, **kwargs):
+        from setup.middleware.request import CurrentRequestMiddleware
+        user = CurrentRequestMiddleware.get_request().user
+        if self.id is None:
+            self.created_by = user
+        else:
+            self.updated_by = user
+        super().save(*args, **kwargs)
+
 
     class Meta:
         abstract = True
