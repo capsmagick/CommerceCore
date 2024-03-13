@@ -1,8 +1,13 @@
 from setup.views import BaseModelViewSet
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.conf import settings
 
-# import pandas as pd
+import openpyxl
+import psycopg2
+
+
 
 from product.models import Products
 from product.models import Variant
@@ -91,6 +96,16 @@ class ImportProduct(APIView):
         file = request.FILES.get('import_file')
         print('File: ', file)
 
-        # df = pd.read_excel(file)
 
-        df.to_sql('Product', 'your_database_connection', if_exists='replace', index=False)
+        wb = openpyxl.load_workbook(file)
+        sheet = wb.active
+
+        for row in sheet.iter_rows(values_only=True):
+            print('--------------------------------------------')
+            print('row : ', row)
+            print('--------------------------------------------')
+
+
+        return Response({
+            'message': 'Success'
+        }, status=status.HTTP_200_OK)

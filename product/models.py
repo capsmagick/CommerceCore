@@ -14,11 +14,11 @@ class Products(BaseModel):
     selling_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Selling Price')
     # currency = models.CharField(max_length=3, default='INR',
     #                             verbose_name='Currency', null=True)  # [('USD', 'USD'), ('INR', 'INR')]
-    condition = models.CharField(max_length=50, verbose_name='Condition')  # [('New', 'New'), ('Used', 'Used')]
+    condition = models.CharField(max_length=50, verbose_name='Condition', blank=True, null=True)  # [('New', 'New'), ('Used', 'Used')]
 
     categories = models.ManyToManyField(Category,
                                         related_name='product_categories',
-                                        verbose_name='Product Category')
+                                        verbose_name='Category')
 
     brand = models.ForeignKey(Brand, related_name='product_brand',
                               on_delete=models.CASCADE,

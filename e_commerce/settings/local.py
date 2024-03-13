@@ -6,7 +6,9 @@ ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
     "127.0.0.1",
-    "localhost:8080"
+    "localhost:8080",
+    "localhost:5173",
+    "127.0.0.1:5173"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -14,7 +16,11 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://localhost:8080/',
     'http://localhost:8081',
-    'http://localhost:8000'
+    'http://localhost:8000',
+    'http://127.0.0.1:8008',
+    'http://localhost:8008',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
 ]
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '143621340002-lmgf8f4tb5i5blkdt3hptkb5fsk6930m.apps.googleusercontent.com'
