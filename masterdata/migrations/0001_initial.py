@@ -2,7 +2,7 @@
 
 from django.conf import settings
 from django.db import migrations, models
-import django.db.models.deletion
+import django.contrib.postgres.fields
 
 
 class Migration(migrations.Migration):
@@ -44,7 +44,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "value",
-                    models.JSONField(default=list, null=True, verbose_name="Values"),
+                    django.contrib.postgres.fields.ArrayField(base_field=models.CharField(max_length=100), blank=True,
+                                                              default=list, null=True, size=None,
+                                                              verbose_name='Values'),
                 ),
                 (
                     "created_by",
