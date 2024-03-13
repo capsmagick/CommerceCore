@@ -8,6 +8,7 @@ import openpyxl
 import psycopg2
 
 
+
 from product.models import Products
 from product.models import Variant
 from product.models import ProductImage
@@ -93,6 +94,8 @@ class ImportProduct(APIView):
 
     def post(self, request):
         file = request.FILES.get('import_file')
+        print('File: ', file)
+
 
         wb = openpyxl.load_workbook(file)
         sheet = wb.active
@@ -101,7 +104,6 @@ class ImportProduct(APIView):
             print('--------------------------------------------')
             print('row : ', row)
             print('--------------------------------------------')
-
 
 
         return Response({
