@@ -9,7 +9,7 @@ def get_userdata(user):
         'mobile_number': user.mobile_number,
         'is_superuser': user.is_superuser,
         'is_customer': user.is_customer,
-        'profile_picture': user.profile_picture.url,
+        'profile_picture': user.profile_picture.url if user.profile_picture else '',
         'last_login': user.last_login,
     }
 
