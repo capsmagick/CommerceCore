@@ -10,6 +10,7 @@ media
 *.bak
 
 #custom
+.dj-env
 *.idea
 .idea/**/e_commerce.iml
 .idea/**/misc.xml
@@ -102,7 +103,7 @@ celerybeat-schedule.*
 *.sage.py 
 
 # Environments 
-.env 
+#.env
 .venv 
 env/ 
 venv/ 
