@@ -14,6 +14,7 @@ router.register('user-address', views.AddressRegisterModelViewSet)
 urlpatterns = [
     path('user/sign-up/', views.Signup.as_view(), name='user-signup'),
     path('user/change-password/', views.ChangePassword.as_view(), name='change-password'),
+    path('user/me/', views.Me.as_view(), name='me'),
 
     path(
         'session/', include(([
