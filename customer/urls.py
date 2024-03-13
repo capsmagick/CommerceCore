@@ -9,7 +9,7 @@ else:
     router = SimpleRouter()
 
 router.register('cart', views.CartModelViewSet)
-router.register('cart-item', views.CartItemModelViewSet)
+router.register('wishlist', views.WishListModelViewSet)
 
 
 urlpatterns = []

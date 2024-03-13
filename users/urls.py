@@ -27,6 +27,8 @@ urlpatterns = [
         ])), name="session-login"
     ),
 
+    path('social/', include('allauth.urls')),
+
     # path(
     #     'jwt/', include(([
     #         path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

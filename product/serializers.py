@@ -19,6 +19,13 @@ class VariantModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class VariantModelSerializerGET(serializers.ModelSerializer):
+    product = ProductsModelSerializer()
+    class Meta:
+        model = Variant
+        fields = '__all__'
+
+
 class ProductImageModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage

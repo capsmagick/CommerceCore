@@ -8,6 +8,7 @@ from product.models import LookBook
 
 from product.serializers import ProductsModelSerializer
 from product.serializers import VariantModelSerializer
+from product.serializers import VariantModelSerializerGET
 from product.serializers import ProductImageModelSerializer
 from product.serializers import CollectionModelSerializer
 from product.serializers import LookBookModelSerializer
@@ -39,6 +40,7 @@ class ProductsModelViewSet(BaseModelViewSet):
 class VariantModelViewSet(BaseModelViewSet):
     queryset = Variant.objects.all()
     serializer_class = VariantModelSerializer
+    retrieve_serializer_class = VariantModelSerializerGET
     search_fields = ['product__name']
     default_fields = [
         'product',

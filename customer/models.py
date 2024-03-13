@@ -5,6 +5,14 @@ from product.models import Variant
 from django.db.models import Sum
 
 
+class WishList(BaseModel):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user_wishlist', verbose_name='User', null=True
+    )
+    product_variant = models.ForeignKey(
+        Variant, on_delete=models.CASCADE, related_name='wishlist_product', verbose_name='Product'
+    )
+
 class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_cart', verbose_name='User', null=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
