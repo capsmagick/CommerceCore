@@ -9,6 +9,8 @@ from users.serializers import UserSignupModelSerializer
 from users.serializers import LoginSerializer
 from users.serializers import ResetPassword
 
+from .utils import get_userdata
+
 
 class Signup(APIView):
     permission_classes = (AllowAny,)
@@ -32,9 +34,10 @@ class Login(APIView):
         serializer = LoginSerializer(data=request.data, **{'request': request})
 
         if serializer.is_valid(raise_exception=True):
-            serializer.login(self.request)
+            user = serializer.login(self.request)
 
             return Response({
+                'user': get_userdata(user),
                 'message': 'Successfully logined'
             }, status.HTTP_200_OK)
 
