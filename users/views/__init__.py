@@ -7,3 +7,5 @@ from .token import TokenLoginAPTView
 
 from .address_register import AddressRegisterModelViewSet
 
+from .user import Me
+

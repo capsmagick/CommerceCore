@@ -44,6 +44,7 @@ class BaseModel(models.Model):
         user = CurrentRequestMiddleware.get_request().user
         if self.id is None:
             self.created_by = user
+            self.updated_by = user
         else:
             self.updated_by = user
         super().save(*args, **kwargs)
