@@ -2,7 +2,7 @@ from setup.views import BaseModelViewSet
 from rest_framework.views import APIView
 from django.conf import settings
 
-import pandas as pd
+# import pandas as pd
 
 from product.models import Products
 from product.models import Variant
@@ -89,7 +89,8 @@ class ImportProduct(APIView):
 
     def post(self, request):
         file = request.FILES.get('import_file')
+        print('File: ', file)
 
-        df = pd.read_excel(file)
+        # df = pd.read_excel(file)
 
         df.to_sql('Product', 'your_database_connection', if_exists='replace', index=False)
