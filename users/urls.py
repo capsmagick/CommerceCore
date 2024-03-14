@@ -31,6 +31,8 @@ urlpatterns = [
         ])), name="jwt-token-login"
     ),
 
+    path('user/logout/', views.Logout.as_view(), name='user-logout'),
+
     path('social/', include('allauth.urls')),
 
     # path(
