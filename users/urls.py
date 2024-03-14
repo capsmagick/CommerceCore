@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import TokenRefreshView
 from . import views
 
 if settings.DEBUG:
@@ -24,8 +25,9 @@ urlpatterns = [
 
     path(
         'token/', include(([
-            path('user/login/', views.TokenLoginAPTView.as_view(), name='token-login')
-        ])), name="session-login"
+            path('user/login/', views.TokenLoginAPTView.as_view(), name='token-login'),
+            path('user/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+        ])), name="jwt-token-login"
     ),
 
     path('social/', include('allauth.urls')),
