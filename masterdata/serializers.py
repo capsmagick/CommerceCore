@@ -13,17 +13,71 @@ class CategoryModelSerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Category.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Category.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Name is already in use.'
+                    })
+
+        return attrs
+
 
 class BrandModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
         fields = '__all__'
+    
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Brand.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Brand.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Name is already in use.'
+                    })
+
+        return attrs
 
 
 class TagModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Tag.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Tag.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Name is already in use.'
+                    })
+
+        return attrs
 
 
 class AttributeModelSerializer(serializers.ModelSerializer):
@@ -33,6 +87,24 @@ class AttributeModelSerializer(serializers.ModelSerializer):
             'name',
             'value',
         )
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Attribute.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Attribute.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Name is already in use.'
+                    })
+
+        return attrs
 
 
 class RetrieveAttributeModelSerializer(serializers.ModelSerializer):
@@ -48,6 +120,24 @@ class AttributeGroupModelSerializer(serializers.ModelSerializer):
             'name',
             'attributes',
         )
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if AttributeGroup.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if AttributeGroup.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Name is already in use.'
+                    })
+
+        return attrs
 
 
 class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
