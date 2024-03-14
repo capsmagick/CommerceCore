@@ -1,5 +1,6 @@
 from .sessions import Signup
 from .sessions import Login
+from .sessions import Logout
 from .sessions import ChangePassword
 
 

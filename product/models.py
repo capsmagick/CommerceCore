@@ -78,9 +78,16 @@ class ProductImage(BaseModel):
 
 class Collection(BaseModel):
     name = models.CharField(max_length=100, verbose_name='Name')
-    collections = models.ManyToManyField(Products,
+    collections = models.ManyToManyField(Variant,
                                          related_name='product_collections',
                                          verbose_name='Collections')
+
+    description = models.TextField(verbose_name='Description', blank=True, null=True)
+    feature_image = models.FileField(upload_to='collections/image', blank=True, null=True,
+                                  verbose_name='Feature Image')
+    tags = models.ManyToManyField(Tag, related_name='collection_tags', blank=True, null=True, verbose_name='Tags')
+
+
 
     def __str__(self):
         return self.name
