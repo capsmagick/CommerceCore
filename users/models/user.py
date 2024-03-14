@@ -27,6 +27,8 @@ class User(AbstractUser):
 
     is_suspended = models.BooleanField(default=False)
 
+    store_manager = models.BooleanField(default=False)
+
     ########################################
     # BaseModel
     ########################################

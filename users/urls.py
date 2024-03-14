@@ -11,6 +11,7 @@ else:
     router = SimpleRouter()
 
 router.register('user-address', views.AddressRegisterModelViewSet)
+router.register('store-manager', views.StoreManagerViewSet)
 
 urlpatterns = [
     path('user/sign-up/', views.Signup.as_view(), name='user-signup'),

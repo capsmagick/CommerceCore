@@ -64,6 +64,8 @@ class Category(BaseModel):
         Tag, related_name='category_tags', verbose_name='Tags', blank=True, null=True
     )
 
+    image = models.FileField(upload_to='category/images', blank=True, null=True, verbose_name='Image')
+
     def __str__(self):
         return self.name
 

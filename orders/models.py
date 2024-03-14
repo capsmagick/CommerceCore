@@ -3,6 +3,13 @@ from users.models.base_model import BaseModel
 from users.models.other import AddressRegister
 from product.models import Variant
 from django.db.models import Sum
+import datetime
+
+
+def generate_order_id():
+    now = datetime.datetime.now()
+    order_key = "".join(now.strftime("%Y%b%d%H%M%S%f"))
+    return f"ORD{order_key}"
 
 
 
@@ -16,7 +23,7 @@ class Order(BaseModel):
         ('Cancelled', 'Cancelled'),
     )
 
-    order_id = models.CharField(max_length=20, verbose_name='Order Id')
+    order_id = models.CharField(max_length=70, verbose_name='Order Id')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
     currency = models.CharField(max_length=10,default='INR', null=True, blank=True, verbose_name='Currency')
 
@@ -33,6 +40,11 @@ class Order(BaseModel):
         self.total_amount = total_amount['total_amount__sum']
         self.save()
 
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            self.order_id = generate_order_id()
+        super().save(*args, **kwargs)
+
 
 class OrderItem(BaseModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitems', verbose_name='Order Details')
@@ -43,8 +55,9 @@ class OrderItem(BaseModel):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Price')
 
     def save(self, *args, **kwargs):
-        total_amount = self.price * self.quantity
-        self.total_amount = total_amount
+        if not self.total_amount:
+            total_amount = self.price * self.quantity
+            self.total_amount = total_amount
         super().save(*args, **kwargs)
         self.order.calculate_total()
 
