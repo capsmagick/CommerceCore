@@ -15,7 +15,5 @@ router.register('product-image', views.ProductImageModelViewSet)
 router.register('collection', views.CollectionModelViewSet)
 router.register('look-book', views.LookBookModelViewSet)
 
-urlpatterns = [
-    path('import/product/', views.ImportProduct.as_view(), name='import-product'),
-]
+urlpatterns = []
 urlpatterns += router.urls

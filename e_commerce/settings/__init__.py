@@ -17,8 +17,8 @@ ENV = get_env()
 
 print('THE ENVIRONMENT IS : ', ENV)
 
-if ENV == 'dev' or ENV == 'development':
-    from .development import *
+if ENV == 'dev' or ENV == 'development' or ENV == 'local':
+    from .local import *
 
 elif ENV == 'prod' or ENV == 'production':
     from .production import *
