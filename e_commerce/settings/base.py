@@ -70,6 +70,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'setup.middleware.request.CurrentRequestMiddleware',
+    # 'setup.middleware.csrf.CustomCsrfMiddleware',
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'
@@ -215,7 +216,7 @@ SIMPLE_JWT = {
 
 SITE_ID = 1
 
-# SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 
@@ -225,3 +226,10 @@ CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_HTTPONLY = True
 SECURE_BROWSER_XSS_FILTER = True
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 500 * 60
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
