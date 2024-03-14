@@ -7,6 +7,10 @@ from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
 from rest_framework.permissions import AllowAny
 
+from setup.views import BaseModelViewSet
+from users.models import User
+from users.serializers import StoreManagerModelSerializer
+
 from .utils import get_userdata
 
 
@@ -29,4 +33,17 @@ class Me(APIView):
             return Response({
                 'loggedIn': False,
             }, status=status.HTTP_200_OK)
+
+
+class StoreManagerViewSet(BaseModelViewSet):
+    queryset = User.objects.filter(deleted=False, store_manager=True)
+    serializer_class = StoreManagerModelSerializer
+    default_fields = [
+        'username', 'first_name', 'last_name',
+        'email', 'mobile_number'
+    ]
+    search_fields = [
+        'username', 'first_name', 'email', 'mobile_number'
+    ]
+
 

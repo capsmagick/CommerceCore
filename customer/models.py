@@ -19,7 +19,7 @@ class Cart(BaseModel):
     currency = models.CharField(max_length=10,default='INR', null=True, blank=True, verbose_name='Currency')
 
     def calculate_total(self):
-        total_amount = CartItem.objects.first(order=self).aggregate(Sum('total_amount'))
+        total_amount = CartItem.objects.first(order=self, deleted=False).aggregate(Sum('total_amount'))
         self.total_amount = total_amount['total_amount__sum']
         self.save()
 
