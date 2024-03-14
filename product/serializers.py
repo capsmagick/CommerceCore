@@ -25,7 +25,7 @@ class ProductsModelSerializer(serializers.ModelSerializer):
             if name != self.instance.name:
                 if Products.objects.filter(name=name).exists():
                     raise serializers.ValidationError({
-                        'name': 'Project name is already exist'
+                        'name': 'Name is already in use.'
                     })
 
         return attrs
@@ -68,7 +68,7 @@ class CollectionModelSerializer(serializers.ModelSerializer):
             if name != self.instance.name:
                 if Collection.objects.filter(name=name).exists():
                     raise serializers.ValidationError({
-                        'name': 'Project name is already exist'
+                        'name': 'Name is already in use.'
                     })
 
         return attrs
@@ -92,7 +92,7 @@ class LookBookModelSerializer(serializers.ModelSerializer):
             if name != self.instance.name:
                 if LookBook.objects.filter(name=name).exists():
                     raise serializers.ValidationError({
-                        'name': 'Project name is already exist'
+                        'name': 'Name is already in use.'
                     })
 
         return attrs

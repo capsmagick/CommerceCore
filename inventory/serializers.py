@@ -25,7 +25,7 @@ class TaxModelSerializer(serializers.ModelSerializer):
             if name != self.instance.name:
                 if Tax.objects.filter(name=name).exists():
                     raise serializers.ValidationError({
-                        'name': 'Project name is already exist'
+                        'name': 'Name is already in use.'
                     })
 
         return attrs
@@ -49,7 +49,7 @@ class WarehouseModelSerializer(serializers.ModelSerializer):
             if name != self.instance.name:
                 if Warehouse.objects.filter(name=name).exists():
                     raise serializers.ValidationError({
-                        'name': 'Project name is already exist'
+                        'name': 'Name is already in use.'
                     })
 
         return attrs
@@ -66,14 +66,14 @@ class BatchModelSerializer(serializers.ModelSerializer):
         if not self.instance:
             if Batch.objects.filter(batch_number=batch_number).exists():
                 raise serializers.ValidationError({
-                    'name': 'Name is already in use.'
+                    'name': 'Batch Number is already in use.'
                 })
 
         else:
             if batch_number != self.instance.name:
                 if Batch.objects.filter(batch_number=batch_number).exists():
                     raise serializers.ValidationError({
-                        'name': 'Project name is already exist'
+                        'name': 'Batch Number is already in use.'
                     })
 
         return attrs
