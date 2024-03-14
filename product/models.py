@@ -1,7 +1,3 @@
-from PIL import Image as ImageFile
-from io import BytesIO
-from django.core.files.base import ContentFile
-
 from django.db import models
 
 from masterdata.models import Category, Brand, Dimension
@@ -38,7 +34,7 @@ class Products(BaseModel):
     dimension = models.ForeignKey(Dimension, related_name='product_dimensions',
                                   on_delete=models.SET_NULL,
                                   blank=True, null=True,
-                                  verbose_name='Brand')
+                                  verbose_name='Dimension')
 
     # reviews = models.ManyToManyField('Review',
     #                                  related_name='product_reviews',
@@ -79,17 +75,6 @@ class ProductImage(BaseModel):
 
     def __str__(self):
         return self.alt_text
-
-    def save(self, *args, **kwargs):
-        if self.image:
-            with open(self.image.path, 'rb') as f:
-                img = ImageFile.open(f)
-                # Compress the image here
-                output = BytesIO()
-                img.save(output, format='JPEG', quality=50)  # Adjust quality as needed
-                output.seek(0)
-                self.thumbnail.save(self.image.name, ContentFile(output.read()), save=False)
-        super(ProductImage, self).save(*args, **kwargs)
 
 
 class Collection(BaseModel):
