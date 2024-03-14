@@ -39,7 +39,7 @@ class Login(APIView):
             return Response({
                 'user': get_userdata(user),
                 'message': 'Successfully logined'
-            }, status.HTTP_200_OK)
+            }, status=status.HTTP_200_OK)
 
 
 class Logout(APIView):
@@ -49,7 +49,7 @@ class Logout(APIView):
         logout(request)
         return Response({
             'message': 'Successfully logged out'
-        }, status.HTTP_200_OK)
+        }, status=status.HTTP_200_OK)
 
 
 class ChangePassword(APIView):
@@ -65,5 +65,5 @@ class ChangePassword(APIView):
             return Response({
                 'success': True,
                 'message': 'Successfully Password Updated'
-            }, status.HTTP_200_OK)
+            }, status=status.HTTP_200_OK)
 

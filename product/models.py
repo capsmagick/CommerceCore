@@ -1,8 +1,13 @@
+from PIL import Image as ImageFile
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 from django.db import models
 
 from masterdata.models import Category, Brand, Dimension
 from users.models.base_model import BaseModel
 from masterdata.models import Tag, Attribute
+
 
 
 class Products(BaseModel):
@@ -74,6 +79,17 @@ class ProductImage(BaseModel):
 
     def __str__(self):
         return self.alt_text
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            with open(self.image.path, 'rb') as f:
+                img = ImageFile.open(f)
+                # Compress the image here
+                output = BytesIO()
+                img.save(output, format='JPEG', quality=50)  # Adjust quality as needed
+                output.seek(0)
+                self.thumbnail.save(self.image.name, ContentFile(output.read()), save=False)
+        super(ProductImage, self).save(*args, **kwargs)
 
 
 class Collection(BaseModel):

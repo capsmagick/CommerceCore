@@ -12,6 +12,24 @@ class ProductsModelSerializer(serializers.ModelSerializer):
         model = Products
         fields = '__all__'
 
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Products.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Products.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Project name is already exist'
+                    })
+
+        return attrs
+
 
 class VariantModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,8 +55,44 @@ class CollectionModelSerializer(serializers.ModelSerializer):
         model = Collection
         fields = '__all__'
 
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Collection.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Collection.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Project name is already exist'
+                    })
+
+        return attrs
+
 
 class LookBookModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = LookBook
         fields = '__all__'
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if LookBook.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if LookBook.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Project name is already exist'
+                    })
+
+        return attrs

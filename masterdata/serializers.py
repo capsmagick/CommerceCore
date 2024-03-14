@@ -25,6 +25,24 @@ class TagModelSerializer(serializers.ModelSerializer):
         model = Tag
         fields = '__all__'
 
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Tag.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Tag.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Project name is already exist'
+                    })
+
+        return attrs
+
 
 class AttributeModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,6 +51,24 @@ class AttributeModelSerializer(serializers.ModelSerializer):
             'name',
             'value',
         )
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Attribute.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Attribute.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Project name is already exist'
+                    })
+
+        return attrs
 
 
 class RetrieveAttributeModelSerializer(serializers.ModelSerializer):
@@ -48,6 +84,24 @@ class AttributeGroupModelSerializer(serializers.ModelSerializer):
             'name',
             'attributes',
         )
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if AttributeGroup.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if AttributeGroup.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Project name is already exist'
+                    })
+
+        return attrs
 
 
 class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
