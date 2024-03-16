@@ -2,14 +2,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import ListModelMixin
+
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from django.middleware.csrf import get_token
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from setup.views import BaseModelViewSet
+from setup.permissions import IsSuperUser
 from users.models import User
 from users.serializers import StoreManagerModelSerializer
+from users.serializers import UserDataModelSerializer
+from users.serializers import UserModelSerializerGET
 
 from .utils import get_userdata
 
@@ -38,6 +43,7 @@ class Me(APIView):
 class StoreManagerViewSet(BaseModelViewSet):
     queryset = User.objects.filter(deleted=False, store_manager=True)
     serializer_class = StoreManagerModelSerializer
+    retrieve_serializer_class = UserModelSerializerGET
     default_fields = [
         'username', 'first_name', 'last_name',
         'email', 'mobile_number'
@@ -45,5 +51,12 @@ class StoreManagerViewSet(BaseModelViewSet):
     search_fields = [
         'username', 'first_name', 'email', 'mobile_number'
     ]
+
+
+class CustomerViewSet(GenericViewSet, ListModelMixin):
+    permission_classes = (IsAuthenticated, IsSuperUser)
+    queryset = User.objects.filter(deleted=False, is_customer=True)
+    serializer_class = UserDataModelSerializer
+
 
 

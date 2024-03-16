@@ -48,7 +48,10 @@ class UserDataModelSerializer(serializers.ModelSerializer):
             'profile_picture',
             'is_customer',
             'customer_id',
-            'is_suspended'
+            'is_suspended',
+
+            'is_superuser',
+            'store_manager',
         )
 
 
@@ -90,4 +93,10 @@ class StoreManagerModelSerializer(serializers.ModelSerializer):
             instance.store_manager = True
         instance.save()
         return instance
+
+
+class UserModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 

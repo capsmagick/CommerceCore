@@ -35,7 +35,7 @@ class CustomPagination(PageNumberPagination):
             except (KeyError, ValueError):
                 pass
 
-        return self.page_size
+        return self.default_limit
 
     def get_query(self, request, queryset):
         if self.limit_query_param in request.query_params:
@@ -50,17 +50,17 @@ class CustomPagination(PageNumberPagination):
         if not self.limit:
             return None
 
-        page_size = self.get_page_size(request)
-        if not page_size:
+        self.page_size = self.get_page_size(request)
+        if not self.page_size:
             return None
 
         self.offset = self.get_offset(request) # noqa
 
         if self.total_count == 0 or self.offset > self.total_count:
-            paginator = self.django_paginator_class([], page_size)
+            paginator = self.django_paginator_class([], self.page_size)
         else:
             paginator = self.django_paginator_class(
-                self.get_query(request, queryset), page_size
+                self.get_query(request, queryset), self.page_size
             )
 
         page_number = self.get_page_number(request, paginator)
@@ -83,9 +83,13 @@ class CustomPagination(PageNumberPagination):
     def get_total_pages(self):
         if self.limit is None:
             return None
-        total_pages = divmod(self.page.paginator.count, self.limit)[0]
-        if self.page.paginator.count % self.limit > 0:
-            total_pages += 1
+        total_pages = divmod(self.page.paginator.count, self.page_size)
+
+        if total_pages[0] != 0:
+            last_page = 1 if total_pages[1] > 0 else 0
+            total_pages = total_pages[0] + last_page
+        else:
+            total_pages = 1
         return total_pages
 
     def get_total_count(self, queryset):
