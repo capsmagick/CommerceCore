@@ -6,6 +6,9 @@ ALLOWED_HOSTS = ['*']
 # ------------------------
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR.parent, 'static')]
+STATIC_ROOT =os.path.join(BASE_DIR.parent, 'staticfiles')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
