@@ -13,6 +13,8 @@ from product.serializers import ProductImageModelSerializer
 from product.serializers import CollectionModelSerializer
 from product.serializers import LookBookModelSerializer
 
+from setup.utils import compress_image
+
 
 class ProductsModelViewSet(BaseModelViewSet):
     queryset = Products.objects.all()
@@ -61,23 +63,16 @@ class ProductImageModelViewSet(BaseModelViewSet):
     ]
 
     def perform_db_action(self, serializer):
-        from PIL import Image as ImageFile
-        from io import BytesIO
-        from django.core.files.base import ContentFile
-
         obj = serializer.save()
 
         if obj.image:
-            with open(obj.image.path, 'rb') as f:
-                img = ImageFile.open(f)
-                # Compress the image here
-                output = BytesIO()
-                img.save(output, format='JPEG', quality=50)  # Adjust quality as needed
-                output.seek(0)
-                obj.thumbnail.save(obj.image.name, ContentFile(output.read()), save=True)
-            obj.save()
-
-
+            compressed_image = compress_image(serializer.validated_data['image'])
+            try:
+                # obj.thumbnail = compressed_image
+                obj.thumbnail.save(f"thumbnail_{obj.image.name}", compressed_image)
+                obj.save()
+            except Exception as e:
+                print('Exception e : ', str(e))
 
 
 class CollectionModelViewSet(BaseModelViewSet):

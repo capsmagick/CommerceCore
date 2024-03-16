@@ -45,6 +45,8 @@ class VariantModelSerializerGET(serializers.ModelSerializer):
 
 
 class ProductImageModelSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()
+
     class Meta:
         model = ProductImage
         fields = '__all__'
