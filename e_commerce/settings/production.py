@@ -2,6 +2,8 @@ from .base import *
 
 ALLOWED_HOSTS = ['*']
 
+DEBUG = True
+
 # STATIC
 # ------------------------
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
