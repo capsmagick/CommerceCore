@@ -6,15 +6,20 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
-
-
-load_dotenv()
+from .utils import get_env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+if get_env() == 'prod':
+    dotenv_path = BASE_DIR.parent / '.env' / '.prod'
+else:
+    dotenv_path = BASE_DIR.parent / '.env' / '.local'
 
-DEBUG = os.environ.get('DEBUG')
+load_dotenv(dotenv_path)
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -62,6 +67,7 @@ INSTALLED_APPS += [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,7 +76,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'setup.middleware.request.CurrentRequestMiddleware',
-    # 'setup.middleware.csrf.CustomCsrfMiddleware',
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'
@@ -137,6 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
 
 # MEDIA
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
