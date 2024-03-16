@@ -1,3 +1,7 @@
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 
 def generate_field_name(field):
     name = field.name
@@ -38,5 +42,22 @@ def generate_column(model, actions=True, default_fields=None):
         })
 
     return columns
+
+
+def compress_image(pic):
+    im = Image.open(pic)
+    if im.mode == 'RGBA':
+        im = im.convert('RGB')
+    # Perform compression operations here
+    image_io = BytesIO()
+    im.save(image_io, format='JPEG', quality=40)  # Adjust quality as needed
+    # image_io.seek(0)
+    content_file = ContentFile(image_io.getvalue())
+    # content_file.name = pic.name
+    # return InMemoryUploadedFile(
+    #     output, 'ImageField', "%s.jpg" % image.name.split('.')[0],
+    #     'image/jpeg', sys.getsizeof(output), None
+    # )
+    return content_file
 
 
