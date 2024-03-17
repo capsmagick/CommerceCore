@@ -15,6 +15,8 @@ if get_env() == 'prod':
 else:
     dotenv_path = BASE_DIR.parent / '.env' / '.local'
 
+print('ENV PATH : ', dotenv_path)
+
 load_dotenv(dotenv_path)
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
