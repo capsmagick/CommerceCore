@@ -1,6 +1,13 @@
 from .base import *
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'commercecore-production.up.railway.app'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "commercecore-production.up.railway.app",
+    # "commercecore-production.up.railway.app",
+]
 
 DEBUG = True
 
