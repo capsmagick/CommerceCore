@@ -5,8 +5,8 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "commercecore-production.up.railway.app",
-    # "commercecore-production.up.railway.app",
+    "https://commercecore-production.up.railway.app",
+    "https://commercecore-production.up.railway.app/",
 ]
 
 DEBUG = True
