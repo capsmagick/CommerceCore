@@ -1,0 +1,9 @@
+{
+  "environments": {
+    "production": {
+      "deploy": {
+        "startCommand": "python manage.py migrate"
+      }
+    }
+  }
+}
