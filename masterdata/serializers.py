@@ -143,7 +143,6 @@ class RetrieveDimensionModelSerializer(serializers.ModelSerializer):
 
 
 class CategoryModelSerializer(serializers.ModelSerializer):
-    tags = TagModelSerializer(many=True)
 
     class Meta:
         model = Category
@@ -166,6 +165,14 @@ class CategoryModelSerializer(serializers.ModelSerializer):
                     })
 
         return attrs
+
+
+class CategoryModelSerializerGET(serializers.ModelSerializer):
+    tags = TagModelSerializer(many=True)
+
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 
 class ReturnReasonModelSerializer(serializers.ModelSerializer):

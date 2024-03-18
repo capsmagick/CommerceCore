@@ -9,6 +9,7 @@ from masterdata.models import Dimension
 from masterdata.models import ReturnReason
 
 from masterdata.serializers import CategoryModelSerializer
+from masterdata.serializers import CategoryModelSerializerGET
 from masterdata.serializers import BrandModelSerializer
 from masterdata.serializers import TagModelSerializer
 from masterdata.serializers import AttributeModelSerializer
@@ -24,6 +25,7 @@ from masterdata.serializers import ReturnReasonModelSerializerGET
 class CategoryModelViewSet(BaseModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
+    retrieve_serializer_class = CategoryModelSerializerGET
     search_fields = ['name', 'parent_category__name', 'description']
     default_fields = [
         'name', 'description', 'is_active', 'parent_category',
