@@ -3,6 +3,7 @@ from users.models.base_model import BaseModel
 from users.models import User
 from product.models import Variant
 from django.db.models import Sum
+from product.models import Products
 
 
 class WishList(BaseModel):
@@ -36,3 +37,33 @@ class CartItem(BaseModel):
         self.total_amount = total_amount
         super().save(*args, **kwargs)
         self.cart.calculate_total()
+
+
+class Review(BaseModel):
+    RATING_CHOICES = (
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+    )
+
+    product = models.ForeignKey(
+        Products, on_delete=models.SET_NULL,
+        related_name='product_review', null=True,
+        verbose_name="Product"
+    )
+
+    comment = models.TextField(null=True, verbose_name='Comment')
+
+    rating = models.CharField(max_length=5, default='0', null=True, verbose_name='Rating', choices=RATING_CHOICES)
+
+
+class ReviewImage(BaseModel):
+    review = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name='review_image',
+        verbose_name='Review', null=True
+    )
+
+    file = models.FileField(upload_to='review/image', verbose_name='Image', blank=True, null=True)
+
