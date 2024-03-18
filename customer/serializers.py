@@ -5,6 +5,7 @@ from customer.models import CartItem
 from customer.models import WishList
 from customer.models import Review
 from customer.models import ReviewImage
+from customer.models import Return
 
 from users.serializers import UserDataModelSerializer
 
@@ -61,7 +62,7 @@ class WishListModelSerializer(serializers.ModelSerializer):
 
 class WishListGETSerializer(serializers.ModelSerializer):
     user = UserDataModelSerializer()
-    product_variant = serializers.ModelSerializer()
+    product_variant = serializers.SerializerMethodField()
 
     def get_product_variant(self, attrs):
         from product.models import Variant
@@ -118,4 +119,30 @@ class ReviewImageSerializer(serializers.ModelSerializer):
         model = ReviewImage
         fields = '__all__'
 
+
+class ReturnModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Return
+        fields = (
+            'reason',
+            'product',
+            'purchase_bill',
+            'description',
+            'refund_method',
+        )
+
+
+class ReturnTrackingUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Return
+        fields = (
+            'tracking_id',
+            'shipping_agent',
+        )
+
+
+class ReturnModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = Return
+        fields = '__all__'
 

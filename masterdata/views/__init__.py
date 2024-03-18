@@ -4,3 +4,4 @@ from .master_data import TagModelViewSet
 from .master_data import AttributeModelViewSet
 from .master_data import AttributeGroupModelViewSet
 from .master_data import DimensionModelViewSet
+from .master_data import ReturnReasonModelViewSet

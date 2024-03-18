@@ -6,30 +6,7 @@ from masterdata.models import Tag
 from masterdata.models import Attribute
 from masterdata.models import AttributeGroup
 from masterdata.models import Dimension
-
-
-class CategoryModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
-    def validate(self, attrs):
-        name = attrs.get('name')
-
-        if not self.instance:
-            if Category.objects.filter(name=name).exists():
-                raise serializers.ValidationError({
-                    'name': 'Name is already in use.'
-                })
-
-        else:
-            if name != self.instance.name:
-                if Category.objects.filter(name=name).exists():
-                    raise serializers.ValidationError({
-                        'name': 'Name is already in use.'
-                    })
-
-        return attrs
+from masterdata.models import ReturnReason
 
 
 class BrandModelSerializer(serializers.ModelSerializer):
@@ -163,3 +140,45 @@ class RetrieveDimensionModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dimension
         fields = '__all__'
+
+
+class CategoryModelSerializer(serializers.ModelSerializer):
+    tags = TagModelSerializer(many=True)
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+    def validate(self, attrs):
+        name = attrs.get('name')
+
+        if not self.instance:
+            if Category.objects.filter(name=name).exists():
+                raise serializers.ValidationError({
+                    'name': 'Name is already in use.'
+                })
+
+        else:
+            if name != self.instance.name:
+                if Category.objects.filter(name=name).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Name is already in use.'
+                    })
+
+        return attrs
+
+
+class ReturnReasonModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReturnReason
+        fields = (
+            'title',
+            'description',
+        )
+
+
+class ReturnReasonModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = ReturnReason
+        fields = '__all__'
+
