@@ -6,7 +6,7 @@
 * ``Transition For status``
 
 ## Modules
-* ``Return``
+* ``Inventory Update``
 * ``Invoice``
 
 

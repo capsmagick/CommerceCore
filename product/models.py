@@ -11,7 +11,7 @@ class Products(BaseModel):
     short_description = models.CharField(max_length=200, null=True, verbose_name='Short Description')
     description = models.TextField(verbose_name='Description', blank=True, null=True)
     sku = models.CharField(max_length=50, blank=True, verbose_name='SKU')
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Price')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Price') # MRP
     selling_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Selling Price')
     # currency = models.CharField(max_length=3, default='INR',
     #                             verbose_name='Currency', null=True)  # [('USD', 'USD'), ('INR', 'INR')]
@@ -50,6 +50,9 @@ class Variant(BaseModel):
                                 verbose_name='Variant')
     attributes = models.ManyToManyField(Attribute, related_name='variant_attributes', blank=True, null=True,
                                         verbose_name='Attributes')
+
+    stock = models.IntegerField(default=0, verbose_name='Stock')
+    selling_price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2, verbose_name='Selling Price')
 
     def __str__(self):
         return f"{self.product.name}"
