@@ -44,13 +44,5 @@ LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

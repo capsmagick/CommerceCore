@@ -8,6 +8,9 @@ from product.models import LookBook
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
+    from customer.serializers import ReviewSerializer
+    review = ReviewSerializer(many=True, read_only=True)
+
     class Meta:
         model = Products
         fields = '__all__'

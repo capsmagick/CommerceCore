@@ -17,7 +17,7 @@ class User(AbstractUser):
     )
 
     is_customer = models.BooleanField(default=False)
-    customer_id = models.CharField(max_length=20, blank=True, null=True, verbose_name='Customer ID')
+    customer_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Customer ID')
     mobile_number = models.CharField(null=True, max_length=15, verbose_name='Mobile Number')
 
     date_of_birth = models.DateField(blank=True, null=True, verbose_name='Date Of Birth')
