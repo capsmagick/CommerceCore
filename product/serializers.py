@@ -6,9 +6,10 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import LookBook
 
+from customer.serializers import ReviewSerializer
+
 
 class ProductsModelSerializer(serializers.ModelSerializer):
-    from customer.serializers import ReviewSerializer
     review = ReviewSerializer(many=True, read_only=True)
 
     class Meta:

@@ -46,8 +46,6 @@ class Dimension(BaseModel):
                                    blank=True)
 
 
-
-
 class Brand(BaseModel):
     name = models.CharField(max_length=75, blank=True, null=True, verbose_name='Name', db_index=True)
     logo = models.FileField(upload_to='brand/logo', blank=True, null=True, verbose_name='Logo')
@@ -96,3 +94,11 @@ class Category(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class ReturnReason(BaseModel):
+    title = models.CharField(max_length=512, null=True, verbose_name='Reason')
+    description = models.TextField(blank=True, null=True, verbose_name='Description')
+
+    def __str__(self):
+        return self.title

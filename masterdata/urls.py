@@ -14,6 +14,7 @@ router.register('tag', views.TagModelViewSet)
 router.register('attribute', views.AttributeModelViewSet)
 router.register('attributegroup', views.AttributeGroupModelViewSet)
 router.register('dimension', views.DimensionModelViewSet)
+router.register('return-reasons', views.ReturnReasonModelViewSet)
 
 urlpatterns = []
 urlpatterns += router.urls

@@ -15,6 +15,8 @@ router.register('cart', views.CartModelViewSet)
 router.register('wishlist', views.WishListModelViewSet)
 
 router.register('product', views.CustomerVariantViewSet)
+router.register('category', views.CustomerCategoryViewSet)
+router.register('return-request', views.CustomerReturnViewSet)
 
 
 urlpatterns = [

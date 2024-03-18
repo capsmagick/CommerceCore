@@ -1,9 +1,10 @@
 from django.db import models
 from users.models.base_model import BaseModel
+from django.db.models import Sum
 from users.models import User
 from product.models import Variant
-from django.db.models import Sum
 from product.models import Products
+from masterdata.models import ReturnReason
 
 
 class WishList(BaseModel):
@@ -13,6 +14,7 @@ class WishList(BaseModel):
     product_variant = models.ForeignKey(
         Variant, on_delete=models.CASCADE, related_name='wishlist_product', verbose_name='Product'
     )
+
 
 class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_cart', verbose_name='User', null=True)
@@ -66,4 +68,75 @@ class ReviewImage(BaseModel):
     )
 
     file = models.FileField(upload_to='review/image', verbose_name='Image', blank=True, null=True)
+
+
+class Return(BaseModel):
+    STATUS_CHOICES = (
+        ('Submitted', 'Submitted'),
+        ('In Review', 'In Review'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    )
+
+    REFUND_METHOD = (
+        ('Exchange', 'Exchange'),
+        ('Refund', 'Refund'),
+    )
+
+    REFUND_CHOICES = (
+        ('Pending', 'Pending'),
+        ('In Transit', 'In Transit'),
+        ('Delivered', 'Delivered'),
+        ('Refund Initiated', 'Refund Initiated'),
+        ('Refunded', 'Refunded'),
+    )
+
+    reason = models.ForeignKey(
+        ReturnReason, on_delete=models.SET_NULL, related_name='return_season',
+        verbose_name='Reason', null=True
+    )
+
+    product = models.ForeignKey(
+        Variant, on_delete=models.SET_NULL, related_name='return_product',
+        verbose_name='Product', null=True
+    )
+
+    purchase_bill = models.FileField(upload_to='return/bill', null=True, blank=True, verbose_name='Purchase Bill')
+    description = models.TextField(blank=True, null=True, verbose_name='Description')
+
+    refund_method = models.CharField(
+        choices=REFUND_METHOD, max_length=70, blank=True, null=True, verbose_name='Refund Method'
+    )
+
+    tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Tracking ID')
+    shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Shipping Agent')
+
+
+    status = models.CharField(
+        choices=STATUS_CHOICES, max_length=25, default='Submitted', verbose_name='Status'
+    )
+
+    approved_user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, related_name='approved_user',
+        blank=True, null=True, verbose_name='Approved User'
+    )
+    approved_comment = models.TextField(blank=True, null=True, verbose_name='Approved Comment')
+    approved_at = models.DateField(blank=True, null=True, verbose_name='Approved Date')
+
+    rejected_user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, related_name='rejected_user',
+        blank=True, null=True, verbose_name='Approved User'
+    )
+    rejected_comment = models.TextField(blank=True, null=True, verbose_name='Rejected Comment')
+    rejected_at = models.DateField(blank=True, null=True, verbose_name='Rejected Date')
+
+    # Refund
+    refund_status = models.CharField(
+        choices=REFUND_CHOICES, max_length=25, default='Submitted', verbose_name='Refund Status'
+    )
+    refund_tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Tracking ID')
+    refund_shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Shipping Agent')
+    refund_transaction_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Tracking ID')
+
+
 

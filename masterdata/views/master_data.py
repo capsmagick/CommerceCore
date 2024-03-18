@@ -6,6 +6,7 @@ from masterdata.models import Tag
 from masterdata.models import Attribute
 from masterdata.models import AttributeGroup
 from masterdata.models import Dimension
+from masterdata.models import ReturnReason
 
 from masterdata.serializers import CategoryModelSerializer
 from masterdata.serializers import BrandModelSerializer
@@ -16,6 +17,8 @@ from masterdata.serializers import AttributeGroupModelSerializer
 from masterdata.serializers import RetrieveAttributeGroupModelSerializer
 from masterdata.serializers import DimensionModelSerializer
 from masterdata.serializers import RetrieveDimensionModelSerializer
+from masterdata.serializers import ReturnReasonModelSerializer
+from masterdata.serializers import ReturnReasonModelSerializerGET
 
 
 class CategoryModelViewSet(BaseModelViewSet):
@@ -62,10 +65,20 @@ class DimensionModelViewSet(BaseModelViewSet):
     queryset = Dimension.objects.all()
     serializer_class = DimensionModelSerializer
     retrieve_serializer_class = RetrieveDimensionModelSerializer
-    search_fields = ['name']
+    search_fields = ['length']
     default_fields = [
         'length', 'breadth', 'height',
         'dimension_unit', 'weight', 'weight_unit'
+    ]
+
+
+class ReturnReasonModelViewSet(BaseModelViewSet):
+    queryset = ReturnReason.objects.all()
+    serializer_class = ReturnReasonModelSerializer
+    retrieve_serializer_class = ReturnReasonModelSerializerGET
+    search_fields = ['title']
+    default_fields = [
+        'title', 'description',
     ]
 
 
