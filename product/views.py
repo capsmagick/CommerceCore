@@ -1,3 +1,7 @@
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+
 from setup.views import BaseModelViewSet
 
 from product.models import Products
@@ -7,11 +11,14 @@ from product.models import Collection
 from product.models import LookBook
 
 from product.serializers import ProductsModelSerializer
+from product.serializers import ProductsModelSerializerGET
 from product.serializers import VariantModelSerializer
 from product.serializers import VariantModelSerializerGET
 from product.serializers import ProductImageModelSerializer
 from product.serializers import CollectionModelSerializer
+from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializer
+from product.serializers import LookBookModelSerializerGET
 
 from setup.utils import compress_image
 
@@ -19,6 +26,7 @@ from setup.utils import compress_image
 class ProductsModelViewSet(BaseModelViewSet):
     queryset = Products.objects.all()
     serializer_class = ProductsModelSerializer
+    retrieve_serializer_class = ProductsModelSerializerGET
     search_fields = ['name']
     default_fields = [
         'name',
@@ -37,6 +45,24 @@ class ProductsModelViewSet(BaseModelViewSet):
         'tags',
         'dimension'
     ]
+
+    @action(detail=True, methods=['POST'], url_path='disable')
+    def disable(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.disable()
+
+        return Response({
+            'message': f'{obj.name} successfully disabled.!'
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='enable')
+    def enable(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.enable()
+
+        return Response({
+            'message': f'{obj.name} successfully enabled.!'
+        }, status=status.HTTP_200_OK)
 
 
 class VariantModelViewSet(BaseModelViewSet):
@@ -78,6 +104,7 @@ class ProductImageModelViewSet(BaseModelViewSet):
 class CollectionModelViewSet(BaseModelViewSet):
     queryset = Collection.objects.all()
     serializer_class = CollectionModelSerializer
+    retrieve_serializer_class = CollectionModelSerializerGET
     search_fields = ['name']
     default_fields = [
         'name',
@@ -88,6 +115,7 @@ class CollectionModelViewSet(BaseModelViewSet):
 class LookBookModelViewSet(BaseModelViewSet):
     queryset = LookBook.objects.all()
     serializer_class = LookBookModelSerializer
+    retrieve_serializer_class = LookBookModelSerializerGET
     search_fields = ['name']
     default_fields = [
         'name',

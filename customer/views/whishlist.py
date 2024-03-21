@@ -1,9 +1,10 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from setup.permissions import IsCustomer
 
@@ -14,7 +15,7 @@ from customer.serializers import WishListGETSerializer
 
 
 class WishListModelViewSet(GenericViewSet, ListModelMixin):
-    permission_classes = (IsCustomer,)
+    permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = WishList.objects.all()
     serializer_class = WishListGETSerializer
 

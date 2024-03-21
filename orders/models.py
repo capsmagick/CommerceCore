@@ -4,6 +4,7 @@ from users.models.other import AddressRegister
 from product.models import Variant
 from django.db.models import Sum
 import datetime
+from django_fsm import transition
 
 
 def generate_order_id():
@@ -44,6 +45,26 @@ class Order(BaseModel):
         if not self.order_id:
             self.order_id = generate_order_id()
         super().save(*args, **kwargs)
+
+    @transition(field=status, source=['Order Placed'], target='Order Processing')
+    def order_processing(self):
+        return f"{self.order_id} moved to Order Processing"
+
+    @transition(field=status, source=['Order Processing'], target='Packed')
+    def packing(self):
+        return f"{self.order_id} moved Packed"
+
+    @transition(field=status, source=['Packed'], target='Shipped')
+    def shipped(self):
+        return f"{self.order_id} moved to Shipped"
+    
+    @transition(field=status, source=['Shipped'], target='Delivered')
+    def delivered(self):
+        return f"{self.order_id} moved Delivered"
+
+    @transition(field=status, source=['Order Placed', 'Packed', 'Delivered'], target='Cancelled')
+    def cancelled(self):
+        return f"{self.order_id} moved to Cancelled"
 
 
 class OrderItem(BaseModel):

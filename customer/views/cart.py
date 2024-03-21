@@ -1,24 +1,21 @@
-from setup.views import BaseModelViewSet
-from rest_framework.mixins import ListModelMixin
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.permissions import IsAuthenticated
 
 from setup.permissions import IsCustomer
 
 from customer.models import Cart
-from customer.models import CartItem
+from product.models import Variant
 
 from customer.serializers import CartModelSerializer
-from customer.serializers import CartItemModelSerializer
+from customer.serializers import UpdateCartProductSerializer
 from customer.serializers import AddToCartSerializer
 
 
-
-
 class CartModelViewSet(GenericViewSet):
-    permission_classes = (IsCustomer,)
+    permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = Cart.objects.all()
     serializer_class = CartModelSerializer
     default_fields = [
@@ -44,6 +41,27 @@ class CartModelViewSet(GenericViewSet):
         serializer = AddToCartSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(cart)
+
+        return Response({
+            'data': serializer.data,
+            'message': 'Successfully added to the cart.!'
+        })
+
+    @action(detail=False, methods=['POST'], url_path='update-cart-product', serializer_class=UpdateCartProductSerializer)
+    def update_cart_product(self, request, pk):
+        cart = self.get_user_cart(request)
+        serializer = UpdateCartProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        product_variant = serializer.validated_data.get('product_variant')
+        quantity = serializer.validated_data.get('quantity')
+
+        cart_item = cart.cartitems.get(
+            cart=cart, product_variant=product_variant
+        )
+        cart_item.quantity += quantity
+        cart_item.save()
+        Variant.objects.get(pk=product_variant).update_stock(quantity)
 
         return Response({
             'data': serializer.data,

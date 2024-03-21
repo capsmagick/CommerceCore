@@ -1,9 +1,10 @@
-from setup.views import BaseModelViewSet
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.permissions import IsAuthenticated
 
+from setup.views import BaseModelViewSet
 from setup.permissions import IsCustomer
 
 from orders.models import Order
@@ -17,7 +18,7 @@ from orders.serializers import OrderItemModelSerializer
 
 
 class PlaceOrder(GenericViewSet):
-    permission_classes = (IsCustomer,)
+    permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = Order.objects.all()
 
     def get_user_cart(self, request):

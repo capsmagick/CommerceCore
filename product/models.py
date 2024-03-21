@@ -27,8 +27,6 @@ class Products(BaseModel):
 
     is_disabled = models.BooleanField(default=False, verbose_name='Disabled')
     hsn_code = models.CharField(max_length=20, blank=True, null=True, verbose_name='HSN Code')
-    rating = models.IntegerField(verbose_name='Rating', blank=True, null=True)
-    no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True, null=True, verbose_name='Tags')
 
     dimension = models.ForeignKey(Dimension, related_name='product_dimensions',
@@ -36,12 +34,20 @@ class Products(BaseModel):
                                   blank=True, null=True,
                                   verbose_name='Dimension')
 
-    # reviews = models.ManyToManyField('Review',
-    #                                  related_name='product_reviews',
-    #                                  verbose_name='Product Review')
+    rating = models.CharField(max_length=120, verbose_name='Rating', blank=True, null=True)
+    no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
+
 
     def __str__(self):
         return self.name
+
+    def disable(self):
+        self.is_disabled = False
+        self.save()
+
+    def enable(self):
+        self.is_disabled = True
+        self.save()
 
 
 class Variant(BaseModel):
@@ -56,6 +62,24 @@ class Variant(BaseModel):
 
     def __str__(self):
         return f"{self.product.name}"
+
+    def restore_stock(self, quantity):
+        updated_stock = self.stock + quantity
+        self.stock = updated_stock
+        self.save()
+
+    def update_stock(self, quantity):
+        if quantity > 0:
+            updated_stock = self.stock - quantity
+            if updated_stock >= 0:
+                self.stock = updated_stock
+        else:
+            self.stock += quantity
+        self.save()
+
+    @classmethod
+    def get_stock(cls, variant):
+        return cls.objects.get(pk=variant).stock
 
 
 class ProductImage(BaseModel):
@@ -90,7 +114,6 @@ class Collection(BaseModel):
     feature_image = models.FileField(upload_to='collections/image', blank=True, null=True,
                                   verbose_name='Feature Image')
     tags = models.ManyToManyField(Tag, related_name='collection_tags', blank=True, null=True, verbose_name='Tags')
-
 
 
     def __str__(self):
