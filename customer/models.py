@@ -1,10 +1,20 @@
 from django.db import models
-from users.models.base_model import BaseModel
 from django.db.models import Sum
+from django_fsm import transition
+
+import datetime
+
+from users.models.base_model import BaseModel
 from users.models import User
 from product.models import Variant
 from product.models import Products
 from masterdata.models import ReturnReason
+
+
+def generate_order_id():
+    now = datetime.datetime.now()
+    order_key = "".join(now.strftime("%Y%b%d%H%M%S%f"))
+    return f"RET{order_key}"
 
 
 class WishList(BaseModel):
@@ -19,7 +29,7 @@ class WishList(BaseModel):
 class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_cart', verbose_name='User', null=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
-    currency = models.CharField(max_length=10,default='INR', null=True, blank=True, verbose_name='Currency')
+    currency = models.CharField(max_length=10, default='INR', null=True, blank=True, verbose_name='Currency')
 
     def calculate_total(self):
         total_amount = CartItem.objects.first(order=self, deleted=False).aggregate(Sum('total_amount'))
@@ -39,6 +49,11 @@ class CartItem(BaseModel):
         self.total_amount = total_amount
         super().save(*args, **kwargs)
         self.cart.calculate_total()
+
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.product_variant.restore_stock(self.quantity)
 
 
 class Review(BaseModel):
@@ -91,6 +106,8 @@ class Return(BaseModel):
         ('Refunded', 'Refunded'),
     )
 
+    return_id = models.CharField(max_length=100, verbose_name='Return Id', null=True, blank=True)
+
     reason = models.ForeignKey(
         ReturnReason, on_delete=models.SET_NULL, related_name='return_season',
         verbose_name='Reason', null=True
@@ -132,11 +149,44 @@ class Return(BaseModel):
 
     # Refund
     refund_status = models.CharField(
-        choices=REFUND_CHOICES, max_length=25, default='Submitted', verbose_name='Refund Status'
+        choices=REFUND_CHOICES, max_length=25, blank=True, null=True, verbose_name='Refund Status'
     )
     refund_tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Tracking ID')
     refund_shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Shipping Agent')
     refund_transaction_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Tracking ID')
+
+    def save(self, *args, **kwargs):
+        if not self.return_id:
+            self.return_id = generate_order_id()
+        super().save(*args, **kwargs)
+
+    @transition(field=status, source=['Submitted'], target='In Review')
+    def in_review(self):
+        return f"{self.return_id} moved to In Review"
+
+    @transition(field=status, source=['In Review'], target='Approved')
+    def approve(self):
+        return f"{self.return_id} moved Approved"
+
+    @transition(field=status, source=['In Review'], target='Rejected')
+    def reject(self):
+        return f"{self.return_id} moved to Reject"
+
+    @transition(field=refund_status, source=['Pending'], target='In Transit')
+    def in_transit(self):
+        return f"{self.return_id} moved to In Transit"
+
+    @transition(field=refund_status, source=['In Transit'], target='Delivered')
+    def delivered(self):
+        return f"{self.return_id} moved Delivered"
+
+    @transition(field=refund_status, source=['Pending'], target='Refund Initiated')
+    def refund_initiated(self):
+        return f"{self.return_id} moved to Refund Initiated"
+
+    @transition(field=refund_status, source=['Refund Initiated'], target='Refunded')
+    def refunded(self):
+        return f"{self.return_id} moved to Refunded"
 
 
 

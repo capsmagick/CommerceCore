@@ -6,6 +6,7 @@ from customer.models import WishList
 from customer.models import Review
 from customer.models import ReviewImage
 from customer.models import Return
+from product.models import Variant
 
 from users.serializers import UserDataModelSerializer
 
@@ -41,10 +42,50 @@ class AddToCartSerializer(serializers.ModelSerializer):
             'price',
         )
 
+    def validate(self, attrs):
+        product_variant = attrs.get('product_variant')
+        quantity = attrs.get('quantity')
+
+        if quantity < 1:
+            raise serializers.ValidationError({
+                'quantity': 'Quantity must be 1 or above.!'
+            })
+
+        if product_variant.stock < quantity:
+            raise serializers.ValidationError({
+                'product_variant': 'Only have limited stock.!'
+            })
+
+        return attrs
+
     def create(self, validated_data):
         cart = validated_data.pop('cart')
         obj = CartItem.objects.create(cart=cart, **validated_data)
         return obj
+
+
+class UpdateCartProductSerializer(serializers.Serializer):
+    product_variant = serializers.SlugRelatedField(
+        slug_field='id',
+        queryset=Variant.objects.all(),
+        required=True,
+    )
+    quantity = serializers.IntegerField(min_value=-1, max_value=1)
+
+    def validate(self, attrs):
+        product_variant = attrs.get('product_variant')
+        quantity = attrs.get('quantity')
+
+        obj = Variant.objects.get(pk=product_variant)
+
+        stock_check = obj.stock + quantity
+
+        if stock_check < 0:
+            raise serializers.ValidationError({
+                'quantity': 'Only have limited quantity'
+            })
+
+        return attrs
 
 
 class WishListModelSerializer(serializers.ModelSerializer):
@@ -65,7 +106,6 @@ class WishListGETSerializer(serializers.ModelSerializer):
     product_variant = serializers.SerializerMethodField()
 
     def get_product_variant(self, attrs):
-        from product.models import Variant
         from product.serializers import VariantModelSerializer
         return VariantModelSerializer(Variant.objects.get(id=attrs.product_variant))
 

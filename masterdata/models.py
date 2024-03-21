@@ -56,6 +56,14 @@ class Brand(BaseModel):
     def __str__(self):
         return self.name
 
+    def deactivate(self):
+        self.is_active = False
+        self.save()
+
+    def activate(self):
+        self.is_active = True
+        self.save()
+
 
 class AttributeGroup(BaseModel):
     name = models.CharField(max_length=75, null=True, verbose_name='Name')
@@ -94,6 +102,14 @@ class Category(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def deactivate(self):
+        self.is_active = False
+        self.save()
+
+    def activate(self):
+        self.is_active = True
+        self.save()
 
 
 class ReturnReason(BaseModel):

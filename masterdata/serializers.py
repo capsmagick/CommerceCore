@@ -12,7 +12,15 @@ from masterdata.models import ReturnReason
 class BrandModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = '__all__'
+        exclude = (
+            'created_by',
+            'created_at',
+            'updated_by',
+            'updated_at',
+            'deleted',
+            'deleted_at',
+            'deleted_by',
+        )
     
     def validate(self, attrs):
         name = attrs.get('name')
@@ -31,6 +39,12 @@ class BrandModelSerializer(serializers.ModelSerializer):
                     })
 
         return attrs
+
+
+class BrandModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
 
 
 class TagModelSerializer(serializers.ModelSerializer):

@@ -2,11 +2,12 @@
 
 ## For All Models
 * ``Form Validations``
+  * `(Particaly Updated)`
 * ``History for all``
-* ``Transition For status``
+* ~~``Transition For status``~~
 
 ## Modules
-* ``Inventory Update``
+* ~~``Inventory Update``~~
 * ``Invoice``
 
 

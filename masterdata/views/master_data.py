@@ -1,3 +1,7 @@
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+
 from setup.views import BaseModelViewSet
 
 from masterdata.models import Category
@@ -11,6 +15,7 @@ from masterdata.models import ReturnReason
 from masterdata.serializers import CategoryModelSerializer
 from masterdata.serializers import CategoryModelSerializerGET
 from masterdata.serializers import BrandModelSerializer
+from masterdata.serializers import BrandModelSerializerGET
 from masterdata.serializers import TagModelSerializer
 from masterdata.serializers import AttributeModelSerializer
 from masterdata.serializers import RetrieveAttributeModelSerializer
@@ -32,12 +37,49 @@ class CategoryModelViewSet(BaseModelViewSet):
         'second_parent_category', 'attribute_group'
     ]
 
+    @action(detail=True, methods=['POST'], url_path='deactivate')
+    def deactivate(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.deactivate()
+
+        return Response({
+            'message': f'{obj.name} successfully deactivated.!'
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='activate')
+    def activate(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.activate()
+
+        return Response({
+            'message': f'{obj.name} successfully activated.!'
+        }, status=status.HTTP_200_OK)
+
 
 class BrandModelViewSet(BaseModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandModelSerializer
+    retrieve_serializer_class = BrandModelSerializerGET
     search_fields = ['name']
     default_fields = ['name', 'description']
+
+    @action(detail=True, methods=['POST'], url_path='deactivate')
+    def deactivate(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.deactivate()
+
+        return Response({
+            'message': f'{obj.name} successfully deactivated.!'
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='activate')
+    def activate(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.activate()
+
+        return Response({
+            'message': f'{obj.name} successfully activated.!'
+        }, status=status.HTTP_200_OK)
 
 
 class TagModelViewSet(BaseModelViewSet):

@@ -10,11 +10,20 @@ from customer.serializers import ReviewSerializer
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
-    review = ReviewSerializer(many=True, read_only=True)
+    price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
+    selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
 
     class Meta:
         model = Products
-        fields = '__all__'
+        exclude = (
+            'created_by',
+            'created_at',
+            'updated_by',
+            'updated_at',
+            'deleted',
+            'deleted_at',
+            'deleted_by',
+        )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -35,14 +44,31 @@ class ProductsModelSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class ProductsModelSerializerGET(serializers.ModelSerializer):
+    review = ReviewSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Products
+        fields = '__all__'
+
+
 class VariantModelSerializer(serializers.ModelSerializer):
+    stock = serializers.IntegerField(min_value=1)
+    selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
+
     class Meta:
         model = Variant
-        fields = '__all__'
+        fields = (
+            'product',
+            'attributes',
+            'stock',
+            'selling_price',
+        )
 
 
 class VariantModelSerializerGET(serializers.ModelSerializer):
     product = ProductsModelSerializer()
+
     class Meta:
         model = Variant
         fields = '__all__'
@@ -57,9 +83,18 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Collection
-        fields = '__all__'
+        exclude = (
+            'created_by',
+            'created_at',
+            'updated_by',
+            'updated_at',
+            'deleted',
+            'deleted_at',
+            'deleted_by',
+        )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -80,10 +115,19 @@ class CollectionModelSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class CollectionModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = '__all__'
+
+
 class LookBookModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = LookBook
-        fields = '__all__'
+        fields = (
+            'name',
+            'variants',
+        )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -102,3 +146,9 @@ class LookBookModelSerializer(serializers.ModelSerializer):
                     })
 
         return attrs
+
+
+class LookBookModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = LookBook
+        fields = '__all__'
