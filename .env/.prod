@@ -1,9 +1,9 @@
 DJANGO_SECRET_KEY='django-insecure-fp76c(6p%%!x-p)wv#d!w*4ff60qjukiims407wo)-xjr10r+h'
 
 
-DB_NAME=railway
-DB_USER=postgres
-DB_PASSWORD=mSQvIOzkwTKFuhCDRNVyuDtgVEEGvArE
-DB_HOST=monorail.proxy.rlwy.net
-DB_PORT=15288
+DB_NAME=commerce_prod_db
+DB_USER=commerce_admin
+DB_PASSWORD=com_admin_q1w2
+DB_HOST=135.181.1.40
+DB_PORT=5432
 

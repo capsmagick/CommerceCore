@@ -10,8 +10,10 @@ from .utils import get_env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if get_env() == 'prod':
+if get_env() == 'prod' or get_env() == 'production':
     dotenv_path = BASE_DIR.parent / '.env' / '.prod'
+elif get_env() == 'stage' or get_env() == 'uat':
+    dotenv_path = BASE_DIR.parent / '.env' / '.stage'
 else:
     dotenv_path = BASE_DIR.parent / '.env' / '.local'
 
