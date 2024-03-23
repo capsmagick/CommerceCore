@@ -8,6 +8,9 @@ print('THE ENVIRONMENT IS : ', ENV)
 if ENV == 'dev' or ENV == 'development' or ENV == 'local':
     from .local import *
 
+elif ENV == 'stage' or ENV == 'uat':
+    from .stage import *
+
 elif ENV == 'prod' or ENV == 'production':
     from .production import *
 
