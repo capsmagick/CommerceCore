@@ -14,10 +14,14 @@ from setup.views import BaseModelViewSet
 from setup.permissions import IsCustomer
 
 from product.models import Variant
+from product.models import Collection
+from product.models import LookBook
 from masterdata.models import Category
 from customer.models import Return
 
 from product.serializers import VariantModelSerializerGET
+from product.serializers import CollectionModelSerializerGET
+from product.serializers import LookBookModelSerializerGET
 from masterdata.serializers import CategoryModelSerializer
 from customer.serializers import ReturnModelSerializer
 from customer.serializers import ReturnModelSerializerGET
@@ -38,6 +42,22 @@ class CustomerCategoryViewSet(GenericViewSet, ListModelMixin):
     serializer_class = CategoryModelSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['name', 'tags', 'handle']
+
+
+class CustomerCollectionViewSet(GenericViewSet, ListModelMixin):
+    permission_classes = (AllowAny,)
+    queryset = Collection.objects.all()
+    serializer_class = CollectionModelSerializerGET
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['name', 'tags', 'description']
+
+
+class CustomerLookBookViewSet(GenericViewSet, ListModelMixin):
+    permission_classes = (AllowAny,)
+    queryset = LookBook.objects.all()
+    serializer_class = LookBookModelSerializerGET
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['name']
 
 
 class CustomerReturnViewSet(BaseModelViewSet):
