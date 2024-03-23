@@ -26,6 +26,10 @@ from masterdata.serializers import RetrieveDimensionModelSerializer
 from masterdata.serializers import ReturnReasonModelSerializer
 from masterdata.serializers import ReturnReasonModelSerializerGET
 
+from masterdata.filters import CategoryFilter
+from masterdata.filters import BrandFilter
+from masterdata.filters import AttributeGroupFilter
+
 
 class CategoryModelViewSet(BaseModelViewSet):
     queryset = Category.objects.all()
@@ -36,6 +40,7 @@ class CategoryModelViewSet(BaseModelViewSet):
         'name', 'description', 'is_active', 'parent_category',
         'second_parent_category', 'attribute_group'
     ]
+    filterset_class = CategoryFilter
 
     @action(detail=True, methods=['POST'], url_path='deactivate')
     def deactivate(self, request, *args, **kwargs):
@@ -62,6 +67,7 @@ class BrandModelViewSet(BaseModelViewSet):
     retrieve_serializer_class = BrandModelSerializerGET
     search_fields = ['name']
     default_fields = ['name', 'description']
+    filterset_class = BrandFilter
 
     @action(detail=True, methods=['POST'], url_path='deactivate')
     def deactivate(self, request, *args, **kwargs):
@@ -103,6 +109,7 @@ class AttributeGroupModelViewSet(BaseModelViewSet):
     retrieve_serializer_class = RetrieveAttributeGroupModelSerializer
     search_fields = ['name']
     default_fields = ['name', 'attributes']
+    filterset_class = AttributeGroupFilter
 
 
 class DimensionModelViewSet(BaseModelViewSet):

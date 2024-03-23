@@ -35,3 +35,8 @@ class AddressRegister(BaseModel):
 
     def __str__(self):
         return self.full_name
+
+    def make_default(self):
+        AddressRegister.objects.filter(user=self.user).update(is_default=False)
+        self.is_default = True
+        self.save()

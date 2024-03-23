@@ -63,6 +63,25 @@ class AddressRegisterModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AddressRegister
+        exclude = (
+            'created_by',
+            'created_at',
+            'updated_by',
+            'updated_at',
+            'deleted',
+            'deleted_at',
+            'deleted_by',
+        )
+
+
+class AddressRegisterModelSerializerGET(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(read_only=True)
+
+    def get_user(self, attrs):
+        return UserDataModelSerializer(attrs.user).data
+
+    class Meta:
+        model = AddressRegister
         fields = '__all__'
 
 
