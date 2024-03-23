@@ -7,6 +7,7 @@ from product.models import Collection
 from product.models import LookBook
 
 from customer.serializers import ReviewSerializer
+from masterdata.serializers import TagModelSerializer
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
@@ -116,6 +117,9 @@ class CollectionModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializerGET(serializers.ModelSerializer):
+    collections = VariantModelSerializerGET(many=True, read_only=True)
+    tags = TagModelSerializer(many=True, read_only=True)
+
     class Meta:
         model = Collection
         fields = '__all__'
@@ -149,6 +153,8 @@ class LookBookModelSerializer(serializers.ModelSerializer):
 
 
 class LookBookModelSerializerGET(serializers.ModelSerializer):
+    variants = VariantModelSerializerGET(many=True, read_only=True)
+
     class Meta:
         model = LookBook
         fields = '__all__'

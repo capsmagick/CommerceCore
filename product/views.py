@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+from setup.utils import compress_image
+
 from setup.views import BaseModelViewSet
 
 from product.models import Products
@@ -20,7 +22,12 @@ from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializer
 from product.serializers import LookBookModelSerializerGET
 
-from setup.utils import compress_image
+from product.filters import ProductFilter
+from product.filters import VariantFilter
+from product.filters import ProductImageFilter
+from product.filters import CollectionFilter
+from product.filters import LookBookFilter
+
 
 
 class ProductsModelViewSet(BaseModelViewSet):
@@ -45,6 +52,7 @@ class ProductsModelViewSet(BaseModelViewSet):
         'tags',
         'dimension'
     ]
+    filterset_class = ProductFilter
 
     @action(detail=True, methods=['POST'], url_path='disable')
     def disable(self, request, *args, **kwargs):
@@ -74,6 +82,7 @@ class VariantModelViewSet(BaseModelViewSet):
         'product',
         'attributes'
     ]
+    filterset_class = VariantFilter
 
 
 class ProductImageModelViewSet(BaseModelViewSet):
@@ -87,6 +96,7 @@ class ProductImageModelViewSet(BaseModelViewSet):
         'thumbnail',
         'alt_text'
     ]
+    filterset_class = ProductImageFilter
 
     def perform_db_action(self, serializer):
         obj = serializer.save()
@@ -110,6 +120,7 @@ class CollectionModelViewSet(BaseModelViewSet):
         'name',
         'collections'
     ]
+    filterset_class = CollectionFilter
 
 
 class LookBookModelViewSet(BaseModelViewSet):
@@ -121,4 +132,5 @@ class LookBookModelViewSet(BaseModelViewSet):
         'name',
         'variants'
     ]
+    filterset_class = LookBookFilter
 
