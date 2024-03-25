@@ -7,31 +7,31 @@ from product.models import Collection
 from product.models import LookBook
 
 
-class ProductFilter(filters.Filter):
+class ProductFilter(filters.FilterSet):
     class Meta:
         model = Products
         fields = ['condition', 'categories', 'brand', 'is_disabled', 'tags']
 
 
-class VariantFilter(filters.Filter):
+class VariantFilter(filters.FilterSet):
     class Meta:
         model = Variant
         fields = ['product', 'attributes', 'product__brand', 'product__categories', 'product__tags']
 
 
-class ProductImageFilter(filters.Filter):
+class ProductImageFilter(filters.FilterSet):
     class Meta:
         model = ProductImage
         fields = ['product', 'variant']
 
 
-class CollectionFilter(filters.Filter):
+class CollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
         fields = ['collections']
 
 
-class LookBookFilter(filters.Filter):
+class LookBookFilter(filters.FilterSet):
     class Meta:
         model = LookBook
         fields = ['variants']

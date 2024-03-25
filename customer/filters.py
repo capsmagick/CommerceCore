@@ -7,31 +7,31 @@ from masterdata.models import Category
 from customer.models import Return
 
 
-class CustomerVariantFilter(filters.Filter):
+class CustomerVariantFilter(filters.FilterSet):
     class Meta:
         model = Variant
         fields = ['product', 'attributes']
 
 
-class CustomerCollectionFilter(filters.Filter):
+class CustomerCollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
         fields = ['name', 'collections', 'tags']
 
 
-class CustomerLookBookFilter(filters.Filter):
+class CustomerLookBookFilter(filters.FilterSet):
     class Meta:
         model = LookBook
         fields = ['variants']
 
 
-class CustomerCategoryFilter(filters.Filter):
+class CustomerCategoryFilter(filters.FilterSet):
     class Meta:
         model = Category
         fields = ['parent_category', 'second_parent_category', 'attribute_group', 'tags']
 
 
-class CustomerReturnFilter(filters.Filter):
+class CustomerReturnFilter(filters.FilterSet):
     class Meta:
         model = Return
         fields = [
