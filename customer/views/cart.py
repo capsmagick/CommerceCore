@@ -9,9 +9,9 @@ from setup.permissions import IsCustomer
 from customer.models import Cart
 from product.models import Variant
 
-from customer.serializers import CartModelSerializer
-from customer.serializers import UpdateCartProductSerializer
-from customer.serializers import AddToCartSerializer
+from customer.serializers.serializers import CartModelSerializer
+from customer.serializers.serializers import UpdateCartProductSerializer
+from customer.serializers.serializers import AddToCartSerializer
 
 
 class CartModelViewSet(GenericViewSet):

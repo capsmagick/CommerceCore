@@ -6,7 +6,7 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import LookBook
 
-from customer.serializers import ReviewSerializer
+from customer.serializers.serializers import ReviewSerializer
 from masterdata.serializers import TagModelSerializer
 
 
