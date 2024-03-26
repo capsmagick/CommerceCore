@@ -138,14 +138,14 @@ class Return(BaseModel):
         blank=True, null=True, verbose_name='Approved User'
     )
     approved_comment = models.TextField(blank=True, null=True, verbose_name='Approved Comment')
-    approved_at = models.DateField(blank=True, null=True, verbose_name='Approved Date')
+    approved_at = models.DateTimeField(blank=True, null=True, verbose_name='Approved Date')
 
     rejected_user = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='rejected_user',
         blank=True, null=True, verbose_name='Approved User'
     )
     rejected_comment = models.TextField(blank=True, null=True, verbose_name='Rejected Comment')
-    rejected_at = models.DateField(blank=True, null=True, verbose_name='Rejected Date')
+    rejected_at = models.DateTimeField(blank=True, null=True, verbose_name='Rejected Date')
 
     # Refund
     refund_status = models.CharField(

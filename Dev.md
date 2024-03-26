@@ -20,7 +20,7 @@
 * ``Payment Integration``
 * ``Delivery Integration``
 * ``Refund``
-* ``Algolia Search Integration``
+* ``Algolia Search Integration -> (On POC)``
 
 ## Later
 * ``Customer Group (Last)``

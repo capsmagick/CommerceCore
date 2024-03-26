@@ -10,8 +10,8 @@ from setup.permissions import IsCustomer
 
 from customer.models import WishList
 
-from customer.serializers import WishListModelSerializer
-from customer.serializers import WishListGETSerializer
+from customer.serializers.serializers import WishListModelSerializer
+from customer.serializers.serializers import WishListGETSerializer
 
 
 class WishListModelViewSet(GenericViewSet, ListModelMixin):
