@@ -3,7 +3,6 @@ from rest_framework import serializers
 from customer.models import Return
 
 from users.serializers import UserDataModelSerializer
-from product.serializers import VariantModelSerializer
 from masterdata.serializers import ReturnReasonModelSerializerGET
 
 class ReturnModelSerializer(serializers.ModelSerializer):
@@ -34,7 +33,7 @@ class ReturnModelSerializerGET(serializers.ModelSerializer):
     rejected_user = UserDataModelSerializer()
 
     def get_product(self, attrs):
-
+        from product.serializers import VariantModelSerializer
         return VariantModelSerializer(attrs.product).data
 
     class Meta:
