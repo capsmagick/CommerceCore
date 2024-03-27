@@ -8,6 +8,9 @@ from product.models import LookBook
 
 from customer.serializers.serializers import ReviewSerializer
 from masterdata.serializers import TagModelSerializer
+from masterdata.serializers import CategoryModelSerializerGET
+from masterdata.serializers import BrandModelSerializerGET
+from masterdata.serializers import RetrieveDimensionModelSerializer
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
@@ -47,6 +50,13 @@ class ProductsModelSerializer(serializers.ModelSerializer):
 
 class ProductsModelSerializerGET(serializers.ModelSerializer):
     review = ReviewSerializer(many=True, read_only=True)
+    categories = CategoryModelSerializerGET(many=True, read_only=True)
+    brand = BrandModelSerializerGET(read_only=True)
+    dimension = RetrieveDimensionModelSerializer(read_only=True)
+    images = serializers.SerializerMethodField()
+
+    def get_images(self, attrs):
+        return ProductImageModelSerializer(attrs.product_images.all(), many=True).data
 
     class Meta:
         model = Products
