@@ -65,7 +65,7 @@ class CustomerReturnViewSet(BaseModelViewSet):
 class ManageCustomerReturn(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = Return.objects.all()
-    retrieve_serializer_class = ReturnModelSerializerGET
+    serializer_class = ReturnModelSerializerGET
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = CustomerReturnFilter
     search_fields = ['reason__title', 'product__product__name', 'refund_method', 'status', 'refund_status']
