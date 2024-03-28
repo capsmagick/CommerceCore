@@ -27,6 +27,9 @@ from customer.filters import CustomerReturnFilter
 
 
 class CustomerReturnViewSet(BaseModelViewSet):
+    """
+        API for Return request to customer.
+    """
     permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = Return.objects.all()
     serializer_class = ReturnTrackingUpdateSerializer
@@ -40,6 +43,20 @@ class CustomerReturnViewSet(BaseModelViewSet):
 
     @action(detail=False, methods=['POST'], url_path='add-return', serializer_class=ReturnModelSerializer)
     def create_record(self, request, *args, **kwargs):
+        """
+            Create a new return request
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            reason (int): The primary key of the return reason model.
+            product (int): The primary key of the variant product model.
+            purchase_bill (file): The bill for the purchase.
+            description (char): The comment by the customer
+            refund_method (char): The customer wish that what type of the refund will be Exchange or Refund
+
+            Returns:
+            Response: A DRF Response object indicates success or a failure with a message.
+        """
         serializer = ReturnModelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -51,6 +68,17 @@ class CustomerReturnViewSet(BaseModelViewSet):
 
     @action(detail=False, methods=['PATCH'], url_path='update-return', serializer_class=ReturnTrackingUpdateSerializer)
     def update_record(self, request, *args, **kwargs):
+        """
+            Update an existing return request
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            tracking_id (char): The tracking id of product that sent by the customer.
+            shipping_agent (char): The shipping agent that the customer sent the product through.
+
+            Returns:
+            Response: A DRF Response object indicates success or a failure with a message.
+        """
         instance = self.get_object()
         serializer = ReturnTrackingUpdateSerializer(instance=instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)

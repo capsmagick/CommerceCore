@@ -15,6 +15,10 @@ def generate_field_name(field):
 
 
 def generate_column(model, actions=True, default_fields=None):
+    """
+        Function to create list of fields in any table
+    """
+
     fields = model._meta.fields
 
     columns = []
@@ -45,19 +49,18 @@ def generate_column(model, actions=True, default_fields=None):
 
 
 def compress_image(pic):
+    """
+        Function to compress the image to make thumb nile image
+    """
     im = Image.open(pic)
     if im.mode == 'RGBA':
         im = im.convert('RGB')
+
     # Perform compression operations here
     image_io = BytesIO()
     im.save(image_io, format='JPEG', quality=40)  # Adjust quality as needed
-    # image_io.seek(0)
     content_file = ContentFile(image_io.getvalue())
-    # content_file.name = pic.name
-    # return InMemoryUploadedFile(
-    #     output, 'ImageField', "%s.jpg" % image.name.split('.')[0],
-    #     'image/jpeg', sys.getsizeof(output), None
-    # )
+
     return content_file
 
 

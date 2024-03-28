@@ -83,6 +83,7 @@ class ReviewImage(BaseModel):
     )
 
     file = models.FileField(upload_to='review/image', verbose_name='Image', blank=True, null=True)
+    name = models.CharField(max_length=250, blank=True, null=True)
 
 
 class Return(BaseModel):

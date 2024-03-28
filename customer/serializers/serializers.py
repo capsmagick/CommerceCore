@@ -133,9 +133,10 @@ class ReviewSerializerPOST(serializers.ModelSerializer):
         review = Review.objects.create(**validated_data)
 
         for image in review_images:
-            ReviewImage.objects.create(
-                reviewe=review, file=image
-            )
+            review.review_image.create(**{
+                'file': image,
+                'name': image.name
+            })
 
         return review
 

@@ -56,6 +56,16 @@ class ProductsModelViewSet(BaseModelViewSet):
 
     @action(detail=True, methods=['POST'], url_path='disable')
     def disable(self, request, *args, **kwargs):
+        """
+            API For disable the product
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            pk (int): The primary key of the product table
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
         obj = self.get_object()
         obj.disable()
 
@@ -65,6 +75,16 @@ class ProductsModelViewSet(BaseModelViewSet):
 
     @action(detail=True, methods=['POST'], url_path='enable')
     def enable(self, request, *args, **kwargs):
+        """
+            API For enable the product
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            pk (int): The primary key of the product table
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
         obj = self.get_object()
         obj.enable()
 

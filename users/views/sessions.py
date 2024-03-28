@@ -13,10 +13,23 @@ from .utils import get_userdata
 
 
 class Signup(APIView):
+    """
+        API For Signup the customer to our site
+    """
     permission_classes = (AllowAny,)
     serializer_class = UserSignupModelSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+            POST API to save the details of customer
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            __all__ fields present in the serializer class
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -31,6 +44,17 @@ class Login(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
+        """
+            Login API Session
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            username (char): Username of the user.
+            password (char): Password of the user.
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
         serializer = LoginSerializer(data=request.data, **{'request': request})
 
         if serializer.is_valid(raise_exception=True):
@@ -46,6 +70,15 @@ class Logout(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
+        """
+            Logout API Session
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
         logout(request)
         return Response({
             'message': 'Successfully logged out'
@@ -56,12 +89,24 @@ class ChangePassword(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
+        """
+            Change Password API
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            old_password (char): The old password of the user.
+            new_password (char): The new password of the user.
+            confirm_password (char): The new password of the user [Retyped].
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
         serializer = ResetPassword(data=request.data, **{'request': request})
 
         if serializer.is_valid(raise_exception=True):
             password = serializer.validated_data['confirm_password']
             serializer.save(password)
-
+            logout(request)
             return Response({
                 'success': True,
                 'message': 'Successfully Password Updated'

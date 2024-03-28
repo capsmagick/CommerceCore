@@ -25,6 +25,15 @@ from customer.filters import CustomerLookBookFilter
 
 
 class CustomerVariantViewSet(GenericViewSet, ListModelMixin):
+    """
+        Get the list of variant products.
+
+        Parameters:
+        request (HttpRequest): The HTTP request object containing model data.
+
+        Returns:
+        Response: A DRF Response object with the variant product data.
+    """
     permission_classes = (AllowAny,)
     queryset = Variant.objects.all()
     serializer_class = VariantModelSerializerGET
@@ -40,6 +49,16 @@ class CustomerVariantViewSet(GenericViewSet, ListModelMixin):
 
 
 class CustomerCategoryViewSet(GenericViewSet, ListModelMixin):
+    """
+        Get the list of categories.
+
+        Parameters:
+        request (HttpRequest): The HTTP request object containing model data.
+
+        Returns:
+        Response: A DRF Response object with the category data.
+    """
+
     permission_classes = (AllowAny,)
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
@@ -49,6 +68,15 @@ class CustomerCategoryViewSet(GenericViewSet, ListModelMixin):
 
 
 class CustomerCollectionViewSet(GenericViewSet, ListModelMixin):
+    """
+        Get the list of collection.
+
+        Parameters:
+        request (HttpRequest): The HTTP request object containing model data.
+
+        Returns:
+        Response: A DRF Response object with the collection data.
+    """
     permission_classes = (AllowAny,)
     queryset = Collection.objects.all()
     serializer_class = CollectionModelSerializerGET
@@ -58,6 +86,15 @@ class CustomerCollectionViewSet(GenericViewSet, ListModelMixin):
 
 
 class CustomerLookBookViewSet(GenericViewSet, ListModelMixin):
+    """
+        Get the list of look book.
+
+        Parameters:
+        request (HttpRequest): The HTTP request object containing model data.
+
+        Returns:
+        Response: A DRF Response object with the look book data.
+    """
     permission_classes = (AllowAny,)
     queryset = LookBook.objects.all()
     serializer_class = LookBookModelSerializerGET
