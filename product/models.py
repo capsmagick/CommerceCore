@@ -99,6 +99,7 @@ class ProductImage(BaseModel):
     thumbnail = models.ImageField(upload_to='product_images/thumbnail', blank=True, null=True,
                                   verbose_name='Thumbnail')
     alt_text = models.CharField(max_length=255, verbose_name='Alt Text')
+    name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.alt_text
