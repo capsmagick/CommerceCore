@@ -10,12 +10,18 @@ from django_fsm import transition
 def generate_order_id():
     now = datetime.datetime.now()
     order_key = "".join(now.strftime("%Y%b%d%H%M%S%f"))
-    return f"ORD{order_key}"
+    order_id = f"ORD{order_key}"
+
+    if Order.objects.filter(order_id=order_id).exists():
+        return generate_order_id()
+    return order_id
 
 
 
 class Order(BaseModel):
     STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Payment Initiated', 'Payment Initiated'),
         ('Order Placed', 'Order Placed'),
         ('Order Processing', 'Order Processing'),
         ('Packed', 'Packed'),
@@ -31,7 +37,7 @@ class Order(BaseModel):
     user = models.CharField(max_length=150, verbose_name='User')
     address = models.ForeignKey(AddressRegister, related_name='order_address', null=True, verbose_name='Address', on_delete=models.SET_NULL)
 
-    status = models.CharField(choices=STATUS_CHOICES, max_length=20, default='Order Placed', verbose_name='Status')
+    status = models.CharField(choices=STATUS_CHOICES, max_length=20, default='Pending', verbose_name='Status')
 
     payment_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Payment ID')
     shipping_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Shipping ID')
@@ -45,6 +51,18 @@ class Order(BaseModel):
         if not self.order_id:
             self.order_id = generate_order_id()
         super().save(*args, **kwargs)
+
+    @transition(field=status, source=['Pending'], target='Payment Initiated')
+    def order_payment(self):
+        return f"{self.order_id} moved to Payment Initiated"
+
+    @transition(field=status, source=['Payment Initiated'], target='Pending')
+    def order_pending(self):
+        return f"{self.order_id} moved to Pending"
+
+    @transition(field=status, source=['Payment Initiated'], target='Order Placed')
+    def order_placed(self):
+        return f"{self.order_id} moved to Order Placed"
 
     @transition(field=status, source=['Order Placed'], target='Order Processing')
     def order_processing(self):

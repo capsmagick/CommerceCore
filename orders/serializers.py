@@ -26,6 +26,14 @@ class OrderItemModelSerializer(serializers.ModelSerializer):
         )
 
 
+class OrderItemRetrieveModelSerializer(serializers.ModelSerializer):
+    product_variant = VariantModelSerializerGET()
+
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+
+
 class PlaceOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -37,5 +45,14 @@ class PlaceOrderSerializer(serializers.ModelSerializer):
 class BuyNowSerializer(serializers.Serializer):
     product_variant = VariantModelSerializerGET()
     address = serializers.SlugRelatedField(slug_field='id', queryset=AddressRegister.objects.all())
+
+
+class OrderRetrieveSerializer(serializers.ModelSerializer):
+    orderitems = OrderItemRetrieveModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+
 
 

@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from masterdata.models import Category
-from masterdata.models import Brand
-from masterdata.models import Tag
-from masterdata.models import Attribute
-from masterdata.models import AttributeGroup
-from masterdata.models import Dimension
-from masterdata.models import ReturnReason
+from .models import Category
+from .models import Brand
+from .models import Tag
+from .models import Attribute
+from .models import AttributeGroup
+from .models import Dimension
+from .models import ReturnReason
 
 
 class BrandModelSerializer(serializers.ModelSerializer):

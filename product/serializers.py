@@ -113,6 +113,7 @@ class VariantModelSerializer(serializers.ModelSerializer):
             'attributes',
             'stock',
             'selling_price',
+            'images',
         )
 
 

@@ -1,8 +1,8 @@
 import django_filters as filters
 
-from masterdata.models import Category
-from masterdata.models import Brand
-from masterdata.models import AttributeGroup
+from .models import Category
+from .models import Brand
+from .models import AttributeGroup
 
 
 class CategoryFilter(filters.FilterSet):

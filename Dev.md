@@ -21,6 +21,7 @@
 * ``Delivery Integration``
 * ``Refund``
 * ``Algolia Search Integration -> (On POC)``
+* ``Login With Google and Facebook``
 
 ## Later
 * ``Customer Group (Last)``

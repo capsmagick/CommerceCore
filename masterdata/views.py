@@ -4,31 +4,31 @@ from rest_framework.decorators import action
 
 from setup.views import BaseModelViewSet
 
-from masterdata.models import Category
-from masterdata.models import Brand
-from masterdata.models import Tag
-from masterdata.models import Attribute
-from masterdata.models import AttributeGroup
-from masterdata.models import Dimension
-from masterdata.models import ReturnReason
+from .models import Category
+from .models import Brand
+from .models import Tag
+from .models import Attribute
+from .models import AttributeGroup
+from .models import Dimension
+from .models import ReturnReason
 
-from masterdata.serializers import CategoryModelSerializer
-from masterdata.serializers import CategoryModelSerializerGET
-from masterdata.serializers import BrandModelSerializer
-from masterdata.serializers import BrandModelSerializerGET
-from masterdata.serializers import TagModelSerializer
-from masterdata.serializers import AttributeModelSerializer
-from masterdata.serializers import RetrieveAttributeModelSerializer
-from masterdata.serializers import AttributeGroupModelSerializer
-from masterdata.serializers import RetrieveAttributeGroupModelSerializer
-from masterdata.serializers import DimensionModelSerializer
-from masterdata.serializers import RetrieveDimensionModelSerializer
-from masterdata.serializers import ReturnReasonModelSerializer
-from masterdata.serializers import ReturnReasonModelSerializerGET
+from .serializers import CategoryModelSerializer
+from .serializers import CategoryModelSerializerGET
+from .serializers import BrandModelSerializer
+from .serializers import BrandModelSerializerGET
+from .serializers import TagModelSerializer
+from .serializers import AttributeModelSerializer
+from .serializers import RetrieveAttributeModelSerializer
+from .serializers import AttributeGroupModelSerializer
+from .serializers import RetrieveAttributeGroupModelSerializer
+from .serializers import DimensionModelSerializer
+from .serializers import RetrieveDimensionModelSerializer
+from .serializers import ReturnReasonModelSerializer
+from .serializers import ReturnReasonModelSerializerGET
 
-from masterdata.filters import CategoryFilter
-from masterdata.filters import BrandFilter
-from masterdata.filters import AttributeGroupFilter
+from .filters import CategoryFilter
+from .filters import BrandFilter
+from .filters import AttributeGroupFilter
 
 
 class CategoryModelViewSet(BaseModelViewSet):

@@ -9,7 +9,7 @@ else:
     router = SimpleRouter()
 
 router.register('order', views.OrderModelViewSet)
-router.register('orderitems', views.OrderItemModelSerializer)
+router.register('placeorder', views.PlaceOrder)
 
 urlpatterns = []
 urlpatterns += router.urls

@@ -9,9 +9,9 @@ from setup.permissions import IsCustomer
 from customer.models import Cart
 from product.models import Variant
 
-from customer.serializers.serializers import CartModelSerializer
-from customer.serializers.serializers import UpdateCartProductSerializer
-from customer.serializers.serializers import AddToCartSerializer
+from customer.serializers import CartModelSerializer
+from customer.serializers import UpdateCartProductSerializer
+from customer.serializers import AddToCartSerializer
 
 
 class CartModelViewSet(GenericViewSet):
@@ -36,10 +36,10 @@ class CartModelViewSet(GenericViewSet):
             Get the current user cart.
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
+                request (HttpRequest): The HTTP request object containing model data.
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message with cart details.
+                Response: A DRF Response object indicating success or failure and a message with cart details.
         """
         cart = self.get_user_cart(request)
         return Response(CartModelSerializer(cart).data, status=status.HTTP_200_OK)
