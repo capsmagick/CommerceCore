@@ -24,6 +24,15 @@ class Me(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
+        """
+            Refresh session API
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
 
         user = request.user
 

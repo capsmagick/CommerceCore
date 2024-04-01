@@ -26,6 +26,16 @@ class AddressRegisterModelViewSet(BaseModelViewSet):
 
     @action(detail=True, methods=['POST'], url_path='make-default')
     def make_default(self, request, *args, **kwargs):
+        """
+            API For marking default address in the customer address registry
+
+            Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+            pk (int): The primary key of the address register table.
+
+            Returns:
+            Response: A DRF Response object indicating success or failure and a message.
+        """
         obj = self.get_object()
         obj.make_default()
 

@@ -2,6 +2,24 @@ DJANGO_SECRET_KEY='django-insecure-fp76c(6p%%!x-p)wv#d!w*4ff60qjukiims407wo)-xjr
 
 DEBUG=True
 
+# DB Details
+# -----------------------
 DB_NAME=commercecore
 DB_USER=postgres
 DB_PASSWORD=rsys@013
+
+# Payment Details (PhonePe)
+# ------------------------
+PHONE_PE_USER_ID=8891633773
+PHONE_PE_MERCHANT_ID=M22Q3JLT6IUGJ
+PHONE_PE_API_KEY=35456a48-fc84-4a0f-ad63-d53de7f4659b
+PHONE_PE_KEY_INDEX=1
+
+PHONE_PAY_S2S_CALLBACK_URL=http://127.0.0.1:8008/transaction/payment/callback/
+PHONE_PAY_REDIRECT_URL=http://127.0.0.1:8008/transaction/payment/callback/
+
+# Shipping Details (Shiprocket)
+# -------------------------
+SHIPROCKET_EMAIL=rmuwork51@gmail.com
+SHIPROCKET_PASSWORD=rmuKnowbinTech
+

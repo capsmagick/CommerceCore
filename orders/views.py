@@ -3,18 +3,20 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.mixins import ListModelMixin
 
-from setup.views import BaseModelViewSet
 from setup.permissions import IsCustomer
+from setup.permissions import IsSuperUser
+from setup.utils import generate_column
 
-from orders.models import Order
-from orders.models import OrderItem
 from customer.models import Cart
 
-from orders.serializers import OrderModelSerializer
-from orders.serializers import PlaceOrderSerializer
-from orders.serializers import BuyNowSerializer
-from orders.serializers import OrderItemModelSerializer
+from .models import Order
+from .models import OrderItem
+
+from .serializers import PlaceOrderSerializer
+from .serializers import BuyNowSerializer
+from .serializers import OrderRetrieveSerializer
 
 
 class PlaceOrder(GenericViewSet):
@@ -22,6 +24,9 @@ class PlaceOrder(GenericViewSet):
     queryset = Order.objects.all()
 
     def get_user_cart(self, request):
+        """
+            Function for getting the user cart
+        """
         cart, created = Cart.objects.get(
             user_id=request.user.id, deleted=False
         )
@@ -29,6 +34,16 @@ class PlaceOrder(GenericViewSet):
 
     @action(detail=False, methods=['POST'], url_path='place-order', serializer_class=PlaceOrderSerializer)
     def place_order(self, request):
+        """
+            API For Place Order
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                all data in the PlaceOrderSerializer serializer
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message with order details.
+        """
         serializer = PlaceOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         cart = self.get_user_cart(request)
@@ -37,7 +52,7 @@ class PlaceOrder(GenericViewSet):
             total_amount=cart.total_amount,
             user=cart.user.username,
             address=serializer.validated_data.get('address'),
-            status='Order Placed'
+            status='Pending'
         )
 
         cart_items = cart.cartitems.filter(deleted=False)
@@ -55,11 +70,22 @@ class PlaceOrder(GenericViewSet):
         OrderItem.objects.bulk_create(order_items)
 
         return Response({
-            'message': 'Successfully created new order..!'
+            'message': 'Successfully created new order..!',
+            'data': OrderRetrieveSerializer(new_order).data
         }, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], url_path='buy-now', serializer_class=BuyNowSerializer)
-    def place_order(self, request):
+    def buy_now(self, request):
+        """
+            API For Instant Buy
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                all data in the BuyNowSerializer serializer
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message with order details.
+        """
         user = request.user
         serializer = BuyNowSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -85,19 +111,118 @@ class PlaceOrder(GenericViewSet):
         }, status=status.HTTP_200_OK)
 
 
-class OrderModelViewSet(BaseModelViewSet):
+class OrderModelViewSet(GenericViewSet, ListModelMixin):
+    """
+        API for Order details for Admin user
+    """
+    permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = Order.objects.all()
-    serializer_class = OrderModelSerializer
+    serializer_class = OrderRetrieveSerializer
     default_fields = [
         'order_id', 'total_amount', 'user', 'address',
         'status', 'payment_id', 'shipping_id'
     ]
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        try:
+            response.data['columns'] = generate_column(
+                self.queryset.model, actions=True,
+                default_fields=self.default_fields
+            )
+        except Exception as e:
+            print('Exception occurred while generating the columns : ', e)
+        return response
 
-class OrderItemModelViewSet(BaseModelViewSet):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemModelSerializer
-    default_fields = [
-        'order', 'product_variant', 'quantity', 'price',
-    ]
+
+    @action(detail=True, methods=['POST'], url_path='order-processing')
+    def order_processing(self, request, pk, *args, **kwargs):
+        """
+            API For Updating the order pending to order processing.
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): Primary key of the order model
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+
+        obj = self.get_object()
+
+        message = obj.order_processing()
+        obj.save()
+
+        return Response({
+            'message': message,
+        }, status=status.HTTP_200_OK)
+
+
+    @action(detail=True, methods=['POST'], url_path='packing')
+    def packing(self, request, pk, *args, **kwargs):
+        """
+            API For Updating the order processing to order packing.
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): Primary key of the order model
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+
+        message = obj.packing()
+        obj.save()
+
+        return Response({
+            'message': message,
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='shipped')
+    def shipped(self, request, pk, *args, **kwargs):
+        """
+            API For Updating the order packing to order shipped.
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): Primary key of the order model
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+
+        message = obj.shipped()
+        obj.save()
+
+        return Response({
+            'message': message,
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='delivered')
+    def delivered(self, request, *args, **kwargs):
+        """
+            API For Updating the order shipped to order delivered.
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): Primary key of the order model
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+
+        message = obj.delivered()
+        obj.save()
+
+        return Response({
+            'message': message,
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='cancel')
+    def cancelled(self, request, *args, **kwargs):
+        pass
+
 

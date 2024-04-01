@@ -16,6 +16,10 @@ from masterdata.serializers import RetrieveDimensionModelSerializer
 class ProductsModelSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
+    images = serializers.ListSerializer(
+        child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True, required=False
+    )
 
     class Meta:
         model = Products
@@ -28,6 +32,21 @@ class ProductsModelSerializer(serializers.ModelSerializer):
             'deleted_at',
             'deleted_by',
         )
+
+    def create(self, validated_data):
+        from setup.utils import compress_image
+        attachment = validated_data.pop('images', None)
+        product = Products.objects.create(**validated_data)
+
+        for file in attachment:
+            compressed_image = compress_image(file)
+
+            img_obj = product.product_images.create(**{
+                'image': file,
+                'name': file.name,
+            })
+            img_obj.thumbnail.save(f"thumbnail_{file.name}", compressed_image)
+            img_obj.save()
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -54,6 +73,7 @@ class ProductsModelSerializerGET(serializers.ModelSerializer):
     brand = BrandModelSerializerGET(read_only=True)
     dimension = RetrieveDimensionModelSerializer(read_only=True)
     images = serializers.SerializerMethodField()
+    tags = TagModelSerializer(many=True, read_only=True)
 
     def get_images(self, attrs):
         return ProductImageModelSerializer(attrs.product_images.all(), many=True).data
@@ -66,6 +86,25 @@ class ProductsModelSerializerGET(serializers.ModelSerializer):
 class VariantModelSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(min_value=1)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
+    images = serializers.ListSerializer(
+        child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True, required=False
+    )
+
+    def create(self, validated_data):
+        from setup.utils import compress_image
+        attachment = validated_data.pop('images', None)
+        product = Variant.objects.create(**validated_data)
+
+        for file in attachment:
+            compressed_image = compress_image(file)
+
+            img_obj = product.variant_images.create(**{
+                'image': file,
+                'name': file.name,
+            })
+            img_obj.thumbnail.save(f"thumbnail_{file.name}", compressed_image)
+            img_obj.save()
 
     class Meta:
         model = Variant
@@ -74,6 +113,7 @@ class VariantModelSerializer(serializers.ModelSerializer):
             'attributes',
             'stock',
             'selling_price',
+            'images',
         )
 
 
