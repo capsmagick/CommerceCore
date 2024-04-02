@@ -34,6 +34,7 @@ class ProductsModelViewSet(BaseModelViewSet):
     queryset = Products.objects.all()
     serializer_class = ProductsModelSerializer
     retrieve_serializer_class = ProductsModelSerializerGET
+    filterset_class = ProductFilter
     search_fields = ['name']
     default_fields = [
         'name',
@@ -52,7 +53,6 @@ class ProductsModelViewSet(BaseModelViewSet):
         'tags',
         'dimension'
     ]
-    filterset_class = ProductFilter
 
     @action(detail=True, methods=['POST'], url_path='disable')
     def disable(self, request, *args, **kwargs):

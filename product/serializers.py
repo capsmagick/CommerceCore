@@ -14,39 +14,14 @@ from masterdata.serializers import RetrieveDimensionModelSerializer
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
+    short_description = serializers.CharField()
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
+    condition = serializers.CharField(required=False, default='New')
     images = serializers.ListSerializer(
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True, required=False
     )
-
-    class Meta:
-        model = Products
-        exclude = (
-            'created_by',
-            'created_at',
-            'updated_by',
-            'updated_at',
-            'deleted',
-            'deleted_at',
-            'deleted_by',
-        )
-
-    def create(self, validated_data):
-        from setup.utils import compress_image
-        attachment = validated_data.pop('images', None)
-        product = Products.objects.create(**validated_data)
-
-        for file in attachment:
-            compressed_image = compress_image(file)
-
-            img_obj = product.product_images.create(**{
-                'image': file,
-                'name': file.name,
-            })
-            img_obj.thumbnail.save(f"thumbnail_{file.name}", compressed_image)
-            img_obj.save()
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -65,6 +40,45 @@ class ProductsModelSerializer(serializers.ModelSerializer):
                     })
 
         return attrs
+
+    class Meta:
+        model = Products
+        exclude = (
+            'created_by',
+            'created_at',
+            'updated_by',
+            'updated_at',
+            'deleted',
+            'deleted_at',
+            'deleted_by',
+        )
+
+    def create(self, validated_data):
+        from setup.utils import compress_image
+        attachment = validated_data.pop('images', [])
+
+        categories = validated_data.pop('categories', None)
+        tags = validated_data.pop('tags', None)
+
+        product = Products.objects.create(**validated_data)
+
+        if categories:
+            product.categories.set(categories)
+
+        if tags:
+            product.tags.set(tags)
+
+        for file in attachment:
+            compressed_image = compress_image(file)
+
+            img_obj = product.product_images.create(**{
+                'image': file,
+                'name': file.name,
+            })
+            img_obj.thumbnail.save(f"thumbnail_{file.name}", compressed_image)
+            img_obj.save()
+
+        return product
 
 
 class ProductsModelSerializerGET(serializers.ModelSerializer):
@@ -94,7 +108,11 @@ class VariantModelSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         from setup.utils import compress_image
         attachment = validated_data.pop('images', None)
+        attributes = validated_data.pop('attributes', None)
         product = Variant.objects.create(**validated_data)
+
+        if attributes:
+            product.attributes.set(attributes)
 
         for file in attachment:
             compressed_image = compress_image(file)
@@ -105,6 +123,8 @@ class VariantModelSerializer(serializers.ModelSerializer):
             })
             img_obj.thumbnail.save(f"thumbnail_{file.name}", compressed_image)
             img_obj.save()
+
+        return product
 
     class Meta:
         model = Variant
@@ -135,18 +155,6 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 class CollectionModelSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Collection
-        exclude = (
-            'created_by',
-            'created_at',
-            'updated_by',
-            'updated_at',
-            'deleted',
-            'deleted_at',
-            'deleted_by',
-        )
-
     def validate(self, attrs):
         name = attrs.get('name')
 
@@ -165,6 +173,33 @@ class CollectionModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    class Meta:
+        model = Collection
+        exclude = (
+            'created_by',
+            'created_at',
+            'updated_by',
+            'updated_at',
+            'deleted',
+            'deleted_at',
+            'deleted_by',
+        )
+
+    def create(self, validated_data):
+
+        collections = validated_data.pop('collections', None)
+        tags = validated_data.pop('tags', None)
+
+        obj = Collection.objects.create(**validated_data)
+
+        if collections:
+            obj.collections.set(collections)
+
+        if tags:
+            obj.tags.set(tags)
+
+        return obj
+
 
 class CollectionModelSerializerGET(serializers.ModelSerializer):
     collections = VariantModelSerializerGET(many=True, read_only=True)
@@ -176,12 +211,6 @@ class CollectionModelSerializerGET(serializers.ModelSerializer):
 
 
 class LookBookModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LookBook
-        fields = (
-            'name',
-            'variants',
-        )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -200,6 +229,23 @@ class LookBookModelSerializer(serializers.ModelSerializer):
                     })
 
         return attrs
+
+    class Meta:
+        model = LookBook
+        fields = (
+            'name',
+            'variants',
+        )
+
+    def create(self, validated_data):
+        variants = validated_data.pop('variants', None)
+
+        obj = LookBook.objects.create(**validated_data)
+
+        if variants:
+            obj.variants.set(variants)
+
+        return obj
 
 
 class LookBookModelSerializerGET(serializers.ModelSerializer):
