@@ -25,7 +25,6 @@ class ProductsModelSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         name = attrs.get('name')
-        images = attrs.get('images')
 
         if not self.instance:
             if Products.objects.filter(name=name).exists():
