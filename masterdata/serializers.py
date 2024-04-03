@@ -166,6 +166,8 @@ class AttributeGroupModelSerializer(serializers.ModelSerializer):
 
 
 class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
+    attributes = RetrieveAttributeModelSerializer(many=True)
+
     class Meta:
         model = AttributeGroup
         fields = '__all__'
