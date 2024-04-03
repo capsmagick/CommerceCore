@@ -95,7 +95,7 @@ class CartModelViewSet(GenericViewSet):
         )
         cart_item.quantity += quantity
         cart_item.save()
-        Variant.objects.get(pk=product_variant).update_stock(quantity)
+        Variant.objects.get(pk=product_variant.id).update_stock(quantity)
 
         return Response({
             'data': serializer.data,
