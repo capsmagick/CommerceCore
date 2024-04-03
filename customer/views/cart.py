@@ -46,7 +46,7 @@ class CartModelViewSet(GenericViewSet):
         return Response(CartModelSerializer(cart).data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], url_path='add-to-cart', serializer_class=AddToCartSerializer)
-    def add_to_cart(self, request, pk):
+    def add_to_cart(self, request, *args, **kwargs):
         """
             Add a product to cart.
 
@@ -69,8 +69,8 @@ class CartModelViewSet(GenericViewSet):
             'message': 'Successfully added to the cart.!'
         })
 
-    @action(detail=False, methods=['POST'], url_path='update-cart-product', serializer_class=UpdateCartProductSerializer)
-    def update_cart_product(self, request, pk):
+    @action(detail=True, methods=['POST'], url_path='update-cart-product', serializer_class=UpdateCartProductSerializer)
+    def update_cart_product(self, request, *args, **kwargs):
         """
             Update the quantity of a cart product.
 
@@ -102,8 +102,8 @@ class CartModelViewSet(GenericViewSet):
             'message': 'Successfully added to the cart.!'
         })
 
-    @action(detail=False, methods=['DELETE'], url_path='(?P<id>.*?)/remove-cart')
-    def delete_from_cart(self, request, id):
+    @action(detail=False, methods=['DELETE'], url_path='(?P<pk>.*?)/remove-cart')
+    def delete_from_cart(self, request, pk, *args, **kwargs):
         """
             Delete the product from the cart.
 
@@ -115,7 +115,7 @@ class CartModelViewSet(GenericViewSet):
                 Response: A DRF Response object indicating success or failure and a message.
         """
         cart = self.get_user_cart(request)
-        item = cart.cartitems.get(id=id)
+        item = cart.cartitems.get(id=pk)
         item.delete()
         return Response({
             'message': 'Successfully removed..!',
