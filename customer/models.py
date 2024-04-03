@@ -39,7 +39,7 @@ class Cart(BaseModel):
     is_completed = models.BooleanField(default=False, verbose_name='Cart Completed')
 
     def calculate_total(self):
-        total_amount = CartItem.objects.first(order=self, deleted=False).aggregate(Sum('total_amount'))
+        total_amount = CartItem.objects.filter(cart=self, deleted=False).aggregate(Sum('total_amount'))
         self.total_amount = total_amount['total_amount__sum']
         self.save()
 

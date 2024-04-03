@@ -43,7 +43,7 @@ class Order(BaseModel):
     shipping_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Shipping ID')
 
     def calculate_total(self):
-        total_amount = OrderItem.objects.first(order=self).aggregate(Sum('total_amount'))
+        total_amount = OrderItem.objects.filter(order=self).aggregate(Sum('total_amount'))
         self.total_amount = total_amount['total_amount__sum']
         self.save()
 
