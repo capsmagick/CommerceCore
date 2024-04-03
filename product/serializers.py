@@ -13,7 +13,7 @@ from masterdata.serializers import TagModelSerializer
 from masterdata.serializers import CategoryModelSerializerGET
 from masterdata.serializers import BrandModelSerializerGET
 from masterdata.serializers import RetrieveDimensionModelSerializer
-from masterdata.serializers import AttributeGroupModelSerializer
+from masterdata.serializers import RetrieveAttributeModelSerializer
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
@@ -142,7 +142,7 @@ class VariantModelSerializer(serializers.ModelSerializer):
 
 class VariantModelSerializerGET(serializers.ModelSerializer):
     product = ProductsModelSerializerGET()
-    attributes = AttributeGroupModelSerializer(many=True)
+    attributes = RetrieveAttributeModelSerializer(many=True)
     images = serializers.SerializerMethodField()
     wish_listed = serializers.SerializerMethodField()
 
