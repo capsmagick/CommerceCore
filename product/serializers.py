@@ -18,13 +18,18 @@ class ProductsModelSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     condition = serializers.CharField(required=False, default='New')
-    images = serializers.ListSerializer(
+    images = serializers.ListField(
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True, required=False
     )
 
     def validate(self, attrs):
         name = attrs.get('name')
+        images = attrs.get('images')
+
+        print('----------------------------------')
+        print('images : ', images)
+        print('----------------------------------')
 
         if not self.instance:
             if Products.objects.filter(name=name).exists():
@@ -67,6 +72,10 @@ class ProductsModelSerializer(serializers.ModelSerializer):
 
         if tags:
             product.tags.set(tags)
+
+        print('------------------------------------')
+        print('attachment : ', attachment)
+        print('------------------------------------')
 
         for file in attachment:
             compressed_image = compress_image(file)
