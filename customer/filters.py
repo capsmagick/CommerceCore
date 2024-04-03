@@ -5,6 +5,7 @@ from product.models import Collection
 from product.models import LookBook
 from masterdata.models import Category
 from customer.models import Return
+from customer.models import Review
 
 
 class CustomerVariantFilter(filters.FilterSet):
@@ -43,4 +44,14 @@ class CustomerReturnFilter(filters.FilterSet):
             'approved_user',
             'rejected_user',
             'refund_status'
+        ]
+
+
+class CustomerReviewFilter(filters.FilterSet):
+
+    class Meta:
+        model = Review
+        fields = [
+            'product__name',
+            'rating',
         ]

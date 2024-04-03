@@ -21,8 +21,9 @@ router.register('cart', views.CartModelViewSet)
 router.register('wishlist', views.WishListModelViewSet)
 
 router.register('return-request', views.CustomerReturnViewSet)
-
 router.register('manage/return-request', views.ManageCustomerReturn)
+
+router.register('manage/reviews', views.ReviewModelViewSet)
 
 
 urlpatterns = [
