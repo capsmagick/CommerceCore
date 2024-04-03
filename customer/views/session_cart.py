@@ -53,7 +53,7 @@ class SessionCartModelViewSet(GenericViewSet):
         cart = Cart.get_session_cart()
         serializer = AddToCartSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(cart)
+        serializer.save(cart=cart)
 
         return Response({
             'data': serializer.data,
