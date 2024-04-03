@@ -19,8 +19,8 @@ class WishListModelViewSet(GenericViewSet, ListModelMixin):
     queryset = WishList.objects.all()
     serializer_class = WishListGETSerializer
 
-    @action(detail=True, methods=['POST'], url_path='add-to-wishlist', serializer_class=WishListModelSerializer)
-    def add_to_wishlist(self, request, pk):
+    @action(detail=False, methods=['POST'], url_path='add-to-wishlist', serializer_class=WishListModelSerializer)
+    def add_to_wishlist(self, request, *args, **kwargs):
         user = request.user
         serializer = WishListModelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
