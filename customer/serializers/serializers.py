@@ -105,8 +105,8 @@ class WishListGETSerializer(serializers.ModelSerializer):
     product_variant = serializers.SerializerMethodField()
 
     def get_product_variant(self, attrs):
-        from product.serializers import VariantModelSerializer
-        return VariantModelSerializer(attrs.product_variant).data
+        from product.serializers import VariantModelSerializerGET
+        return VariantModelSerializerGET(attrs.product_variant).data
 
     class Meta:
         model = WishList
