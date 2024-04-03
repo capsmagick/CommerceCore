@@ -27,10 +27,6 @@ class ProductsModelSerializer(serializers.ModelSerializer):
         name = attrs.get('name')
         images = attrs.get('images')
 
-        print('----------------------------------')
-        print('images : ', images)
-        print('----------------------------------')
-
         if not self.instance:
             if Products.objects.filter(name=name).exists():
                 raise serializers.ValidationError({
@@ -72,10 +68,6 @@ class ProductsModelSerializer(serializers.ModelSerializer):
 
         if tags:
             product.tags.set(tags)
-
-        print('------------------------------------')
-        print('attachment : ', attachment)
-        print('------------------------------------')
 
         for file in attachment:
             compressed_image = compress_image(file)
