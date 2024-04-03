@@ -2,6 +2,7 @@ from django.db import models
 from users.models.base_model import BaseModel
 from users.models.other import AddressRegister
 from product.models import Variant
+from customer.models import Cart
 from django.db.models import Sum
 import datetime
 from django_fsm import transition
@@ -28,6 +29,10 @@ class Order(BaseModel):
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled'),
+    )
+    cart = models.ForeignKey(
+        Cart, related_name='cart_order', null=True, blank=True,
+        verbose_name='Cart', on_delete=models.SET_NULL
     )
 
     order_id = models.CharField(max_length=70, verbose_name='Order Id')
