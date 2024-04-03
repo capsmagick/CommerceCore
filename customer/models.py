@@ -1,8 +1,10 @@
+import datetime
+
 from django.db import models
 from django.db.models import Sum
 from django_fsm import transition
 
-import datetime
+from setup.middleware.request import CurrentRequestMiddleware
 
 from users.models.base_model import BaseModel
 from users.models import User
@@ -27,7 +29,11 @@ class WishList(BaseModel):
 
 
 class Cart(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_cart', verbose_name='User', null=True)
+    session_key = models.CharField(max_length=70, blank=True, null=True)
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, related_name='user_cart',
+        verbose_name='User', null=True, blank=True
+    )
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
     currency = models.CharField(max_length=10, default='INR', null=True, blank=True, verbose_name='Currency')
     is_completed = models.BooleanField(default=False, verbose_name='Cart Completed')
@@ -40,6 +46,19 @@ class Cart(BaseModel):
     def complete_cart(self):
         self.is_completed = True
         self.save()
+
+    @classmethod
+    def get_session_cart(cls):
+        request = CurrentRequestMiddleware.get_request()
+        session_key = request.session.session_key
+        if not request.session.exists(session_key):
+            request.session.create()
+        session_key = request.session.session_key
+
+        try:
+            return cls.objects.get(session_key=session_key, is_completed=False)
+        except cls.DoesNotExist:
+            return cls.objects.create(session_key=session_key, total_price=0)
 
 
 class CartItem(BaseModel):
