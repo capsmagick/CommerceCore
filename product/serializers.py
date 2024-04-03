@@ -107,7 +107,7 @@ class VariantModelSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         from setup.utils import compress_image
-        attachment = validated_data.pop('images', None)
+        attachment = validated_data.pop('images', [])
         attributes = validated_data.pop('attributes', None)
         product = Variant.objects.create(**validated_data)
 

@@ -129,7 +129,7 @@ class ReviewSerializerPOST(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        review_images = validated_data.pop('review_images')
+        review_images = validated_data.pop('review_images', [])
         review = Review.objects.create(**validated_data)
 
         for image in review_images:
