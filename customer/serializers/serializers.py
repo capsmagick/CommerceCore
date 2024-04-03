@@ -33,6 +33,9 @@ class CartItemModelSerializer(serializers.ModelSerializer):
 
 
 class AddToCartSerializer(serializers.ModelSerializer):
+    price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    quantity = serializers.IntegerField()
+
     class Meta:
         model = CartItem
         fields = (
