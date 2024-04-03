@@ -28,10 +28,10 @@ class Me(APIView):
             Refresh session API
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
+                request (HttpRequest): The HTTP request object containing model data.
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
 
         user = request.user

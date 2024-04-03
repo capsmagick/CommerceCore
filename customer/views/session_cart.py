@@ -43,6 +43,7 @@ class SessionCartModelViewSet(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 product_variant (int): The primary key of the variant model.
                 quantity (int): The quantity of the product to be added to the cart.
                 price (Decimal): The price of the variant product.
@@ -67,6 +68,7 @@ class SessionCartModelViewSet(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 product_variant (int): The primary key of the variant model.
                 quantity (int): The quantity of the product to be updated to the cart.
 

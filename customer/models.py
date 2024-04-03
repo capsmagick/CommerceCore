@@ -60,6 +60,15 @@ class Cart(BaseModel):
         except cls.DoesNotExist:
             return cls.objects.create(session_key=session_key, total_price=0)
 
+    @classmethod
+    def get_user_cart(cls):
+        request = CurrentRequestMiddleware.get_request()
+        cart, created = cls.objects.get_or_create(
+            user_id=request.user.id, deleted=False,
+            is_completed=False
+        )
+        return cart
+
 
 class CartItem(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cartitems', verbose_name='Cart Details')

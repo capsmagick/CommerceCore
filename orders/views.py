@@ -23,16 +23,6 @@ class PlaceOrder(GenericViewSet):
     permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = Order.objects.all()
 
-    def get_user_cart(self, request):
-        """
-            Function for getting the user cart
-        """
-        cart = Cart.objects.get(
-            user_id=request.user.id, deleted=False,
-            is_completed=False
-        )
-        return cart
-
     @action(detail=False, methods=['POST'], url_path='place-order', serializer_class=PlaceOrderSerializer)
     def place_order(self, request):
         """
@@ -40,14 +30,16 @@ class PlaceOrder(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 all data in the PlaceOrderSerializer serializer
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message with order details.
         """
+
         serializer = PlaceOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        cart = self.get_user_cart(request)
+        cart = Cart.get_user_cart()
 
         new_order = Order.objects.create(
             total_amount=cart.total_amount,
@@ -84,11 +76,13 @@ class PlaceOrder(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 all data in the BuyNowSerializer serializer
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message with order details.
         """
+
         user = request.user
         serializer = BuyNowSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -118,6 +112,7 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
     """
         API for Order details for Admin user
     """
+
     permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = Order.objects.all()
     serializer_class = OrderRetrieveSerializer
@@ -136,7 +131,6 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
         except Exception as e:
             print('Exception occurred while generating the columns : ', e)
         return response
-
 
     @action(detail=True, methods=['POST'], url_path='order-processing')
     def order_processing(self, request, pk, *args, **kwargs):
@@ -159,7 +153,6 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
         return Response({
             'message': message,
         }, status=status.HTTP_200_OK)
-
 
     @action(detail=True, methods=['POST'], url_path='packing')
     def packing(self, request, pk, *args, **kwargs):

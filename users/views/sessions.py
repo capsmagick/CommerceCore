@@ -24,11 +24,12 @@ class Signup(APIView):
             POST API to save the details of customer
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            __all__ fields present in the serializer class
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                __all__ fields present in the serializer class
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
 
         serializer = self.serializer_class(data=request.data)
@@ -48,12 +49,13 @@ class Login(APIView):
             Login API Session
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            username (char): Username of the user.
-            password (char): Password of the user.
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                username (char): Username of the user.
+                password (char): Password of the user.
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
         serializer = LoginSerializer(data=request.data, **{'request': request})
 
@@ -74,10 +76,10 @@ class Logout(APIView):
             Logout API Session
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
+                request (HttpRequest): The HTTP request object containing model data.
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
         logout(request)
         return Response({
@@ -93,13 +95,14 @@ class ChangePassword(APIView):
             Change Password API
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            old_password (char): The old password of the user.
-            new_password (char): The new password of the user.
-            confirm_password (char): The new password of the user [Retyped].
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                old_password (char): The old password of the user.
+                new_password (char): The new password of the user.
+                confirm_password (char): The new password of the user [Retyped].
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
         serializer = ResetPassword(data=request.data, **{'request': request})
 

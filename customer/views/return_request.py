@@ -47,15 +47,16 @@ class CustomerReturnViewSet(BaseModelViewSet):
             Create a new return request
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            reason (int): The primary key of the return reason model.
-            product (int): The primary key of the variant product model.
-            purchase_bill (file): The bill for the purchase.
-            description (char): The comment by the customer
-            refund_method (char): The customer wish that what type of the refund will be Exchange or Refund
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                reason (int): The primary key of the return reason model.
+                product (int): The primary key of the variant product model.
+                purchase_bill (file): The bill for the purchase.
+                description (char): The comment by the customer
+                refund_method (char): The customer wish that what type of the refund will be Exchange or Refund
 
             Returns:
-            Response: A DRF Response object indicates success or a failure with a message.
+                Response: A DRF Response object indicates success or a failure with a message.
         """
         serializer = ReturnModelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -72,12 +73,13 @@ class CustomerReturnViewSet(BaseModelViewSet):
             Update an existing return request
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            tracking_id (char): The tracking id of product that sent by the customer.
-            shipping_agent (char): The shipping agent that the customer sent the product through.
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                tracking_id (char): The tracking id of product that sent by the customer.
+                shipping_agent (char): The shipping agent that the customer sent the product through.
 
             Returns:
-            Response: A DRF Response object indicates success or a failure with a message.
+                Response: A DRF Response object indicates success or a failure with a message.
         """
         instance = self.get_object()
         serializer = ReturnTrackingUpdateSerializer(instance=instance, data=request.data, partial=True)

@@ -30,11 +30,11 @@ class AddressRegisterModelViewSet(BaseModelViewSet):
             API For marking default address in the customer address registry
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            pk (int): The primary key of the address register table.
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): The primary key of the address register table.
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
         obj = self.get_object()
         obj.make_default()

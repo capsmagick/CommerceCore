@@ -51,11 +51,12 @@ class BaseModelViewSet(
             Create a new record
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            any: other data according to the serializer class
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                any: other data according to the serializer class
 
             Returns:
-            Response: A DRF Response object with the creation status.
+                Response: A DRF Response object with the creation status.
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -74,10 +75,10 @@ class BaseModelViewSet(
             Update an existing record
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
+                request (HttpRequest): The HTTP request object containing model data.
 
             Returns:
-            Response: A DRF Response object with the update status.
+                Response: A DRF Response object with the update status.
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -97,11 +98,11 @@ class BaseModelViewSet(
             Delete an existing record
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            pk (int): The primary key of the model to be deleted.
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): The primary key of the model to be deleted.
 
             Returns:
-            Response: A DRF Response object indicating success or failure.
+                Response: A DRF Response object indicating success or failure.
         """
         instance = self.get_object()
         self.perform_delete(instance)

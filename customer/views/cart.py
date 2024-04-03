@@ -24,13 +24,6 @@ class CartModelViewSet(GenericViewSet):
         'currency'
     ]
 
-    def get_user_cart(self, request):
-        cart, created = Cart.objects.get_or_create(
-            user_id=request.user.id, deleted=False,
-            is_completed=False
-        )
-        return cart
-
     @action(detail=False, methods=['GET'], url_path='user-cart')
     def get_cart(self, request):
         """
@@ -42,7 +35,8 @@ class CartModelViewSet(GenericViewSet):
             Returns:
                 Response: A DRF Response object indicating success or failure and a message with cart details.
         """
-        cart = self.get_user_cart(request)
+
+        cart = Cart.get_user_cart()
         return Response(CartModelSerializer(cart).data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], url_path='add-to-cart', serializer_class=AddToCartSerializer)
@@ -52,6 +46,7 @@ class CartModelViewSet(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 product_variant (int): The primary key of the variant model.
                 quantity (int): The quantity of the product to be added to the cart.
                 price (Decimal): The price of the variant product.
@@ -59,7 +54,8 @@ class CartModelViewSet(GenericViewSet):
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
         """
-        cart = self.get_user_cart(request)
+
+        cart = Cart.get_user_cart()
         serializer = AddToCartSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(cart=cart)
@@ -76,6 +72,7 @@ class CartModelViewSet(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 product_variant (int): The primary key of the variant model.
                 quantity (int): The quantity of the product to be updated to the cart.
 
@@ -83,7 +80,7 @@ class CartModelViewSet(GenericViewSet):
                 Response: A DRF Response object indicating success or failure and a message.
         """
 
-        cart = self.get_user_cart(request)
+        cart = Cart.get_user_cart()
         serializer = UpdateCartProductSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -109,12 +106,13 @@ class CartModelViewSet(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
-                id (int): The primary key of the cart item.
+                pk (int): The primary key of the cart item.
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
         """
-        cart = self.get_user_cart(request)
+
+        cart = Cart.get_user_cart()
         item = cart.cartitems.get(id=pk)
         item.delete()
         return Response({
