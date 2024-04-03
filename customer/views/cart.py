@@ -62,7 +62,7 @@ class CartModelViewSet(GenericViewSet):
         cart = self.get_user_cart(request)
         serializer = AddToCartSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(cart)
+        serializer.save(cart=cart)
 
         return Response({
             'data': serializer.data,
