@@ -20,7 +20,7 @@ class TokenLoginAPTView(GenericAPIView):
             password (char): Password of the user.
 
             Returns:
-            Response: A DRF Response object indicating success or failure and a message.
+                Response: A DRF Response object indicating success or failure and a message.
         """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

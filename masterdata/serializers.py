@@ -10,6 +10,11 @@ from .models import ReturnReason
 
 
 class BrandModelSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
+    logo = serializers.FileField(required=False)
+    description = serializers.CharField(required=True)
+    is_active = serializers.BooleanField(default=True)
+
     class Meta:
         model = Brand
         exclude = (
@@ -40,6 +45,16 @@ class BrandModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    def create(self, validated_data):
+        tags = validated_data.pop('tags', None)
+
+        brand = Brand.objects.create(**validated_data)
+
+        if tags:
+            brand.tags.set(tags)
+
+        return brand
+
 
 class BrandModelSerializerGET(serializers.ModelSerializer):
     class Meta:
@@ -48,9 +63,7 @@ class BrandModelSerializerGET(serializers.ModelSerializer):
 
 
 class TagModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = '__all__'
+    name = serializers.CharField(required=True)
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -70,14 +83,14 @@ class TagModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
 
 class AttributeModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Attribute
-        fields = (
-            'name',
-            'value',
-        )
+    name = serializers.CharField(required=True)
+    value = serializers.ListField(child=serializers.CharField(), allow_empty=True)
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -97,6 +110,13 @@ class AttributeModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    class Meta:
+        model = Attribute
+        fields = (
+            'name',
+            'value',
+        )
+
 
 class RetrieveAttributeModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,12 +125,7 @@ class RetrieveAttributeModelSerializer(serializers.ModelSerializer):
 
 
 class AttributeGroupModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AttributeGroup
-        fields = (
-            'name',
-            'attributes',
-        )
+    name = serializers.CharField()
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -130,6 +145,23 @@ class AttributeGroupModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    class Meta:
+        model = AttributeGroup
+        fields = (
+            'name',
+            'attributes',
+        )
+
+    def create(self, validated_data):
+        attributes = validated_data.pop('attributes', None)
+
+        attribute_group = AttributeGroup.objects.create(**validated_data)
+
+        if attributes:
+            attribute_group.attributes.set(attributes)
+
+        return attribute_group
+
 
 class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -138,6 +170,13 @@ class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
 
 
 class DimensionModelSerializer(serializers.ModelSerializer):
+    length = serializers.DecimalField(max_digits=10, decimal_places=2)
+    breadth = serializers.DecimalField(max_digits=10, decimal_places=2)
+    height = serializers.DecimalField(max_digits=10, decimal_places=2)
+    dimension_unit = serializers.ChoiceField(choices=Dimension.DIMENSION_UNIT)
+    weight = serializers.DecimalField(max_digits=10, decimal_places=2)
+    weight_unit = serializers.ChoiceField(choices=Dimension.WEIGHT_UNIT)
+
     class Meta:
         model = Dimension
         fields = (
@@ -157,10 +196,8 @@ class RetrieveDimensionModelSerializer(serializers.ModelSerializer):
 
 
 class CategoryModelSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Category
-        fields = '__all__'
+    name = serializers.CharField()
+    description = serializers.CharField()
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -180,6 +217,20 @@ class CategoryModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+    def create(self, validated_data):
+        tags = validated_data.pop('tags', None)
+
+        category = Category.objects.create(**validated_data)
+
+        if tags:
+            category.tags.set(tags)
+
+        return category
+
 
 class CategoryModelSerializerGET(serializers.ModelSerializer):
     tags = TagModelSerializer(many=True)
@@ -190,6 +241,9 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
 
 
 class ReturnReasonModelSerializer(serializers.ModelSerializer):
+    title = serializers.CharField()
+    description = serializers.CharField()
+
     class Meta:
         model = ReturnReason
         fields = (

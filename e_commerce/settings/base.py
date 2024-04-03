@@ -53,6 +53,7 @@ INSTALLED_APPS += [
 # Documentation
 INSTALLED_APPS += [
     'drf_spectacular',
+    'django_filters',
 ]
 
 # Our Apps

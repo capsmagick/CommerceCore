@@ -16,11 +16,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
 
-from .models import Transaction
-from .serializers import TransactionSerializer
-from .serializers import TransactionRetrieveSerializer
-from .filters import TransactionFilter
-from .phonepe import PhonePe
+from transaction.models import Transaction
+from transaction.serializers import TransactionSerializer
+from transaction.serializers import TransactionRetrieveSerializer
+from transaction.filters import TransactionFilter
+from transaction.mixins import PhonePe
 
 
 class TransactionAPIView(APIView):
