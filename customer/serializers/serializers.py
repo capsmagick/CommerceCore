@@ -12,9 +12,6 @@ from users.serializers import UserDataModelSerializer
 
 class CartModelSerializer(serializers.ModelSerializer):
     user = UserDataModelSerializer()
-    created_by = UserDataModelSerializer()
-    updated_by = UserDataModelSerializer()
-    deleted_by = UserDataModelSerializer()
     items = serializers.SerializerMethodField()
 
     def get_items(self, attrs):
@@ -27,6 +24,12 @@ class CartModelSerializer(serializers.ModelSerializer):
 
 
 class CartItemModelSerializer(serializers.ModelSerializer):
+    product_variant = serializers.SerializerMethodField()
+
+    def get_product_variant(self, attrs):
+        from product.serializers import VariantModelSerializerGET
+        return VariantModelSerializerGET(attrs.product_variant).data
+
     class Meta:
         model = CartItem
         fields = '__all__'
