@@ -44,7 +44,7 @@ class Order(BaseModel):
 
     def calculate_total(self):
         total_amount = OrderItem.objects.filter(order=self).aggregate(Sum('total_amount'))
-        self.total_amount = total_amount['total_amount__sum']
+        self.total_amount = total_amount['total_amount__sum'] if total_amount['total_amount__sum'] else 0.00
         self.save()
 
     def save(self, *args, **kwargs):

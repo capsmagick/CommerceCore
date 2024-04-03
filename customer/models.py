@@ -40,7 +40,7 @@ class Cart(BaseModel):
 
     def calculate_total(self):
         total_amount = CartItem.objects.filter(cart=self, deleted=False).aggregate(Sum('total_amount'))
-        self.total_amount = total_amount['total_amount__sum']
+        self.total_amount = total_amount['total_amount__sum'] if total_amount['total_amount__sum'] else 0.00
         self.save()
 
     def complete_cart(self):
