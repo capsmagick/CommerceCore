@@ -174,6 +174,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "setup.pagination.CustomPagination",
     "PAGE_SIZE": 10,
     "DEFAULT_SCHEMA_CLASS": 'drf_spectacular.openapi.AutoSchema',
+    "DATETIME_FORMAT": "%Y-%m-%d %I:%M %p",
 }
 
 AUTHENTICATION_BACKENDS = (
