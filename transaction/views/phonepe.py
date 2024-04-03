@@ -44,6 +44,7 @@ class TransactionAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         order = serializer.validated_data.get('order')
 
+        order.cart.complete_cart()
         order.order_payment()
         order.save()
 

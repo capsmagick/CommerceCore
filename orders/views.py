@@ -4,6 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import RetrieveModelMixin
+
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
@@ -19,19 +23,25 @@ from .serializers import BuyNowSerializer
 from .serializers import OrderRetrieveSerializer
 
 
-class PlaceOrder(GenericViewSet):
+class PlaceOrder(GenericViewSet, RetrieveModelMixin):
     permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = Order.objects.all()
 
-    def get_user_cart(self, request):
-        """
-            Function for getting the user cart
-        """
-        cart = Cart.objects.get(
-            user_id=request.user.id, deleted=False,
-            is_completed=False
-        )
-        return cart
+    def get_object(self):
+        queryset = self.get_queryset()
+        or_condition = Q()
+        try:
+            instance = int(self.kwargs['pk'])
+            or_condition.add(
+                Q(pk=instance), Q.OR
+            )
+        except ValueError:
+            or_condition.add(
+                Q(order_id=self.kwargs['pk']), Q.OR
+            )
+        obj = get_object_or_404(queryset, or_condition)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     @action(detail=False, methods=['POST'], url_path='place-order', serializer_class=PlaceOrderSerializer)
     def place_order(self, request):
@@ -40,16 +50,19 @@ class PlaceOrder(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 all data in the PlaceOrderSerializer serializer
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message with order details.
         """
+
         serializer = PlaceOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        cart = self.get_user_cart(request)
+        cart = Cart.get_user_cart()
 
         new_order = Order.objects.create(
+            cart=cart,
             total_amount=cart.total_amount,
             user=cart.user.username,
             address=serializer.validated_data.get('address'),
@@ -70,8 +83,6 @@ class PlaceOrder(GenericViewSet):
 
         OrderItem.objects.bulk_create(order_items)
 
-        cart.complete_cart()
-
         return Response({
             'message': 'Successfully created new order..!',
             'data': OrderRetrieveSerializer(new_order).data
@@ -84,11 +95,13 @@ class PlaceOrder(GenericViewSet):
 
             Parameters:
                 request (HttpRequest): The HTTP request object containing model data.
+            Data:
                 all data in the BuyNowSerializer serializer
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message with order details.
         """
+
         user = request.user
         serializer = BuyNowSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -118,6 +131,7 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
     """
         API for Order details for Admin user
     """
+
     permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = Order.objects.all()
     serializer_class = OrderRetrieveSerializer
@@ -136,7 +150,6 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
         except Exception as e:
             print('Exception occurred while generating the columns : ', e)
         return response
-
 
     @action(detail=True, methods=['POST'], url_path='order-processing')
     def order_processing(self, request, pk, *args, **kwargs):
@@ -159,7 +172,6 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
         return Response({
             'message': message,
         }, status=status.HTTP_200_OK)
-
 
     @action(detail=True, methods=['POST'], url_path='packing')
     def packing(self, request, pk, *args, **kwargs):

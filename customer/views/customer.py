@@ -30,10 +30,10 @@ class CustomerVariantViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin)
         Get the list of variant products.
 
         Parameters:
-        request (HttpRequest): The HTTP request object containing model data.
+            request (HttpRequest): The HTTP request object containing model data.
 
         Returns:
-        Response: A DRF Response object with the variant product data.
+            Response: A DRF Response object with the variant product data.
     """
     permission_classes = (AllowAny,)
     queryset = Variant.objects.all()
@@ -54,10 +54,10 @@ class CustomerCategoryViewSet(GenericViewSet, ListModelMixin):
         Get the list of categories.
 
         Parameters:
-        request (HttpRequest): The HTTP request object containing model data.
+            request (HttpRequest): The HTTP request object containing model data.
 
         Returns:
-        Response: A DRF Response object with the category data.
+            Response: A DRF Response object with the category data.
     """
 
     permission_classes = (AllowAny,)
@@ -73,10 +73,10 @@ class CustomerCollectionViewSet(GenericViewSet, ListModelMixin):
         Get the list of collection.
 
         Parameters:
-        request (HttpRequest): The HTTP request object containing model data.
+            request (HttpRequest): The HTTP request object containing model data.
 
         Returns:
-        Response: A DRF Response object with the collection data.
+            Response: A DRF Response object with the collection data.
     """
     permission_classes = (AllowAny,)
     queryset = Collection.objects.all()
@@ -91,10 +91,10 @@ class CustomerLookBookViewSet(GenericViewSet, ListModelMixin):
         Get the list of look book.
 
         Parameters:
-        request (HttpRequest): The HTTP request object containing model data.
+            request (HttpRequest): The HTTP request object containing model data.
 
         Returns:
-        Response: A DRF Response object with the look book data.
+            Response: A DRF Response object with the look book data.
     """
     permission_classes = (AllowAny,)
     queryset = LookBook.objects.all()

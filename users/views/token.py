@@ -15,9 +15,10 @@ class TokenLoginAPTView(GenericAPIView):
             Login API Token
 
             Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
-            username (char): Username of the user.
-            password (char): Password of the user.
+                request (HttpRequest): The HTTP request object containing model data.
+            Data:
+                username (char): Username of the user.
+                password (char): Password of the user.
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
