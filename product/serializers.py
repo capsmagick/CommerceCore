@@ -11,6 +11,7 @@ from masterdata.serializers import TagModelSerializer
 from masterdata.serializers import CategoryModelSerializerGET
 from masterdata.serializers import BrandModelSerializerGET
 from masterdata.serializers import RetrieveDimensionModelSerializer
+from masterdata.serializers import AttributeGroupModelSerializer
 
 
 class ProductsModelSerializer(serializers.ModelSerializer):
@@ -138,7 +139,12 @@ class VariantModelSerializer(serializers.ModelSerializer):
 
 
 class VariantModelSerializerGET(serializers.ModelSerializer):
-    product = ProductsModelSerializer()
+    product = ProductsModelSerializerGET()
+    attributes = AttributeGroupModelSerializer(many=True)
+    images = serializers.SerializerMethodField()
+
+    def get_images(self, attrs):
+        return ProductImageModelSerializer(attrs.variant_images.all(), many=True).data
 
     class Meta:
         model = Variant
