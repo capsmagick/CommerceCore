@@ -81,7 +81,7 @@ class UpdateCartProductSerializer(serializers.Serializer):
         product_variant = attrs.get('product_variant')
         quantity = attrs.get('quantity')
 
-        obj = Variant.objects.get(pk=product_variant)
+        obj = Variant.objects.get(pk=product_variant.id)
 
         stock_check = obj.stock + quantity
 
