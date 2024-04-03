@@ -6,6 +6,8 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import LookBook
 
+from customer.models import WishList
+
 from customer.serializers.serializers import ReviewSerializer
 from masterdata.serializers import TagModelSerializer
 from masterdata.serializers import CategoryModelSerializerGET
@@ -142,6 +144,12 @@ class VariantModelSerializerGET(serializers.ModelSerializer):
     product = ProductsModelSerializerGET()
     attributes = AttributeGroupModelSerializer(many=True)
     images = serializers.SerializerMethodField()
+    wish_listed = serializers.SerializerMethodField()
+
+    def get_wish_listed(self, attrs):
+        from setup.middleware.request import CurrentRequestMiddleware
+        request = CurrentRequestMiddleware.get_request()
+        return WishList.objects.filter(product_variant_id=attrs.id, user_id=request.user.id).exists()
 
     def get_images(self, attrs):
         return ProductImageModelSerializer(attrs.variant_images.all(), many=True).data

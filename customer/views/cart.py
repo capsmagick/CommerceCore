@@ -16,7 +16,7 @@ from customer.serializers import AddToCartSerializer
 
 class CartModelViewSet(GenericViewSet):
     permission_classes = (IsAuthenticated, IsCustomer,)
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.filter(is_completed=False)
     serializer_class = CartModelSerializer
     default_fields = [
         'user',
@@ -26,7 +26,8 @@ class CartModelViewSet(GenericViewSet):
 
     def get_user_cart(self, request):
         cart, created = Cart.objects.get_or_create(
-            user_id=request.user.id, deleted=False
+            user_id=request.user.id, deleted=False,
+            is_completed=False
         )
         return cart
 
