@@ -1,5 +1,6 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import RetrieveModelMixin
 
 from rest_framework.permissions import AllowAny
 
@@ -24,7 +25,7 @@ from customer.filters import CustomerCollectionFilter
 from customer.filters import CustomerLookBookFilter
 
 
-class CustomerVariantViewSet(GenericViewSet, ListModelMixin):
+class CustomerVariantViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     """
         Get the list of variant products.
 
