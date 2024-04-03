@@ -69,7 +69,7 @@ class CartModelViewSet(GenericViewSet):
             'message': 'Successfully added to the cart.!'
         })
 
-    @action(detail=True, methods=['POST'], url_path='update-cart-product', serializer_class=UpdateCartProductSerializer)
+    @action(detail=False, methods=['POST'], url_path='update-cart-product', serializer_class=UpdateCartProductSerializer)
     def update_cart_product(self, request, *args, **kwargs):
         """
             Update the quantity of a cart product.
