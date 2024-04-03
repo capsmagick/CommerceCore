@@ -114,7 +114,7 @@ class WishListGETSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializerPOST(serializers.ModelSerializer):
-    review_images = serializers.ListSerializer(
+    review_images = serializers.ListField(
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True
     )

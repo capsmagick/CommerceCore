@@ -18,7 +18,7 @@ class ProductsModelSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     condition = serializers.CharField(required=False, default='New')
-    images = serializers.ListSerializer(
+    images = serializers.ListField(
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True, required=False
     )
@@ -100,7 +100,7 @@ class ProductsModelSerializerGET(serializers.ModelSerializer):
 class VariantModelSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(min_value=1)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
-    images = serializers.ListSerializer(
+    images = serializers.ListField(
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True, required=False
     )

@@ -5,6 +5,16 @@ from django.apps import apps
 models = apps.get_models()
 admin.site.site_header = 'Admin Management'
 
+EXCLUDE_FIELDS = [
+    'created_by',
+    'created_at',
+    'updated_by',
+    'updated_at',
+    'deleted',
+    'deleted_at',
+    'deleted_by',
+]
+
 
 class ListAdminMixin(object):
     def __init__(self, model, admin_site):
@@ -18,7 +28,9 @@ class ListAdminMixin(object):
             self.search_fields = ["username", 'mobile_number', 'first_name']
         else:
             """ Set list_display excluding 'id' fields from foreign keys """
-            self.list_display = [field.name for field in model._meta.fields if not field.name.endswith('_id')]
+            self.list_display = [
+                field.name for field in model._meta.fields if not field.name.endswith('_id') and not field.name in EXCLUDE_FIELDS
+            ]
 
             """ Set search_fields with proper handling of ForeignKey fields """
             self.search_fields = []
