@@ -31,11 +31,14 @@ class WishListModelViewSet(GenericViewSet, ListModelMixin):
             'message': 'Successfully added to wishlist.!'
         })
 
-    @action(detail=False, methods=['DELETE'], url_path='(?P<id>.*?)/remove-wishlist')
-    def delete_from_cart(self, request, pk, id):
-        user = request.user
-        item = user.user_wishlist.get(id=id)
-        item.delete()
+    @action(detail=False, methods=['DELETE'], url_path='(?P<pk>.*?)/remove-wishlist')
+    def delete_from_cart(self, request, pk, *args, **kwargs):
+        try:
+            user = request.user
+            item = user.user_wishlist.get(product_variant_id=pk)
+            item.delete()
+        except Exception as e:
+            pass
         return Response({
             'message': 'Successfully removed..!',
         }, status=status.HTTP_200_OK)

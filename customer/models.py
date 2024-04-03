@@ -30,10 +30,15 @@ class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='user_cart', verbose_name='User', null=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
     currency = models.CharField(max_length=10, default='INR', null=True, blank=True, verbose_name='Currency')
+    is_completed = models.BooleanField(default=False, verbose_name='Cart Completed')
 
     def calculate_total(self):
         total_amount = CartItem.objects.first(order=self, deleted=False).aggregate(Sum('total_amount'))
         self.total_amount = total_amount['total_amount__sum']
+        self.save()
+
+    def complete_cart(self):
+        self.is_completed = True
         self.save()
 
 

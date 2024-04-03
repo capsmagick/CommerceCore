@@ -27,8 +27,9 @@ class PlaceOrder(GenericViewSet):
         """
             Function for getting the user cart
         """
-        cart, created = Cart.objects.get(
-            user_id=request.user.id, deleted=False
+        cart = Cart.objects.get(
+            user_id=request.user.id, deleted=False,
+            is_completed=False
         )
         return cart
 
@@ -68,6 +69,8 @@ class PlaceOrder(GenericViewSet):
             )
 
         OrderItem.objects.bulk_create(order_items)
+
+        cart.complete_cart()
 
         return Response({
             'message': 'Successfully created new order..!',
