@@ -11,7 +11,7 @@ from customer.models import Review
 class CustomerVariantFilter(filters.FilterSet):
     class Meta:
         model = Variant
-        fields = ['product', 'attributes']
+        fields = ['product']
 
 
 class CustomerCollectionFilter(filters.FilterSet):

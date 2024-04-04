@@ -51,12 +51,10 @@ class Products(BaseModel):
 
 
 class Variant(BaseModel):
-    product = models.ForeignKey(Products, related_name='product_variant',
-                                on_delete=models.CASCADE,
-                                verbose_name='Variant')
-    attributes = models.ManyToManyField(Attribute, related_name='variant_attributes', blank=True, null=True,
-                                        verbose_name='Attributes')
-
+    product = models.ForeignKey(
+        Products, related_name='product_variant',
+        on_delete=models.CASCADE, verbose_name='Variant'
+    )
     stock = models.IntegerField(default=0, verbose_name='Stock')
     selling_price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2, verbose_name='Selling Price')
 
@@ -80,6 +78,19 @@ class Variant(BaseModel):
     @classmethod
     def get_stock(cls, variant):
         return cls.objects.get(pk=variant).stock
+
+
+class VariantAttributes(BaseModel):
+    variant = models.ForeignKey(
+        Variant, related_name='variant_attribute',
+        on_delete=models.CASCADE, verbose_name='Variant'
+    )
+
+    attributes = models.ForeignKey(
+        Attribute, related_name='variant_attributes',
+        on_delete=models.CASCADE, verbose_name='Attributes'
+    )
+    value = models.CharField(max_length=256, verbose_name='Value')
 
 
 class ProductImage(BaseModel):
