@@ -114,7 +114,7 @@ class BaseModelViewSet(
         )
 
     def perform_db_action(self, serializer):
-        serializer.save()
+        return serializer.save()
 
     def perform_delete(self, instance):
         instance.delete()

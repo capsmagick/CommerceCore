@@ -16,7 +16,7 @@ class ProductFilter(filters.FilterSet):
 class VariantFilter(filters.FilterSet):
     class Meta:
         model = Variant
-        fields = ['product', 'attributes', 'product__brand', 'product__categories', 'product__tags']
+        fields = ['product', 'product__brand', 'product__categories', 'product__tags']
 
 
 class ProductImageFilter(filters.FilterSet):

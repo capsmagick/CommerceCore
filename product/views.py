@@ -104,6 +104,45 @@ class VariantModelViewSet(BaseModelViewSet):
     ]
     filterset_class = VariantFilter
 
+    @action(detail=True, methods=['PUT'])
+    def update_record(self, request, *args, **kwargs):
+        """
+            Update an existing variant record
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+
+            Returns:
+                Response: A DRF Response object with the update status.
+        """
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        attributes = serializer.validated_data.pop('attributes', None)
+        obj = self.perform_db_action(serializer)
+
+        if attributes:
+            for i in attributes:
+                attribute_instance = i.get('id', None)
+
+                if attribute_instance:
+                    attribute = obj.variant_attribute.get(pk=attribute_instance)
+                    attribute.attributes_id = i['attribute']
+                    attribute.value = i['value']
+                    attribute.save()
+                else:
+                    obj.variant_attribute.create(**{
+                        'attributes': i['attributes'],
+                        'value': i['value'],
+                    })
+        return Response(
+            {
+                'data': serializer.data,
+                'message': 'Successfully Updated'
+            },
+            status=status.HTTP_200_OK
+        )
+
 
 class ProductImageModelViewSet(BaseModelViewSet):
     queryset = ProductImage.objects.all()
