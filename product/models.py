@@ -82,12 +82,12 @@ class Variant(BaseModel):
 
 class VariantAttributes(BaseModel):
     variant = models.ForeignKey(
-        Variant, related_name='variant_attribute',
+        Variant, related_name='variant',
         on_delete=models.CASCADE, verbose_name='Variant'
     )
 
     attributes = models.ForeignKey(
-        Attribute, related_name='variant_attributes',
+        Attribute, related_name='attributes',
         on_delete=models.CASCADE, verbose_name='Attributes'
     )
     value = models.CharField(max_length=256, verbose_name='Value')
