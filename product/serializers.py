@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from product.models import Products
 from product.models import Variant
+from product.models import VariantAttributes
 from product.models import ProductImage
 from product.models import Collection
 from product.models import LookBook
@@ -147,9 +148,12 @@ class VariantModelSerializer(serializers.ModelSerializer):
 
 class VariantModelSerializerGET(serializers.ModelSerializer):
     product = ProductsModelSerializerGET()
-    attributes = RetrieveAttributeModelSerializer(many=True)
+    attributes = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     wish_listed = serializers.SerializerMethodField()
+
+    def get_attributes(self, attrs):
+        return VariantAttributeModelSerializerGET(attrs.variant.all(), many=True).data
 
     def get_wish_listed(self, attrs):
         from setup.middleware.request import CurrentRequestMiddleware
@@ -161,6 +165,15 @@ class VariantModelSerializerGET(serializers.ModelSerializer):
 
     class Meta:
         model = Variant
+        fields = '__all__'
+
+
+
+class VariantAttributeModelSerializerGET(serializers.ModelSerializer):
+    attributes = RetrieveAttributeModelSerializer()
+
+    class Meta:
+        model = VariantAttributes
         fields = '__all__'
 
 
