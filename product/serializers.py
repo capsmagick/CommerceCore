@@ -108,7 +108,7 @@ class VariantModelSerializer(serializers.ModelSerializer):
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True, required=False
     )
-    attributes = serializers.JSONField(required=True)
+    attributes = serializers.JSONField(required=True, write_only=True)
 
     def create(self, validated_data):
         from setup.utils import compress_image
@@ -118,9 +118,9 @@ class VariantModelSerializer(serializers.ModelSerializer):
 
         if attributes:
             for i in attributes:
-                product.variant_attribute.create(**{
-                    'attributes': i['attributes'],
-                    'value': i['value'],
+                product.variant.create(**{
+                    'attributes_id': i['attribute'],
+                    'value': i['value']
                 })
 
         for file in attachment:
