@@ -126,12 +126,12 @@ class VariantModelViewSet(BaseModelViewSet):
                 attribute_instance = i.get('id', None)
 
                 if attribute_instance:
-                    attribute = obj.variant_attribute.get(pk=attribute_instance)
+                    attribute = obj.variant.get(pk=attribute_instance)
                     attribute.attributes_id = i['attribute']
                     attribute.value = i['value']
                     attribute.save()
                 else:
-                    obj.variant_attribute.create(**{
+                    obj.variant.create(**{
                         'attributes': i['attributes'],
                         'value': i['value'],
                     })
