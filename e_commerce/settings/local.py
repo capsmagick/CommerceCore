@@ -47,6 +47,14 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.knowbintech.com'
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
 
 USER_ID = os.environ.get('PHONE_PE_USER_ID')
 MERCHANT_KEY = os.environ.get('PHONE_PE_MERCHANT_ID')
