@@ -5,6 +5,7 @@ from product.models import Variant
 from product.models import VariantAttributes
 from product.models import ProductImage
 from product.models import Collection
+from product.models import CollectionItems
 from product.models import LookBook
 
 from customer.models import WishList
@@ -186,6 +187,10 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializer(serializers.ModelSerializer):
+    collections = serializers.PrimaryKeyRelatedField(
+        queryset=Variant.objects.all(), many=True,
+        required=False
+    )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -286,3 +291,33 @@ class LookBookModelSerializerGET(serializers.ModelSerializer):
     class Meta:
         model = LookBook
         fields = '__all__'
+
+
+class AddToCollectionSerializer(serializers.Serializer):
+    collection = serializers.PrimaryKeyRelatedField(
+        queryset=Collection.objects.all()
+    )
+
+
+class AddProductCollectionSerializer(serializers.Serializer):
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Products.objects.all()
+    )
+
+
+class CollectionItemsModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CollectionItems
+        fields = (
+            'collection',
+            'product',
+        )
+
+
+class CollectionItemsModelSerializerGET(serializers.ModelSerializer):
+
+    class Meta:
+        model = CollectionItems
+        fields = '__all__'
+

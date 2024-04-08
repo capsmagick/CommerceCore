@@ -17,7 +17,7 @@ class CustomerVariantFilter(filters.FilterSet):
 class CustomerCollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
-        fields = ['name', 'collections', 'tags']
+        fields = ['name', 'tags',]
 
 
 class CustomerLookBookFilter(filters.FilterSet):

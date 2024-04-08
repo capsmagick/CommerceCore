@@ -13,6 +13,7 @@ router.register('product', views.ProductsModelViewSet)
 router.register('variant', views.VariantModelViewSet)
 router.register('product-image', views.ProductImageModelViewSet)
 router.register('collection', views.CollectionModelViewSet)
+router.register('collection-items', views.CollectionItemsModelViewSet)
 router.register('look-book', views.LookBookModelViewSet)
 
 urlpatterns = []

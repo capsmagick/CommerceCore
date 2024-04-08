@@ -10,6 +10,7 @@ from product.models import Products
 from product.models import Variant
 from product.models import ProductImage
 from product.models import Collection
+from product.models import CollectionItems
 from product.models import LookBook
 
 from product.serializers import ProductsModelSerializer
@@ -19,14 +20,19 @@ from product.serializers import VariantModelSerializerGET
 from product.serializers import ProductImageModelSerializer
 from product.serializers import CollectionModelSerializer
 from product.serializers import CollectionModelSerializerGET
+from product.serializers import CollectionItemsModelSerializer
+from product.serializers import CollectionItemsModelSerializerGET
 from product.serializers import LookBookModelSerializer
 from product.serializers import LookBookModelSerializerGET
+from product.serializers import AddToCollectionSerializer
+from product.serializers import AddProductCollectionSerializer
 
 from product.filters import ProductFilter
 from product.filters import VariantFilter
 from product.filters import ProductImageFilter
 from product.filters import CollectionFilter
 from product.filters import LookBookFilter
+from product.filters import CollectionItemsFilter
 
 
 
@@ -90,6 +96,31 @@ class ProductsModelViewSet(BaseModelViewSet):
 
         return Response({
             'message': f'{obj.name} successfully enabled.!'
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='add-to-collection', serializer_class=AddToCollectionSerializer)
+    def add_to_collection(self, request, *args, **kwargs):
+        """
+            API For Add the product to the collection
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): The primary key of the product table
+
+            Data:
+                collection (int): The primary key of the collection table
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+        serializer = AddToCollectionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        collection = serializer.validated_data.get('collection')
+        CollectionItems.objects.create(collection_id=collection, product=obj)
+
+        return Response({
+            'message': f'{obj.name} successfully added to the collection.!'
         }, status=status.HTTP_200_OK)
 
 
@@ -181,6 +212,31 @@ class CollectionModelViewSet(BaseModelViewSet):
     ]
     filterset_class = CollectionFilter
 
+    @action(detail=True, methods=['POST'], url_path='add-product', serializer_class=AddProductCollectionSerializer)
+    def add_product(self, request, *args, **kwargs):
+        """
+            API For Add the product to the collection
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): The primary key of the collection table
+
+            Data:
+                product (int): The primary key of the product table
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+        serializer = AddToCollectionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product = serializer.validated_data.get('product')
+        CollectionItems.objects.create(collection=obj, product_id=product)
+
+        return Response({
+            'message': f'{obj.name} successfully added to the collection.!'
+        }, status=status.HTTP_200_OK)
+
 
 class LookBookModelViewSet(BaseModelViewSet):
     queryset = LookBook.objects.all()
@@ -193,3 +249,14 @@ class LookBookModelViewSet(BaseModelViewSet):
     ]
     filterset_class = LookBookFilter
 
+
+class CollectionItemsModelViewSet(BaseModelViewSet):
+    queryset = CollectionItems.objects.all()
+    serializer_class = CollectionItemsModelSerializer
+    retrieve_serializer_class = CollectionItemsModelSerializerGET
+    search_fields = ['product__name', 'collection__name']
+    default_fields = [
+        'collection',
+        'product',
+    ]
+    filterset_class = CollectionItemsFilter

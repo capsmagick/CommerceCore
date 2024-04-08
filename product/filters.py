@@ -4,6 +4,7 @@ from product.models import Products
 from product.models import Variant
 from product.models import ProductImage
 from product.models import Collection
+from product.models import CollectionItems
 from product.models import LookBook
 
 
@@ -28,12 +29,18 @@ class ProductImageFilter(filters.FilterSet):
 class CollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
-        fields = ['collections']
+        fields = ['name', 'tags',]
 
 
 class LookBookFilter(filters.FilterSet):
     class Meta:
         model = LookBook
         fields = ['variants']
+
+
+class CollectionItemsFilter(filters.FilterSet):
+    class Meta:
+        model = CollectionItems
+        fields = ['collection', 'product']
 
 

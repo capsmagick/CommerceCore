@@ -3,6 +3,8 @@ from .sessions import Login
 from .sessions import Logout
 from .sessions import ChangePassword
 
+from .new import TestMail
+
 
 from .token import TokenLoginAPTView
 
