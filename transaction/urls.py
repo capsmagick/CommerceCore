@@ -11,6 +11,9 @@ else:
 
 router.register('details', views.TransactionModelViewSet)
 
+# Shiprocket
+router.register('shiprocket', views.ShiprocketViewSet, basename='shiprocket')
+
 
 urlpatterns = [
     path('payment/initiate/', views.TransactionAPIView.as_view(), name='transaction-initiate'),

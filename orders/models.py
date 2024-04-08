@@ -26,6 +26,7 @@ class Order(BaseModel):
         ('Order Placed', 'Order Placed'),
         ('Order Processing', 'Order Processing'),
         ('Packed', 'Packed'),
+        ('Ready For Dispatch', 'Ready For Dispatch'),
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled'),
@@ -77,7 +78,11 @@ class Order(BaseModel):
     def packing(self):
         return f"{self.order_id} moved Packed"
 
-    @transition(field=status, source=['Packed'], target='Shipped')
+    @transition(field=status, source=['Packed'], target='Ready For Dispatch')
+    def ready_for_dispatch(self):
+        return f"{self.order_id} moved to Ready For Dispatch"
+
+    @transition(field=status, source=['Ready For Dispatch'], target='Shipped')
     def shipped(self):
         return f"{self.order_id} moved to Shipped"
     
