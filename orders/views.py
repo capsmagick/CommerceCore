@@ -13,6 +13,8 @@ from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
 from setup.utils import generate_column
 
+from transaction.views import ShiprocketUtility
+
 from customer.models import Cart
 
 from .models import Order
@@ -188,6 +190,25 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
         obj = self.get_object()
 
         message = obj.packing()
+        obj.save()
+
+        return Response({
+            'message': message,
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='ready-for-dispatch')
+    def ready_for_dispatch(self, request, pk, *args, **kwargs):
+        """
+            API For updating the order packed to ready for dispatch.
+            Also creating order in shiprocket and requesting shipment
+        """
+        obj = self.get_object()
+
+        message = obj.ready_for_dispatch()
+
+        """Creating order in shiprocket"""
+        ShiprocketUtility().create_order(obj)
+
         obj.save()
 
         return Response({
