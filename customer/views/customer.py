@@ -1,14 +1,11 @@
-from django.db.models import QuerySet
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
 
 from rest_framework.permissions import AllowAny
 
-from rest_framework.response import Response
-from rest_framework.decorators import action
-
 from rest_framework import filters
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 # from algoliasearch_django import raw_search

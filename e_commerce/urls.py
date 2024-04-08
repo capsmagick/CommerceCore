@@ -35,6 +35,7 @@ urlpatterns += [
     path('customer/', include('customer.urls')),
     path('orders/', include('orders.urls')),
     path('transaction/', include('transaction.urls')),
+    path('cms/', include('cms.urls')),
 ]
 
 if settings.DEBUG:

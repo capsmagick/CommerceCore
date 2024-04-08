@@ -66,6 +66,7 @@ INSTALLED_APPS += [
     'customer',
     'orders',
     'transaction',
+    'cms',
 ]
 
 MIDDLEWARE = [
