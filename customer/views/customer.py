@@ -1,8 +1,12 @@
+from django.db.models import QuerySet
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
 
 from rest_framework.permissions import AllowAny
+
+from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -67,6 +71,13 @@ class CustomerCategoryViewSet(GenericViewSet, ListModelMixin):
     filterset_class = CustomerCategoryFilter
     search_fields = ['name', 'tags', 'handle']
 
+    # @action(detail=False, methods=['GET'], url_path='group-by')
+    # def group_by_category(self, request, *args, **kwargs):
+    #     categories = self.get_queryset().query
+    #     categories.group_by = ['parent_category']
+    #     results = QuerySet(query=categories, model=Category)
+    #     print('results : ', results)
+    #     return Response(results)
 
 class CustomerCollectionViewSet(GenericViewSet, ListModelMixin):
     """
