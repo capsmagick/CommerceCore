@@ -21,7 +21,7 @@ from masterdata.models import Category
 from product.serializers import VariantModelSerializerGET
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializerGET
-from masterdata.serializers import CategoryModelSerializer
+from masterdata.serializers import CategoryModelSerializerGET
 
 from customer.filters import CustomerVariantFilter
 from customer.filters import CustomerCategoryFilter
@@ -65,19 +65,12 @@ class CustomerCategoryViewSet(GenericViewSet, ListModelMixin):
     """
 
     permission_classes = (AllowAny,)
-    queryset = Category.objects.all()
-    serializer_class = CategoryModelSerializer
+    queryset = Category.objects.filter(parent_category__isnull=True).order_by('name')
+    serializer_class = CategoryModelSerializerGET
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = CustomerCategoryFilter
     search_fields = ['name', 'tags', 'handle']
 
-    # @action(detail=False, methods=['GET'], url_path='group-by')
-    # def group_by_category(self, request, *args, **kwargs):
-    #     categories = self.get_queryset().query
-    #     categories.group_by = ['parent_category']
-    #     results = QuerySet(query=categories, model=Category)
-    #     print('results : ', results)
-    #     return Response(results)
 
 class CustomerCollectionViewSet(GenericViewSet, ListModelMixin):
     """

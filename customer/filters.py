@@ -29,7 +29,7 @@ class CustomerLookBookFilter(filters.FilterSet):
 class CustomerCategoryFilter(filters.FilterSet):
     class Meta:
         model = Category
-        fields = ['parent_category', 'attribute_group', 'tags']
+        fields = ['attribute_group', 'tags', 'handle', 'is_main_menu', 'is_top_category']
 
 
 class CustomerReturnFilter(filters.FilterSet):
