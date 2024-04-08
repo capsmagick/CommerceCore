@@ -202,14 +202,21 @@ class RetrieveDimensionModelSerializer(serializers.ModelSerializer):
 class CategoryModelSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
+    handle = serializers.CharField()
 
     def validate(self, attrs):
         name = attrs.get('name')
+        handle = attrs.get('handle')
 
         if not self.instance:
             if Category.objects.filter(name=name).exists():
                 raise serializers.ValidationError({
                     'name': 'Name is already in use.'
+                })
+
+            if Category.objects.filter(handle=handle).exists():
+                raise serializers.ValidationError({
+                    'name': 'Handle is already in use.'
                 })
 
         else:
@@ -219,11 +226,27 @@ class CategoryModelSerializer(serializers.ModelSerializer):
                         'name': 'Name is already in use.'
                     })
 
+                if Category.objects.filter(handle=handle).exists():
+                    raise serializers.ValidationError({
+                        'name': 'Handle is already in use.'
+                    })
+
         return attrs
 
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = (
+            'name',
+            'description',
+            'handle',
+            'is_active',
+            'parent_category',
+            'attribute_group',
+            'tags',
+            'image',
+            'is_main_menu',
+            'is_top_category',
+        )
 
     def create(self, validated_data):
         tags = validated_data.pop('tags', None)

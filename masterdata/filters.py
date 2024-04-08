@@ -8,7 +8,7 @@ from .models import AttributeGroup
 class CategoryFilter(filters.FilterSet):
     class Meta:
         model = Category
-        fields = ['parent_category', 'second_parent_category', 'attribute_group', 'tags']
+        fields = ['parent_category', 'attribute_group', 'tags']
 
 
 class BrandFilter(filters.FilterSet):

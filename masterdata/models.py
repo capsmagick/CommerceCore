@@ -70,7 +70,7 @@ class AttributeGroup(BaseModel):
     attributes = models.ManyToManyField(Attribute, related_name='attributeitems', null=True, verbose_name='Attributes')
 
     def __str__(self):
-        return self.name
+        return self.name if self.name else 'AttributeGroupObject({})'.format(self.id)
 
 
 class Category(BaseModel):
@@ -84,11 +84,6 @@ class Category(BaseModel):
         on_delete=models.SET_NULL, blank=True, null=True
     )
 
-    second_parent_category = models.ForeignKey(
-        'Category', related_name='secondsubcategory', verbose_name='Second Parent Category',
-        on_delete=models.SET_NULL, blank=True, null=True
-    )
-
     attribute_group = models.ForeignKey(
         AttributeGroup, related_name='attributegroup', verbose_name='Attribute Groups',
         on_delete=models.SET_NULL, blank=True, null=True
@@ -99,6 +94,9 @@ class Category(BaseModel):
     )
 
     image = models.FileField(upload_to='category/images', blank=True, null=True, verbose_name='Image')
+
+    is_main_menu = models.BooleanField(default=False, verbose_name='Main Menu')
+    is_top_category = models.BooleanField(default=False, verbose_name='Top Category')
 
     def __str__(self):
         return self.name
