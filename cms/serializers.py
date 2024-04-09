@@ -4,6 +4,7 @@ from .models import HeroSection
 
 
 class HeroSectionModelSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
 
     class Meta:
         model = HeroSection
