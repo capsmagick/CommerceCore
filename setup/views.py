@@ -41,7 +41,7 @@ class BaseModelViewSet(
 
             (Eg. admins get full serialization, others get basic serialization)
         """
-        if self.action == 'list' and self.retrieve_serializer_class:
+        if self.action == 'list' or self.action == 'retrieve' and self.retrieve_serializer_class:
             return self.retrieve_serializer_class
         return self.serializer_class
 
