@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
 from transaction.mixins import Shiprocket
+from orders.serializers import OrderRetrieveSerializer
 
 
 class ShiprocketViewSet(ViewSet):
@@ -41,6 +42,15 @@ class ShiprocketUtility:
                 obj (object): The object of the order.
         """
 
+        order_data = OrderRetrieveSerializer(obj).data
+        order_items = order_data.get('orderitems')
+        order_items = Response(order_items).data
+
+        length = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['length'])
+        breadth = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['breadth'])
+        height = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['height'])
+        weight = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['weight'])
+
         payload = {
             'order_id': obj.order_id,
             'order_date': obj.created_at,
@@ -68,17 +78,17 @@ class ShiprocketUtility:
             'shipping_state': "",
             'shipping_email': "",
             'shipping_phone': "",
-            'order_items': '',
+            'order_items': order_items,
             'payment_method': "Prepaid",
             'shipping_charges': 0,
             'giftwrap_charges': 0,
             'transaction_charges': 0,
             'total_discount': 0,
             'sub_total': obj.total_amount,
-            'length': 10,
-            'breadth': 15,
-            'height': 20,
-            'weight': 2.5
+            'length': length,
+            'breadth': breadth,
+            'height': height,
+            'weight': weight
         }
 
         shiprocket = Shiprocket()

@@ -28,6 +28,7 @@ from .serializers import OrderRetrieveSerializer
 class PlaceOrder(GenericViewSet, RetrieveModelMixin):
     permission_classes = (IsAuthenticated, IsCustomer,)
     queryset = Order.objects.all()
+    serializer_class = OrderRetrieveSerializer
 
     def get_object(self):
         queryset = self.get_queryset()
