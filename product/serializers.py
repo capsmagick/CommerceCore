@@ -169,7 +169,6 @@ class VariantModelSerializerGET(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class VariantAttributeModelSerializerGET(serializers.ModelSerializer):
     attributes = RetrieveAttributeModelSerializer()
 
@@ -306,7 +305,6 @@ class AddProductCollectionSerializer(serializers.Serializer):
 
 
 class CollectionItemsModelSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CollectionItems
         fields = (
@@ -316,8 +314,12 @@ class CollectionItemsModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionItemsModelSerializerGET(serializers.ModelSerializer):
-
     class Meta:
         model = CollectionItems
         fields = '__all__'
 
+
+class OrderItemsModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'

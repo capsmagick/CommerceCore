@@ -16,6 +16,7 @@ router.register('product', views.CustomerVariantViewSet)
 router.register('category', views.CustomerCategoryViewSet)
 router.register('collections', views.CustomerCollectionViewSet)
 router.register('lookbook', views.CustomerLookBookViewSet)
+router.register('orders', views.CustomerOrderViewSet)
 
 router.register('cart', views.CartModelViewSet)
 router.register('session/cart', views.SessionCartModelViewSet)
