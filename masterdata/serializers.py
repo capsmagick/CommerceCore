@@ -262,6 +262,7 @@ class CategoryModelSerializer(serializers.ModelSerializer):
 class CategoryModelSerializerGET(serializers.ModelSerializer):
     tags = TagModelSerializer(many=True)
     sub_category = serializers.SerializerMethodField()
+    attribute_group = RetrieveAttributeGroupModelSerializer()
 
     def get_sub_category(self, attrs):
         return CategoryModelSerializerGET(attrs.subcategory.all(), many=True).data
