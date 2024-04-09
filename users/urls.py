@@ -11,7 +11,7 @@ else:
     router = SimpleRouter()
 
 router.register('user-address', views.AddressRegisterModelViewSet)
-router.register('store-manager', views.StoreManagerViewSet)
+router.register('manager', views.ManagerViewSet)
 router.register('customers', views.CustomerViewSet)
 
 urlpatterns = [
