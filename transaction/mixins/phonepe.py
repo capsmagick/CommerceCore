@@ -55,13 +55,12 @@ class PhonePe:
 
         headers = self.generate_headers(main_string)
 
-        response = requests.post(
-            self.POST_ACTION_URL,
-            headers=headers,
-            data=payload
-        )
-
-        return response.json()
+        return {
+            'headers': headers,
+            'post_data': { 'request': base64_string },
+            'action': self.POST_ACTION_URL,
+            'method': 'post'
+        }
 
     def payment(self, order):
         transaction = Transaction.create_transaction(order)
