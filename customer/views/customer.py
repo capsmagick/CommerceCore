@@ -19,8 +19,10 @@ from orders.models import Order
 from product.serializers import VariantModelSerializerGET
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializerGET
+from product.serializers import OrderItemsModelSerializerGET
+
 from masterdata.serializers import CategoryModelSerializerGET
-from masterdata.serializers import OrderItemsModelSerializerGET
+
 
 from customer.filters import CustomerVariantFilter
 from customer.filters import CustomerCategoryFilter
