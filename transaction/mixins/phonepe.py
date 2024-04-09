@@ -42,7 +42,7 @@ class PhonePe:
             "merchantUserId": self.USER_ID,
             "amount": str(transaction.amount),
             "redirectUrl": self.REDIRECT_URL,
-            "redirectMode": "POST",
+            "redirectMode": "REDIRECT",
             "callbackUrl": self.S2S_CALLBACK_URL,
             "mobileNumber": transaction.order.address.contact_number,
             "paymentInstrument": {
