@@ -58,40 +58,49 @@ class Order(BaseModel):
             self.order_id = generate_order_id()
         super().save(*args, **kwargs)
 
-    @transition(field=status, source=['Pending'], target='Payment Initiated')
+    # @transition(field=status, source=['Pending'], target='Payment Initiated')
     def order_payment(self):
+        self.status = 'Payment Initiated'
         return f"{self.order_id} moved to Payment Initiated"
 
-    @transition(field=status, source=['Payment Initiated'], target='Pending')
+    # @transition(field=status, source=['Payment Initiated'], target='Pending')
     def order_pending(self):
+        self.status = 'Pending'
         return f"{self.order_id} moved to Pending"
 
-    @transition(field=status, source=['Payment Initiated'], target='Order Placed')
+    # @transition(field=status, source=['Payment Initiated'], target='Order Placed')
     def order_placed(self):
+        self.status = 'Order Placed'
         return f"{self.order_id} moved to Order Placed"
 
-    @transition(field=status, source=['Order Placed'], target='Order Processing')
+    # @transition(field=status, source=['Order Placed'], target='Order Processing')
     def order_processing(self):
+        self.status = 'Order Processing'
         return f"{self.order_id} moved to Order Processing"
 
-    @transition(field=status, source=['Order Processing'], target='Packed')
+    # @transition(field=status, source=['Order Processing'], target='Packed')
     def packing(self):
+        self.status = 'Packed'
         return f"{self.order_id} moved Packed"
 
-    @transition(field=status, source=['Packed'], target='Ready For Dispatch')
+    # @transition(field=status, source=['Packed'], target='Ready For Dispatch')
     def ready_for_dispatch(self):
+        self.status = 'Ready For Dispatch'
         return f"{self.order_id} moved to Ready For Dispatch"
 
-    @transition(field=status, source=['Ready For Dispatch'], target='Shipped')
+    # @transition(field=status, source=['Ready For Dispatch'], target='Shipped')
     def shipped(self):
+        self.status = 'Shipped'
         return f"{self.order_id} moved to Shipped"
     
-    @transition(field=status, source=['Shipped'], target='Delivered')
+    # @transition(field=status, source=['Shipped'], target='Delivered')
     def delivered(self):
+        self.status = 'Delivered'
         return f"{self.order_id} moved Delivered"
 
-    @transition(field=status, source=['Order Placed', 'Packed', 'Delivered'], target='Cancelled')
+    # @transition(field=status, source=['Order Placed', 'Packed', 'Delivered'], target='Cancelled')
     def cancelled(self):
+        self.status = 'Cancelled'
         return f"{self.order_id} moved to Cancelled"
 
 
