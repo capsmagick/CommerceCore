@@ -7,6 +7,8 @@ from masterdata.models import Category
 from customer.models import Return
 from customer.models import Review
 
+from orders.models import Order
+
 
 class CustomerVariantFilter(filters.FilterSet):
     class Meta:
