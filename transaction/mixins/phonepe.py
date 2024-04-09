@@ -40,7 +40,7 @@ class PhonePe:
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
             "merchantUserId": self.USER_ID,
-            "amount": transaction.amount,
+            "amount": str(transaction.amount),
             "redirectUrl": self.REDIRECT_URL,
             "redirectMode": "POST",
             "callbackUrl": self.S2S_CALLBACK_URL,
