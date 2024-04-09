@@ -58,7 +58,7 @@ class PhonePe:
         response = requests.post(
             self.POST_ACTION_URL,
             headers=headers,
-            data={ 'request': base64_string }
+            data=payload
         )
 
         return response.json()
