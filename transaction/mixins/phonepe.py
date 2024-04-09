@@ -37,6 +37,8 @@ class PhonePe:
 
     def make_request(self, transaction):
         payload = {
+            'keyINDEX': self.KEY_INDEX,
+            'apiKey': self.API_KEY,
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
             "merchantUserId": self.USER_ID,
@@ -56,10 +58,7 @@ class PhonePe:
         headers = self.generate_headers(main_string)
 
         return {
-            'headers': headers,
-            'post_data': { 'request': base64_string },
-            'action': self.POST_ACTION_URL,
-            'method': 'post'
+            'payload': payload
         }
 
     def payment(self, order):
