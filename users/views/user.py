@@ -69,8 +69,8 @@ class CustomerMe(APIView):
             }, status=status.HTTP_200_OK)
 
 
-class StoreManagerViewSet(BaseModelViewSet):
-    queryset = User.objects.filter(deleted=False, store_manager=True)
+class ManagerViewSet(BaseModelViewSet):
+    queryset = User.objects.filter(deleted=False)
     serializer_class = StoreManagerModelSerializer
     retrieve_serializer_class = UserModelSerializerGET
     default_fields = [
