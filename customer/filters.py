@@ -17,7 +17,7 @@ class CustomerVariantFilter(filters.FilterSet):
 class CustomerCollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
-        fields = ['name', 'tags',]
+        fields = ['name', 'tags', ]
 
 
 class CustomerLookBookFilter(filters.FilterSet):
@@ -48,10 +48,15 @@ class CustomerReturnFilter(filters.FilterSet):
 
 
 class CustomerReviewFilter(filters.FilterSet):
-
     class Meta:
         model = Review
         fields = [
             'product__name',
             'rating',
         ]
+
+
+class CustomerOrderFilter(filters.FilterSet):
+    class Meta:
+        model = Order
+        fields = ['order_id']

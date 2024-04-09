@@ -14,16 +14,19 @@ from product.models import Variant
 from product.models import Collection
 from product.models import LookBook
 from masterdata.models import Category
+from orders.models import Order
 
 from product.serializers import VariantModelSerializerGET
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializerGET
 from masterdata.serializers import CategoryModelSerializerGET
+from masterdata.serializers import OrderItemsModelSerializerGET
 
 from customer.filters import CustomerVariantFilter
 from customer.filters import CustomerCategoryFilter
 from customer.filters import CustomerCollectionFilter
 from customer.filters import CustomerLookBookFilter
+from customer.filters import CustomerOrderFilter
 
 
 class CustomerVariantViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -105,4 +108,21 @@ class CustomerLookBookViewSet(GenericViewSet, ListModelMixin):
     search_fields = ['name']
 
 
+class CustomerOrderViewSet(GenericViewSet, ListModelMixin):
+    """
+        Get the list of Orders.
 
+        Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+
+        Returns:
+            Response: A DRF Response object with the look book data.
+    """
+    permission_classes = (IsAuthenticated, AllowAny,)
+    user = request.user
+
+    queryset = Order.objects.filter(user=user)
+    serializer_class = OrderItemsModelSerializerGET
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_class = CustomerOrderFilter
+    search_fields = ['order_id']
