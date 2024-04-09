@@ -127,4 +127,4 @@ class CustomerOrderViewSet(GenericViewSet, ListModelMixin):
 
     def get_queryset(self):
         user = self.request.user
-        return Order.objects.filter(user=user.id)
+        return Order.objects.filter(user=user.username)
