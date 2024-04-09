@@ -7,6 +7,7 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import CollectionItems
 from product.models import LookBook
+from orders.models import Order
 
 from customer.models import WishList
 
