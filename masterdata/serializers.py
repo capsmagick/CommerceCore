@@ -271,6 +271,14 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+class CategoryGET(serializers.ModelSerializer):
+    tags = TagModelSerializer(many=True)
+    attribute_group = RetrieveAttributeGroupModelSerializer()
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
 
 class ReturnReasonModelSerializer(serializers.ModelSerializer):
     title = serializers.CharField()
