@@ -37,6 +37,8 @@ class PhonePe:
 
     def make_request(self, transaction):
         payload = {
+            'keyINDEX': self.KEY_INDEX,
+            'apiKey': self.API_KEY,
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
             "merchantUserId": self.USER_ID,
