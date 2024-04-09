@@ -6,7 +6,10 @@ from rest_framework.permissions import AllowAny
 
 from rest_framework import filters
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+
 
 # from algoliasearch_django import raw_search
 
@@ -46,6 +49,17 @@ class CustomerVariantViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin)
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = CustomerVariantFilter
     search_fields = ['product__name', 'product__brand', 'product__tags']
+
+    @action(detail=True, methods=['GET'], url_path='other-variants')
+    def other_variants(self, request, *args, **kwargs):
+        """
+            API to fetch all similar variants
+        """
+        obj = self.get_object()
+        return Response(
+            VariantModelSerializerGET(obj.product.product_variant.all(), many=True).data,
+            status=status.HTTP_200_OK
+        )
 
     # def list(self, request, *args, **kwargs):
     #     query = request.query_params.get('query', '')
