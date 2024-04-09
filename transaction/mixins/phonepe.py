@@ -56,10 +56,7 @@ class PhonePe:
         headers = self.generate_headers(main_string)
 
         return {
-            'headers': headers,
-            'post_data': { 'request': base64_string },
-            'action': self.POST_ACTION_URL,
-            'method': 'post'
+            'payload': payload
         }
 
     def payment(self, order):
