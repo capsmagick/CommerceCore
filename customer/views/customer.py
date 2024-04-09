@@ -1,7 +1,7 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
-
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
 
 from rest_framework import filters
@@ -19,8 +19,10 @@ from orders.models import Order
 from product.serializers import VariantModelSerializerGET
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializerGET
+from product.serializers import OrderItemsModelSerializerGET
+
 from masterdata.serializers import CategoryModelSerializerGET
-from masterdata.serializers import OrderItemsModelSerializerGET
+
 
 from customer.filters import CustomerVariantFilter
 from customer.filters import CustomerCategoryFilter
@@ -118,11 +120,12 @@ class CustomerOrderViewSet(GenericViewSet, ListModelMixin):
         Returns:
             Response: A DRF Response object with the look book data.
     """
-    permission_classes = (IsAuthenticated, AllowAny,)
-    user = request.user
-
-    queryset = Order.objects.filter(user=user)
+    permission_classes = (IsAuthenticated,)
     serializer_class = OrderItemsModelSerializerGET
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = CustomerOrderFilter
     search_fields = ['order_id']
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user)
