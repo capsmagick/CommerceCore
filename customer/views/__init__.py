@@ -7,6 +7,7 @@ from .customer import CustomerVariantViewSet
 from .customer import CustomerCategoryViewSet
 from .customer import CustomerCollectionViewSet
 from .customer import CustomerLookBookViewSet
+from .customer import CustomerOrderViewSet
 
 from .review import ReviewModelView
 from .review import ReviewModelViewSet
