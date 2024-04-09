@@ -11,12 +11,11 @@ if settings.DEBUG:
 else:
     router = SimpleRouter()
 
-
 router.register('product', views.CustomerVariantViewSet)
 router.register('category', views.CustomerCategoryViewSet)
 router.register('collections', views.CustomerCollectionViewSet)
 router.register('lookbook', views.CustomerLookBookViewSet)
-router.register('orders', views.CustomerOrderViewSet)
+router.register('orders', views.CustomerOrderViewSet, basename='customer-orders')
 
 router.register('cart', views.CartModelViewSet)
 router.register('session/cart', views.SessionCartModelViewSet)
@@ -26,7 +25,6 @@ router.register('return-request', views.CustomerReturnViewSet)
 router.register('manage/return-request', views.ManageCustomerReturn)
 
 router.register('manage/reviews', views.ReviewModelViewSet)
-
 
 urlpatterns = [
     path('add-review/', views.ReviewModelView.as_view(), name='add-review'),

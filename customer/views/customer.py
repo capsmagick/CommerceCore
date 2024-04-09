@@ -120,8 +120,11 @@ class CustomerOrderViewSet(GenericViewSet, ListModelMixin):
             Response: A DRF Response object with the look book data.
     """
     permission_classes = (IsAuthenticated,)
-    queryset = Order.objects.all()
     serializer_class = OrderItemsModelSerializerGET
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = CustomerOrderFilter
     search_fields = ['order_id']
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user.id)
