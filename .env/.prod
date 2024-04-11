@@ -1,5 +1,6 @@
 DJANGO_SECRET_KEY='django-insecure-fp76c(6p%%!x-p)wv#d!w*4ff60qjukiims407wo)-xjr10r+h'
 
+DEBUG=False
 
 DB_NAME=commerce_prod_db
 DB_USER=commerce_admin
