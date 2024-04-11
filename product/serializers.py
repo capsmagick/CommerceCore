@@ -187,10 +187,6 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializer(serializers.ModelSerializer):
-    collections = serializers.PrimaryKeyRelatedField(
-        queryset=Variant.objects.all(), many=True,
-        required=False
-    )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -223,14 +219,9 @@ class CollectionModelSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-
-        collections = validated_data.pop('collections', None)
         tags = validated_data.pop('tags', None)
 
         obj = Collection.objects.create(**validated_data)
-
-        if collections:
-            obj.collections.set(collections)
 
         if tags:
             obj.tags.set(tags)
