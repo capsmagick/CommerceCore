@@ -252,4 +252,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     'API_KEY': '9335c56e84ceac681c30904edcff4dae',
 # }
 
+URL_PREFIX = 'api/'
+
 

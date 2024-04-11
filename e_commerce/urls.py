@@ -21,21 +21,21 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('super-admin/', admin.site.urls),
+    path(f'{settings.URL_PREFIX}super-admin/', admin.site.urls),
 ]
 
 # Application Urls
 urlpatterns += [
-    path('setup/', include('setup.urls')),
-    path('account/', include('users.urls')),
+    path(f'{settings.URL_PREFIX}setup/', include('setup.urls')),
+    path(f'{settings.URL_PREFIX}account/', include('users.urls')),
 
-    path('masterdata/', include('masterdata.urls')),
-    path('inventory/', include('inventory.urls')),
-    path('products/', include('product.urls')),
-    path('customer/', include('customer.urls')),
-    path('orders/', include('orders.urls')),
-    path('transaction/', include('transaction.urls')),
-    path('cms/', include('cms.urls')),
+    path(f'{settings.URL_PREFIX}masterdata/', include('masterdata.urls')),
+    path(f'{settings.URL_PREFIX}inventory/', include('inventory.urls')),
+    path(f'{settings.URL_PREFIX}products/', include('product.urls')),
+    path(f'{settings.URL_PREFIX}customer/', include('customer.urls')),
+    path(f'{settings.URL_PREFIX}orders/', include('orders.urls')),
+    path(f'{settings.URL_PREFIX}transaction/', include('transaction.urls')),
+    path(f'{settings.URL_PREFIX}cms/', include('cms.urls')),
 ]
 
 if settings.DEBUG:
