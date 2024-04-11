@@ -4,7 +4,7 @@ DEBUG=False
 
 DB_NAME=signupdb
 DB_USER=signupadmin
-DB_PASSWORD=com_admin_q1w2
+DB_PASSWORD=HelloSignup@789
 DB_HOST=135.181.1.40
 DB_PORT=5432
 
