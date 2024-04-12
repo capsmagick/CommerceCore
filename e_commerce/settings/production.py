@@ -11,7 +11,7 @@ ALLOWED_HOSTS = [
     "localhost:8080",
     "localhost:5173",
     "127.0.0.1:5173",
-    "http://135.181.1.40"
+    "135.181.1.40",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -40,7 +40,7 @@ DATABASES = {
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '143621340002-lmgf8f4tb5i5blkdt3hptkb5fsk6930m.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 # LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 
