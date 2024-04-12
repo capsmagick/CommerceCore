@@ -12,6 +12,7 @@ ALLOWED_HOSTS = [
     "localhost:5173",
     "127.0.0.1:5173",
     "135.181.1.40",
+    "manage.signupcasuals.com"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
