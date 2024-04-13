@@ -19,7 +19,7 @@ from users.serializers import UserModelSerializerGET
 from .utils import get_userdata
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
+# @method_decorator(ensure_csrf_cookie, name='dispatch')
 class Me(APIView):
     permission_classes = (AllowAny,)
 
