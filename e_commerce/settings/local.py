@@ -24,6 +24,12 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:5173',
 ]
 
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_SAMESITE = 'Strict'
+# X_FRAME_OPTIONS = 'SAMEORIGIN'
+# SESSION_COOKIE_SAMESITE = 'None'
+# SECURE_BROWSER_XSS_FILTER = True
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
