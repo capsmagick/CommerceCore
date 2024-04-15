@@ -57,7 +57,7 @@ class Login(APIView):
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
         """
-        serializer = LoginSerializer(data=request.data, **{'request': request})
+        serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
             user = serializer.login(self.request)
@@ -104,7 +104,7 @@ class ChangePassword(APIView):
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
         """
-        serializer = ResetPassword(data=request.data, **{'request': request})
+        serializer = ResetPassword(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
             password = serializer.validated_data['confirm_password']
