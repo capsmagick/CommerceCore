@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = os.environ.get('DEBUG')
 
-INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
+# INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -13,14 +13,13 @@ ALLOWED_HOSTS = [
     "127.0.0.1:5173"
 ]
 
-CSRF_TRUSTED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
-    'http://localhost',
-    'http://localhost:8080/',
-    'http://localhost:8081',
-    'http://localhost:8000',
-    'http://127.0.0.1:8008',
-    'http://localhost:8008',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]
+
+CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
@@ -42,11 +41,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 # LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.knowbintech.com'
 # EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -66,5 +60,9 @@ PHONE_PAY_REDIRECT_URL = os.environ.get('PHONE_PAY_REDIRECT_URL')
 
 SHIPROCKET_EMAIL = os.environ.get('SHIPROCKET_EMAIL')
 SHIPROCKET_PASSWORD = os.environ.get('SHIPROCKET_PASSWORD')
+
+DELHIVERY_API_KEY = os.environ.get('DELHIVERY_API_KEY')
+
+
 
 

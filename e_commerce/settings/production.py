@@ -45,7 +45,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 # LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

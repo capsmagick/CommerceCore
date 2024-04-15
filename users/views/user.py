@@ -19,7 +19,7 @@ from users.serializers import UserModelSerializerGET
 from .utils import get_userdata
 
 
-# @method_decorator(ensure_csrf_cookie, name='dispatch')
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class Me(APIView):
     permission_classes = (AllowAny,)
 
@@ -37,11 +37,10 @@ class Me(APIView):
         user = request.user
 
         if user.is_authenticated:
-            response = Response({
+            return Response({
                 'loggedIn': True,
                 'user': get_userdata(user)
             }, status=status.HTTP_200_OK)
-            return response
 
         else:
             return Response({

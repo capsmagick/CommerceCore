@@ -27,7 +27,7 @@ class Shiprocket:
     def __init__(self):
         self.email = settings.SHIPROCKET_EMAIL
         self.password = settings.SHIPROCKET_PASSWORD
-        self.headers = { "Content-Type": 'application/json' }
+        self.headers = {"Content-Type": 'application/json'}
 
         self.authorize()
 

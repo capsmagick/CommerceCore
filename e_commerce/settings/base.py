@@ -42,12 +42,12 @@ INSTALLED_APPS = [
 
 # Third Party
 INSTALLED_APPS += [
+    'corsheaders',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
-    'corsheaders',
 ]
 
 # Documentation
@@ -71,9 +71,9 @@ INSTALLED_APPS += [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -162,6 +162,7 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -232,20 +233,26 @@ SIMPLE_JWT = {
 
 SITE_ID = 1
 
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_COOKIE_HTTPONLY = False
-CORS_ORIGIN_ALLOW_ALL = True
+CSRF_COOKIE_SAMESITE = 'Strict'
+
 CORS_ALLOW_CREDENTIALS = True
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = 3000
+SESSION_COOKIE_AGE = 3000
+SESSION_SAVE_EVERY_REQUEST = True
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_COOKIE_HTTPONLY = True
 SECURE_BROWSER_XSS_FILTER = True
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 500 * 60
-
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_URLS_REGEX = r"^/api/.*$"
 
 # ALGOLIA = {
 #     'APPLICATION_ID': '6U8MXHFLJW',
