@@ -5,28 +5,28 @@ DEBUG = os.environ.get('DEBUG')
 INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "0.0.0.0",
-    "127.0.0.1",
-    "localhost:8080",
-    "localhost:5173",
-    "127.0.0.1:5173",
-    "135.181.1.40",
-    "manage.signupcasuals.com"
+    "manage.signupcasuals.com",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'https://manage.signupcasuals.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8080',
-    'http://localhost',
-    'http://localhost:8080/',
-    'http://localhost:8081',
-    'http://localhost:8000',
-    'http://127.0.0.1:8008',
-    'http://localhost:8008',
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://135.181.1.40'
+    'https://manage.signupcasuals.com',
 ]
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
+SECURE_SSL_REDIRECT = False
+
+# https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 DATABASES = {
     'default': {
@@ -44,10 +44,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 # SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 # LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
-
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.knowbintech.com'
