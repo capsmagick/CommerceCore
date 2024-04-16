@@ -13,7 +13,7 @@ from orders.models import Order
 class CustomerVariantFilter(filters.FilterSet):
     class Meta:
         model = Variant
-        fields = ['product']
+        fields = ['product', 'product__categories']
 
 
 class CustomerCollectionFilter(filters.FilterSet):
