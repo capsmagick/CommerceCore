@@ -5,7 +5,6 @@ from users.models.base_model import BaseModel
 from masterdata.models import Tag, Attribute
 
 
-
 class Products(BaseModel):
     name = models.CharField(max_length=50, verbose_name='Name')
     short_description = models.CharField(max_length=200, null=True, verbose_name='Short Description')
@@ -123,7 +122,7 @@ class Collection(BaseModel):
     feature_image = models.FileField(upload_to='collections/image', blank=True, null=True,
                                   verbose_name='Feature Image')
     tags = models.ManyToManyField(Tag, related_name='collection_tags', blank=True, null=True, verbose_name='Tags')
-
+    is_in_home_page = models.BooleanField(default=False, verbose_name='Display In Home Page')
 
     def __str__(self):
         return self.name
@@ -141,10 +140,10 @@ class CollectionItems(BaseModel):
     )
 
 
-
 class LookBook(BaseModel):
     name = models.CharField(max_length=100, verbose_name='Name')
 
     variants = models.ManyToManyField(Variant,
                                       related_name='variants',
                                       verbose_name='Variants')
+    is_in_home_page = models.BooleanField(default=False, verbose_name='Display In Home Page')
