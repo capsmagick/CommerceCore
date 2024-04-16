@@ -37,7 +37,7 @@ SECURE_SSL_REDIRECT = False
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
 SECURE_CONTENT_TYPE_NOSNIFF = False
 
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 
 X_FRAME_OPTIONS = 'DENY'
