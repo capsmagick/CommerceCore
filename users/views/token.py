@@ -20,7 +20,7 @@ class TokenLoginAPTView(GenericAPIView):
                 request (HttpRequest): The HTTP request object containing model data.
             Data:
                 username (char): Username of the user.
-                password (char): Password of the user.
+                password (password): Password of the user.
 
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
@@ -30,7 +30,7 @@ class TokenLoginAPTView(GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class LoginStatus(GenericAPIView):
+class LoginStatus(APIView):
     permission_classes = (AllowAny,)
     authentication_classes = (JWTAuthentication,)
 

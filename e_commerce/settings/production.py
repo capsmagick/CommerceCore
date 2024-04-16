@@ -7,6 +7,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 ALLOWED_HOSTS = [
     "localhost:5173",
     "127.0.0.1:5173",
+    "manage.signupcasuals.com:8443",
     "manage.signupcasuals.com",
     "signupcasuals.com",
 ]
@@ -14,6 +15,7 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'https://manage.signupcasuals.com:8443',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com',
 ]
@@ -21,6 +23,7 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'https://manage.signupcasuals.com:8443',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com',
 ]
