@@ -46,7 +46,7 @@ class LoginStatus(APIView):
         """
         user = request.user
 
-        if user.is_authenticated:
+        if user:
             return Response({
                 'loggedIn': True,
                 'user': get_userdata(user)
