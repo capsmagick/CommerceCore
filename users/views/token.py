@@ -30,7 +30,7 @@ class TokenLoginAPTView(GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class LoginStatus(APIView):
+class LoginStatus(GenericAPIView):
     permission_classes = (AllowAny,)
     authentication_classes = (JWTAuthentication,)
 
