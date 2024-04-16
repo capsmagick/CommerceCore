@@ -8,6 +8,7 @@ from product.models import Collection
 from product.models import CollectionItems
 from product.models import LookBook
 from orders.models import Order
+from masterdata.models import Tag
 
 from customer.models import WishList
 
@@ -187,6 +188,10 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializer(serializers.ModelSerializer):
+    tags = serializers.ListField(
+        child=serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all()),
+        write_only=True, required=False
+    )
 
     def validate(self, attrs):
         name = attrs.get('name')
