@@ -31,6 +31,7 @@ urlpatterns = [
         'token/', include(([
             path('user/login/', views.TokenLoginAPTView.as_view(), name='token-login'),
             path('user/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+            path('user/status/', views.LoginStatus.as_view(), name='token-refresh-c'),
         ])), name="jwt-token-login"
     ),
 
