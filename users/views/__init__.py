@@ -7,6 +7,7 @@ from .sessions import ChangePassword
 
 
 from .token import TokenLoginAPTView
+from .token import LoginStatus
 
 
 from .address_register import AddressRegisterModelViewSet
