@@ -5,16 +5,22 @@ DEBUG = os.environ.get('DEBUG')
 INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 ALLOWED_HOSTS = [
+    "localhost:5173",
+    "127.0.0.1:5173",
     "manage.signupcasuals.com",
     "signupcasuals.com",
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com',
 ]
@@ -76,4 +82,5 @@ PHONE_PAY_REDIRECT_URL = os.environ.get('PHONE_PAY_REDIRECT_URL')
 SHIPROCKET_EMAIL = os.environ.get('SHIPROCKET_EMAIL')
 SHIPROCKET_PASSWORD = os.environ.get('SHIPROCKET_PASSWORD')
 
-SECURE_BROWSER_XSS_FILTER = False
+# SECURE_BROWSER_XSS_FILTER = False
+SECURE_REFERRER_POLICY = None
