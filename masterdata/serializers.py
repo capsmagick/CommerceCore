@@ -226,6 +226,7 @@ class CategoryModelSerializer(serializers.ModelSerializer):
                         'name': 'Name is already in use.'
                     })
 
+            if handle != self.instance.handle:
                 if Category.objects.filter(handle=handle).exists():
                     raise serializers.ValidationError({
                         'name': 'Handle is already in use.'
@@ -270,6 +271,7 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
 
 class CategoryGET(serializers.ModelSerializer):
     tags = TagModelSerializer(many=True)
