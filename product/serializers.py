@@ -13,7 +13,7 @@ from masterdata.models import Tag
 from customer.models import WishList
 
 from customer.serializers.serializers import ReviewSerializer
-from masterdata.serializers import TagModelSerializer
+from masterdata.serializers import TagModelSerializerGET
 from masterdata.serializers import CategoryGET
 from masterdata.serializers import BrandModelSerializerGET
 from masterdata.serializers import RetrieveDimensionModelSerializer
@@ -94,7 +94,7 @@ class ProductsModelSerializerGET(serializers.ModelSerializer):
     brand = BrandModelSerializerGET(read_only=True)
     dimension = RetrieveDimensionModelSerializer(read_only=True)
     images = serializers.SerializerMethodField()
-    tags = TagModelSerializer(many=True, read_only=True)
+    tags = TagModelSerializerGET(many=True, read_only=True)
 
     def get_images(self, attrs):
         return ProductImageModelSerializer(attrs.product_images.all(), many=True).data
@@ -236,7 +236,7 @@ class CollectionModelSerializer(serializers.ModelSerializer):
 
 class CollectionModelSerializerGET(serializers.ModelSerializer):
     collections = VariantModelSerializerGET(many=True, read_only=True)
-    tags = TagModelSerializer(many=True, read_only=True)
+    tags = TagModelSerializerGET(many=True, read_only=True)
 
     class Meta:
         model = Collection

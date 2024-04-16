@@ -17,6 +17,7 @@ from .serializers import CategoryModelSerializerGET
 from .serializers import BrandModelSerializer
 from .serializers import BrandModelSerializerGET
 from .serializers import TagModelSerializer
+from .serializers import TagModelSerializerGET
 from .serializers import AttributeModelSerializer
 from .serializers import RetrieveAttributeModelSerializer
 from .serializers import AttributeGroupModelSerializer
@@ -91,6 +92,7 @@ class BrandModelViewSet(BaseModelViewSet):
 class TagModelViewSet(BaseModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagModelSerializer
+    retrieve_serializer_class = TagModelSerializerGET
     search_fields = ['name']
     default_fields = ['name']
 
