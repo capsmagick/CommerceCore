@@ -18,6 +18,7 @@ class HeroSectionFilter(filters.FilterSet):
     class Meta:
         model = HeroSection
         fields = [
+            'title',
             'cta_text',
             'short_description',
             'link',
