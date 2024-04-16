@@ -6,14 +6,17 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 ALLOWED_HOSTS = [
     "manage.signupcasuals.com",
+    "signupcasuals.com",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'https://manage.signupcasuals.com',
+    'https://signupcasuals.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://manage.signupcasuals.com',
+    'https://signupcasuals.com',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
