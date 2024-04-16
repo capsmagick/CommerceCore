@@ -35,7 +35,6 @@ from product.filters import LookBookFilter
 from product.filters import CollectionItemsFilter
 
 
-
 class ProductsModelViewSet(BaseModelViewSet):
     queryset = Products.objects.all()
     serializer_class = ProductsModelSerializer

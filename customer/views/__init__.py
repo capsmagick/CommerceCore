@@ -1,8 +1,9 @@
-from .cart import  CartModelViewSet
+from .cart import CartModelViewSet
 from .session_cart import SessionCartModelViewSet
 
-from .whishlist import  WishListModelViewSet
+from .whishlist import WishListModelViewSet
 
+from .customer import CustomerProductViewSet
 from .customer import CustomerVariantViewSet
 from .customer import CustomerCategoryViewSet
 from .customer import CustomerCollectionViewSet

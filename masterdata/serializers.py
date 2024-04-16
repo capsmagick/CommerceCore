@@ -90,6 +90,7 @@ class BrandModelSerializer(serializers.ModelSerializer):
 
 class BrandModelSerializerGET(serializers.ModelSerializer):
     tags = TagModelSerializerGET(many=True)
+
     class Meta:
         model = Brand
         fields = '__all__'
