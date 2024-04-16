@@ -48,26 +48,6 @@ class Me(APIView):
             }, status=status.HTTP_200_OK)
 
 
-class CustomerMe(APIView):
-    permission_classes = (AllowAny,)
-
-    def get(self, request):
-
-        user = request.user
-
-        if user.is_authenticated:
-            response = Response({
-                'loggedIn': True,
-                'user': get_userdata(user)
-            }, status=status.HTTP_200_OK)
-            return response
-
-        else:
-            return Response({
-                'loggedIn': False,
-            }, status=status.HTTP_200_OK)
-
-
 class ManagerViewSet(BaseModelViewSet):
     queryset = User.objects.filter(deleted=False)
     serializer_class = StoreManagerModelSerializer
