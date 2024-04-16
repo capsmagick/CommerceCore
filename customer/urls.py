@@ -11,7 +11,8 @@ if settings.DEBUG:
 else:
     router = SimpleRouter()
 
-router.register('product', views.CustomerVariantViewSet)
+router.register('product', views.CustomerProductViewSet)
+router.register('product-variants', views.CustomerVariantViewSet)
 router.register('category', views.CustomerCategoryViewSet)
 router.register('collections', views.CustomerCollectionViewSet)
 router.register('lookbook', views.CustomerLookBookViewSet)

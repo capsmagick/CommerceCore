@@ -13,12 +13,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 # from algoliasearch_django import raw_search
 
+from product.models import Products
 from product.models import Variant
 from product.models import Collection
 from product.models import LookBook
 from masterdata.models import Category
 from orders.models import Order
 
+from product.serializers import ProductsModelSerializerGET
 from product.serializers import VariantModelSerializerGET
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializerGET
@@ -26,11 +28,41 @@ from product.serializers import OrderItemsModelSerializerGET
 
 from masterdata.serializers import CategoryModelSerializerGET
 
+from customer.filters import CustomerProductFilter
 from customer.filters import CustomerVariantFilter
 from customer.filters import CustomerCategoryFilter
 from customer.filters import CustomerCollectionFilter
 from customer.filters import CustomerLookBookFilter
 from customer.filters import CustomerOrderFilter
+
+
+class CustomerProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    """
+        Get the list of variant products.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object containing model data.
+
+        Returns:
+            Response: A DRF Response object with the variant product data.
+    """
+    permission_classes = (AllowAny,)
+    queryset = Products.objects.all()
+    serializer_class = ProductsModelSerializerGET
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_class = CustomerProductFilter
+    search_fields = ['name', 'brand']
+
+    @action(detail=True, methods=['GET'], url_path='other-variants')
+    def other_variants(self, request, *args, **kwargs):
+        """
+            API to fetch all similar variants
+        """
+        obj = self.get_object()
+        return Response(
+            VariantModelSerializerGET(obj.product_variant.all(), many=True).data,
+            status=status.HTTP_200_OK
+        )
 
 
 class CustomerVariantViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

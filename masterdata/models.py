@@ -12,6 +12,7 @@ class Tag(BaseModel):
     def __str__(self):
         return self.name
 
+
 class Attribute(BaseModel):
     name = models.CharField(max_length=80, null=True, verbose_name='Name')
     value = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list, verbose_name='Values')
