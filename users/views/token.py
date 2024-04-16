@@ -44,12 +44,11 @@ class LoginStatus(APIView):
             Returns:
                 Response: A DRF Response object indicating success or failure and a message.
         """
-        user = request.user
 
-        if user:
+        if request.user.is_authenticated:
             return Response({
                 'loggedIn': True,
-                'user': get_userdata(user)
+                'user': get_userdata(request.user)
             }, status=status.HTTP_200_OK)
 
         else:
