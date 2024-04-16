@@ -26,18 +26,18 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-SECURE_SSL_REDIRECT = False
+# SECURE_SSL_REDIRECT = False
 
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = False
+# SECURE_CONTENT_TYPE_NOSNIFF = False
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-# X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = 'DENY'
 
 DATABASES = {
     'default': {
@@ -83,4 +83,4 @@ SHIPROCKET_EMAIL = os.environ.get('SHIPROCKET_EMAIL')
 SHIPROCKET_PASSWORD = os.environ.get('SHIPROCKET_PASSWORD')
 
 # SECURE_BROWSER_XSS_FILTER = False
-SECURE_REFERRER_POLICY = None
+# SECURE_REFERRER_POLICY = None
