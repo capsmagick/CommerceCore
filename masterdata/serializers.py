@@ -9,7 +9,6 @@ from .models import Dimension
 from .models import ReturnReason
 
 
-
 class TagModelSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
 
@@ -31,6 +30,12 @@ class TagModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+class TagModelSerializerGET(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
@@ -84,7 +89,7 @@ class BrandModelSerializer(serializers.ModelSerializer):
 
 
 class BrandModelSerializerGET(serializers.ModelSerializer):
-    tags = TagModelSerializer(many=True)
+    tags = TagModelSerializerGET(many=True)
     class Meta:
         model = Brand
         fields = '__all__'
@@ -261,7 +266,7 @@ class CategoryModelSerializer(serializers.ModelSerializer):
 
 
 class CategoryModelSerializerGET(serializers.ModelSerializer):
-    tags = TagModelSerializer(many=True)
+    tags = TagModelSerializerGET(many=True)
     sub_category = serializers.SerializerMethodField()
     attribute_group = RetrieveAttributeGroupModelSerializer()
 
@@ -274,7 +279,7 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
 
 
 class CategoryGET(serializers.ModelSerializer):
-    tags = TagModelSerializer(many=True)
+    tags = TagModelSerializerGET(many=True)
     attribute_group = RetrieveAttributeGroupModelSerializer()
 
     class Meta:

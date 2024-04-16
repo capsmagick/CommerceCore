@@ -9,6 +9,7 @@ class HeroSectionModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = HeroSection
         fields = (
+            'title',
             'image',
             'short_description',
             'cta_text',

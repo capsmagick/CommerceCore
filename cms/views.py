@@ -19,7 +19,7 @@ class HeroSectionModelViewSet(BaseModelViewSet):
     filterset_class = HeroSectionFilter
     search_fields = ['cta_text', 'short_description']
     default_fields = [
-        'cta_text', 'short_description', 'link', 'image',
+        'title', 'cta_text', 'short_description', 'link', 'image',
     ]
 
 
@@ -29,6 +29,6 @@ class HeroSectionCustomer(GenericViewSet, ListModelMixin):
     serializer_class = HeroSectionModelSerializerGET
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = HeroSectionFilter
-    search_fields = ['cta_text', 'short_description']
+    search_fields = ['title', 'cta_text', 'short_description']
 
 
