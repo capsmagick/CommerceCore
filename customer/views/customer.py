@@ -44,7 +44,7 @@ class CustomerVariantViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin)
             Response: A DRF Response object with the variant product data.
     """
     permission_classes = (AllowAny,)
-    queryset = Variant.objects.all()
+    queryset = Variant.objects.filter(product__deleted=False)
     serializer_class = VariantModelSerializerGET
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = CustomerVariantFilter
