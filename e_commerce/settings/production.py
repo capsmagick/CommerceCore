@@ -7,6 +7,8 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 ALLOWED_HOSTS = [
     "localhost:5173",
     "127.0.0.1:5173",
+    "localhost:8080",
+    "127.0.0.1:8080",
     "manage.signupcasuals.com:8443",
     "manage.signupcasuals.com",
     "signupcasuals.com",
@@ -15,6 +17,8 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
     'https://manage.signupcasuals.com:8443',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com',
@@ -39,8 +43,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = False
 
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
+# SECURE_BROWSER_XSS_FILTER = True
 
-X_FRAME_OPTIONS = 'DENY'
+# X_FRAME_OPTIONS = 'DENY'
 
 DATABASES = {
     'default': {
