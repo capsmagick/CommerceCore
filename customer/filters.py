@@ -1,3 +1,5 @@
+import json
+
 import django_filters as filters
 
 from product.models import Variant
@@ -11,9 +13,20 @@ from orders.models import Order
 
 
 class CustomerVariantFilter(filters.FilterSet):
+    categories = filters.CharFilter(method='generate_view')
+
+    def generate_view(self, queryset, value, *args, **kwargs):
+        try:
+            categories = json.loads(args[0])
+            if categories:
+                queryset = queryset.filter(product__categories__in=categories)
+        except Exception as e:
+            print('Exception occurred at the hero section filter : ', str(e))
+        return queryset
+
     class Meta:
         model = Variant
-        fields = ['product']
+        fields = ['product', 'categories']
 
 
 class CustomerCollectionFilter(filters.FilterSet):
