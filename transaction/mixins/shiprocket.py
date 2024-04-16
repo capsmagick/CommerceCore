@@ -1,4 +1,5 @@
 import requests
+import json
 from django.conf import settings
 
 
@@ -39,15 +40,13 @@ class Shiprocket:
 
         response = requests.post(
             self.GENERATE_TOKEN,
-            data=params,
+            data=json.dumps(params),
             headers=self.headers
         )
         response.raise_for_status()
 
         self.token = response.json()['token'] # noqa
-
         self.headers['Authorization'] = f"Bearer {self.token}"
-
 
     def get_all_orders(self):
         """
@@ -154,10 +153,12 @@ class Shiprocket:
 
         response = requests.post(
             self.CREATE_ORDER,
-            data=payload,
+            data=json.dumps(payload),
             headers=self.headers
         )
+        print('response.json() : ', response.json())
         response.raise_for_status()
+        print('response.json() : ', response.json())
         return response.json()
 
     def update_order(self, payload):
@@ -167,7 +168,7 @@ class Shiprocket:
 
         response = requests.post(
             self.CREATE_ORDER,
-            data=payload,
+            data=json.dumps(payload),
             headers=self.headers
         )
         response.raise_for_status()
@@ -180,7 +181,7 @@ class Shiprocket:
 
         response = requests.post(
             self.CREATE_ORDER,
-            data=payload,
+            data=json.dumps(payload),
             headers=self.headers
         )
         response.raise_for_status()
@@ -194,7 +195,7 @@ class Shiprocket:
         response = requests.post(
             self.REQUEST_FOR_SHIPMENT,
             headers=self.headers,
-            data={'shipment_id': [shipment_id]}
+            data=json.dumps({'shipment_id': [shipment_id]})
         )
         response.raise_for_status()
         return response.json()

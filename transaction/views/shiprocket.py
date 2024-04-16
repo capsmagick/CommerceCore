@@ -46,15 +46,15 @@ class ShiprocketUtility:
         order_items = order_data.get('orderitems')
         order_items = Response(order_items).data
 
-        length = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['length'])
-        breadth = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['breadth'])
-        height = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['height'])
-        weight = max(order_items, key=lambda x:x['product_variant']['product']['dimension']['weight'])
+        length = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['length'])
+        breadth = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['breadth'])
+        height = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['height'])
+        weight = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['weight'])
 
         payload = {
             'order_id': obj.order_id,
-            'order_date': obj.created_at,
-            'pickup_location': obj.address,
+            'order_date': obj.created_at.strftime("%Y-%m-%d %H:%M"),
+            'pickup_location': 'Primary',
             'channel_id': '',
             'comment': '',
             'billing_customer_name': obj.address.full_name,
@@ -67,7 +67,7 @@ class ShiprocketUtility:
             'billing_country': obj.address.country,
             'billing_email': obj.address.user.email,
             'billing_phone': obj.address.contact_number,
-            'shipping_is_billing': 'true',
+            'shipping_is_billing': True,
             'shipping_customer_name': "",
             'shipping_last_name': "",
             'shipping_address': "",
@@ -84,16 +84,22 @@ class ShiprocketUtility:
             'giftwrap_charges': 0,
             'transaction_charges': 0,
             'total_discount': 0,
-            'sub_total': obj.total_amount,
-            'length': length,
-            'breadth': breadth,
-            'height': height,
-            'weight': weight
+            'sub_total': str(obj.total_amount),
+            'length': str(length),
+            'breadth': str(breadth),
+            'height': str(height),
+            'weight': str(weight)
         }
+
+        print('length : ', length)
+        # print('breadth : ', breadth)
+        # print('height : ', height)
+        # print('weight : ', weight)
 
         shiprocket = Shiprocket()
 
         data = shiprocket.create_order(payload)
+        print('data : ', data)
         shipping_id = data.get('shipping_id')
         obj.shipping_id = shipping_id
         obj.save()
