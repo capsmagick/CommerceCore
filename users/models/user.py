@@ -1,12 +1,21 @@
-import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
 def generate_customer_id():
-    now = datetime.datetime.now()
-    return "".join(now.strftime("%Y%b%d%H%M%S%f"))
+    user_last = User.objects.filter(is_customer=True).order_by('-id')
+    if user_last.count() > 0:
+        last_customer_id = user_last[0].customer_id
+        number = int(last_customer_id[6:]) + 1
+    else:
+        number = 1
+    customer_key = f"{number:06}"
+    customer_id = f"SC-USR{customer_key}"
+
+    if User.objects.filter(is_customer=True, customer_id=customer_id).exists():
+        return generate_customer_id()
+    return customer_id
 
 
 class User(AbstractUser):

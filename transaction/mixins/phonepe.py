@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 from transaction.utils import base64_encode
-from transaction.utils import calculate_sha256_string
+from transaction.utils import hash_with_sha256
 
 from transaction.models import Transaction
 
@@ -19,12 +19,13 @@ class PhonePe:
 
     CHECK_SUM_FORMAT = '{}###{}'
 
-    POST_ACTION_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay'
+    PROD_POST_ACTION_URL = 'https://api.phonepe.com/apis/hermes'
+    POST_ACTION_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox'
     GET_ACTION_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/PGTESTPAYUAT/{}'
-
+    END_POINT = '/pg/v1/pay'
 
     def generate_headers(self, input_string):
-        sha256_value = calculate_sha256_string(input_string)
+        sha256_value = hash_with_sha256(input_string)
         check_sum = self.CHECK_SUM_FORMAT.format(sha256_value, self.KEY_INDEX)
 
         headers = {
@@ -37,12 +38,10 @@ class PhonePe:
 
     def make_request(self, transaction):
         payload = {
-            'keyINDEX': self.KEY_INDEX,
-            'apiKey': self.API_KEY,
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
             "merchantUserId": self.USER_ID,
-            "amount": str(transaction.amount),
+            "amount": round(transaction.amount),
             "redirectUrl": self.REDIRECT_URL,
             "redirectMode": "REDIRECT",
             "callbackUrl": self.S2S_CALLBACK_URL,
@@ -52,15 +51,24 @@ class PhonePe:
             }
         }
 
+        print('------------------------------------------')
+        print('payload : ', payload)
+        print('------------------------------------------')
+
         base64_string = base64_encode(payload)
-        main_string = base64_string + '/pg/v1/pay' + self.API_KEY
+        main_string = base64_string + self.END_POINT + self.API_KEY
 
         headers = self.generate_headers(main_string)
 
+        print('-------------------------------------------')
+        print('headers : ', headers)
+        print('base64_string : ', base64_string)
+        print('-------------------------------------------')
         return {
-            'payload': payload,
-            'post_data': { 'request': base64_string},
-            'headers': headers
+            'headers': headers,
+            'post_data': {'request': base64_string},
+            'action': self.POST_ACTION_URL + self.END_POINT,
+            'method': 'post'
         }
 
     def payment(self, order):

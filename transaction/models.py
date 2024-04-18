@@ -1,13 +1,18 @@
 from django.db import models
 from users.models.base_model import BaseModel
 from orders.models import Order
-import uuid
 
 
 def generate_transaction_id():
-    uu_id = str(uuid.uuid4())[:-2]
-    uu_id = uu_id.replace('-', '')
-    txn_id = f"TXN{uu_id}"
+    user_txn = Transaction.objects.all().order_by('-id')
+    if user_txn.count() > 0:
+        last_txn_id = user_txn[0].customer_id
+        number = int(last_txn_id[6:]) + 1
+    else:
+        number = 1
+
+    txn_key = f"{number:06}"
+    txn_id = f"SC-TXN{txn_key}"
 
     if Transaction.objects.filter(transaction_id=txn_id).exists():
         return generate_transaction_id()

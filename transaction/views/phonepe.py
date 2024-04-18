@@ -67,7 +67,10 @@ def transaction_call_back(request):
         Returns:
             Response: A Template Response object indicating success or failure and a message with payment request details.
     """
+    print('request : ', request.POST)
+    print('request : ', request.GET)
     form_data = dict(request.POST)
+    print('form_data : ', form_data)
     transaction_id = form_data.get('transactionId', None)
 
     if transaction_id:
