@@ -6,7 +6,7 @@ from setup.views import BaseModelViewSet
 
 from .models import Category
 from .models import Brand
-from .models import Tag
+# from .models import Tag
 from .models import Attribute
 from .models import AttributeGroup
 from .models import Dimension
@@ -16,8 +16,8 @@ from .serializers import CategoryModelSerializer
 from .serializers import CategoryModelSerializerGET
 from .serializers import BrandModelSerializer
 from .serializers import BrandModelSerializerGET
-from .serializers import TagModelSerializer
-from .serializers import TagModelSerializerGET
+# from .serializers import TagModelSerializer
+# from .serializers import TagModelSerializerGET
 from .serializers import AttributeModelSerializer
 from .serializers import RetrieveAttributeModelSerializer
 from .serializers import AttributeGroupModelSerializer
@@ -89,12 +89,12 @@ class BrandModelViewSet(BaseModelViewSet):
         }, status=status.HTTP_200_OK)
 
 
-class TagModelViewSet(BaseModelViewSet):
-    queryset = Tag.objects.all()
-    serializer_class = TagModelSerializer
-    retrieve_serializer_class = TagModelSerializerGET
-    search_fields = ['name']
-    default_fields = ['name']
+# class TagModelViewSet(BaseModelViewSet):
+#     queryset = Tag.objects.all()
+#     serializer_class = TagModelSerializer
+#     retrieve_serializer_class = TagModelSerializerGET
+#     search_fields = ['name']
+#     default_fields = ['name']
 
 
 class AttributeModelViewSet(BaseModelViewSet):

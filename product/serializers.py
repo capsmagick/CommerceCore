@@ -8,12 +8,12 @@ from product.models import Collection
 from product.models import CollectionItems
 from product.models import LookBook
 from orders.models import Order
-from masterdata.models import Tag
+# from masterdata.models import Tag
 
 from customer.models import WishList
 
 from customer.serializers.serializers import ReviewSerializer
-from masterdata.serializers import TagModelSerializerGET
+# from masterdata.serializers import TagModelSerializerGET
 from masterdata.serializers import CategoryGET
 from masterdata.serializers import BrandModelSerializerGET
 from masterdata.serializers import RetrieveDimensionModelSerializer
@@ -65,15 +65,11 @@ class ProductsModelSerializer(serializers.ModelSerializer):
         attachment = validated_data.pop('images', [])
 
         categories = validated_data.pop('categories', None)
-        tags = validated_data.pop('tags', None)
 
         product = Products.objects.create(**validated_data)
 
         if categories:
             product.categories.set(categories)
-
-        if tags:
-            product.tags.set(tags)
 
         for file in attachment:
             compressed_image = compress_image(file)
@@ -94,7 +90,6 @@ class ProductsModelSerializerGET(serializers.ModelSerializer):
     brand = BrandModelSerializerGET(read_only=True)
     dimension = RetrieveDimensionModelSerializer(read_only=True)
     images = serializers.SerializerMethodField()
-    tags = TagModelSerializerGET(many=True, read_only=True)
 
     def get_images(self, attrs):
         return ProductImageModelSerializer(attrs.product_images.all(), many=True).data
@@ -188,10 +183,6 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializer(serializers.ModelSerializer):
-    tags = serializers.ListField(
-        child=serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all()),
-        write_only=True, required=False
-    )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -223,20 +214,9 @@ class CollectionModelSerializer(serializers.ModelSerializer):
             'deleted_by',
         )
 
-    def create(self, validated_data):
-        tags = validated_data.pop('tags', None)
-
-        obj = Collection.objects.create(**validated_data)
-
-        if tags:
-            obj.tags.set(tags)
-
-        return obj
-
 
 class CollectionModelSerializerGET(serializers.ModelSerializer):
     collections = VariantModelSerializerGET(many=True, read_only=True)
-    tags = TagModelSerializerGET(many=True, read_only=True)
     feature_image = serializers.SerializerMethodField()
 
     def get_feature_image(self, attrs):

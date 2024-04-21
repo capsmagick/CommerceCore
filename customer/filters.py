@@ -50,7 +50,7 @@ class CustomerVariantFilter(filters.FilterSet):
 class CustomerCollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
-        fields = ['name', 'tags', ]
+        fields = ['name']
 
 
 class CustomerLookBookFilter(filters.FilterSet):
@@ -62,7 +62,7 @@ class CustomerLookBookFilter(filters.FilterSet):
 class CustomerCategoryFilter(filters.FilterSet):
     class Meta:
         model = Category
-        fields = ['attribute_group', 'tags', 'handle', 'is_main_menu', 'is_top_category']
+        fields = ['attribute_group', 'handle', 'is_main_menu', 'is_top_category']
 
 
 class CustomerReturnFilter(filters.FilterSet):

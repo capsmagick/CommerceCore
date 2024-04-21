@@ -2,43 +2,43 @@ from rest_framework import serializers
 
 from .models import Category
 from .models import Brand
-from .models import Tag
+# from .models import Tag
 from .models import Attribute
 from .models import AttributeGroup
 from .models import Dimension
 from .models import ReturnReason
 
 
-class TagModelSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(required=True)
+# class TagModelSerializer(serializers.ModelSerializer):
+#     name = serializers.CharField(required=True)
+#
+#     def validate(self, attrs):
+#         name = attrs.get('name')
+#
+#         if not self.instance:
+#             if Tag.objects.filter(name=name).exists():
+#                 raise serializers.ValidationError({
+#                     'name': 'Name is already in use.'
+#                 })
+#
+#         else:
+#             if name != self.instance.name:
+#                 if Tag.objects.filter(name=name).exists():
+#                     raise serializers.ValidationError({
+#                         'name': 'Name is already in use.'
+#                     })
+#
+#         return attrs
+#
+#     class Meta:
+#         model = Tag
+#         fields = '__all__'
 
-    def validate(self, attrs):
-        name = attrs.get('name')
 
-        if not self.instance:
-            if Tag.objects.filter(name=name).exists():
-                raise serializers.ValidationError({
-                    'name': 'Name is already in use.'
-                })
-
-        else:
-            if name != self.instance.name:
-                if Tag.objects.filter(name=name).exists():
-                    raise serializers.ValidationError({
-                        'name': 'Name is already in use.'
-                    })
-
-        return attrs
-
-    class Meta:
-        model = Tag
-        fields = '__all__'
-
-
-class TagModelSerializerGET(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = '__all__'
+# class TagModelSerializerGET(serializers.ModelSerializer):
+#     class Meta:
+#         model = Tag
+#         fields = '__all__'
 
 
 class BrandModelSerializer(serializers.ModelSerializer):
@@ -77,19 +77,8 @@ class BrandModelSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def create(self, validated_data):
-        tags = validated_data.pop('tags', None)
-
-        brand = Brand.objects.create(**validated_data)
-
-        if tags:
-            brand.tags.set(tags)
-
-        return brand
-
 
 class BrandModelSerializerGET(serializers.ModelSerializer):
-    tags = TagModelSerializerGET(many=True)
     logo = serializers.SerializerMethodField()
 
     def get_logo(self, attrs):
@@ -259,19 +248,8 @@ class CategoryModelSerializer(serializers.ModelSerializer):
             'is_top_category',
         )
 
-    def create(self, validated_data):
-        tags = validated_data.pop('tags', None)
-
-        category = Category.objects.create(**validated_data)
-
-        if tags:
-            category.tags.set(tags)
-
-        return category
-
 
 class CategoryModelSerializerGET(serializers.ModelSerializer):
-    tags = TagModelSerializerGET(many=True)
     sub_category = serializers.SerializerMethodField()
     attribute_group = RetrieveAttributeGroupModelSerializer()
     image = serializers.SerializerMethodField()
@@ -288,7 +266,6 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
 
 
 class CategoryGET(serializers.ModelSerializer):
-    tags = TagModelSerializerGET(many=True)
     attribute_group = RetrieveAttributeGroupModelSerializer()
 
     class Meta:
