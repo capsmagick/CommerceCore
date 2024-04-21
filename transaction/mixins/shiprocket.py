@@ -1,6 +1,8 @@
-import requests
 import json
-from django.conf import settings
+import requests
+from dynamic_preferences.registries import global_preferences_registry
+
+global_preferences = global_preferences_registry.manager()
 
 
 class ShipRocket:
@@ -27,8 +29,8 @@ class ShipRocket:
     EXPORT_ORDERS = 'https://apiv2.shiprocket.in/v1/external/orders/export/'
 
     def __init__(self):
-        self.email = settings.SHIPROCKET_EMAIL
-        self.password = settings.SHIPROCKET_PASSWORD
+        self.email = global_preferences['integrations__SHIP_ROCKET_EMAIL']
+        self.password = global_preferences['integrations__SHIP_ROCKET_PASSWORD']
         self.headers = {"Content-Type": 'application/json'}
 
         self.authorize()
