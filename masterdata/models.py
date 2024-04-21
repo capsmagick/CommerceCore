@@ -52,7 +52,7 @@ class Brand(BaseModel):
     logo = models.FileField(upload_to='brand/logo', blank=True, null=True, verbose_name='Logo')
     description = models.TextField(blank=True, null=True, verbose_name='Description')
     is_active = models.BooleanField(default=True, verbose_name='Active')
-    tags = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list, verbose_name='Tags')
+    tags = ArrayField(models.CharField(max_length=100, blank=True, null=True), blank=True, null=True, default=list, verbose_name='Tags')
 
     def __str__(self):
         return self.name
@@ -95,7 +95,7 @@ class Category(BaseModel):
     is_main_menu = models.BooleanField(default=False, verbose_name='Main Menu')
     is_top_category = models.BooleanField(default=False, verbose_name='Top Category')
 
-    tags = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list, verbose_name='Tags')
+    tags = ArrayField(models.CharField(max_length=100, blank=True, null=True), blank=True, null=True, default=list, verbose_name='Tags')
 
     def __str__(self):
         return self.name

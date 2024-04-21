@@ -26,7 +26,7 @@ class Products(BaseModel):
 
     is_disabled = models.BooleanField(default=False, verbose_name='Disabled')
     hsn_code = models.CharField(max_length=20, blank=True, null=True, verbose_name='HSN Code')
-    tags = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list, verbose_name='Tags')
+    tags = ArrayField(models.CharField(max_length=100, blank=True, null=True), blank=True, null=True, default=list, verbose_name='Tags')
 
     dimension = models.ForeignKey(
         Dimension, related_name='product_dimensions', on_delete=models.SET_NULL,
@@ -120,7 +120,7 @@ class Collection(BaseModel):
     description = models.TextField(verbose_name='Description', blank=True, null=True)
     feature_image = models.FileField(upload_to='collections/image', blank=True, null=True,
                                   verbose_name='Feature Image')
-    tags = ArrayField(models.CharField(max_length=100), blank=True, null=True, default=list, verbose_name='Tags')
+    tags = ArrayField(models.CharField(max_length=100, blank=True, null=True), blank=True, null=True, default=list, verbose_name='Tags')
     is_in_home_page = models.BooleanField(default=False, verbose_name='Display In Home Page')
 
     def __str__(self):

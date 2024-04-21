@@ -202,6 +202,7 @@ class CategoryModelSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     handle = serializers.CharField()
+    tags = serializers.ListField(child=serializers.CharField(required=False), allow_empty=True, required=False)
 
     def validate(self, attrs):
         name = attrs.get('name')
