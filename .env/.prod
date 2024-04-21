@@ -18,7 +18,6 @@ PHONE_PE_KEY_INDEX=1
 PHONE_PAY_S2S_CALLBACK_URL=https://manage.signupcasuals.com:8443/api/transaction/payment/callback/
 PHONE_PAY_REDIRECT_URL=http://manage.signupcasuals.com:8443/api/transaction/payment/callback/
 
-# Shipping Details (ShipRocket)
+# Shipping Details
 # -------------------------
-SHIPROCKET_EMAIL=rmuwork51@gmail.com
-SHIPROCKET_PASSWORD=rmuKnowbinTech
+
