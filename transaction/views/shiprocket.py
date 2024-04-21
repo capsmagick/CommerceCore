@@ -3,36 +3,35 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Max
+from transaction.mixins import ShipRocket
 
-from transaction.mixins import Shiprocket
-from orders.serializers import OrderRetrieveSerializer
 
-
-class ShiprocketViewSet(ViewSet):
+class ShipRocketViewSet(ViewSet):
     permission_classes = (IsAuthenticated,)
 
     @action(detail=False, methods=['GET'], url_path='orders')
     def order_list(self, request, *args, **kwargs):
-        data = Shiprocket().get_all_orders()
+        data = ShipRocket().get_all_orders()
         return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], url_path='order/(?P<order>.*?)/details')
     def order_details(self, request, order, *args, **kwargs):
-        data = Shiprocket().get_order_details(order)
+        data = ShipRocket().get_order_details(order)
         return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], url_path='shipments')
     def shipment_list(self, request, *args, **kwargs):
-        data = Shiprocket().get_all_shipment()
+        data = ShipRocket().get_all_shipment()
         return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], url_path='shipment/(?P<shipment>.*?)/details')
     def shipment_details(self, request, shipment, *args, **kwargs):
-        data = Shiprocket().get_shipment_details(shipment)
+        data = ShipRocket().get_shipment_details(shipment)
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ShiprocketUtility:
+class ShipRocketUtility:
 
     def create_order(self, obj):
         """
@@ -42,14 +41,34 @@ class ShiprocketUtility:
                 obj (object): The object of the order.
         """
 
-        order_data = OrderRetrieveSerializer(obj).data
-        order_items = order_data.get('orderitems')
-        order_items = Response(order_items).data
+        order_items = obj.orderitems.all()
 
-        length = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['length'])
-        breadth = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['breadth'])
-        height = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['height'])
-        weight = max(order_items, key=lambda x: x['product_variant']['product']['dimension']['weight'])
+        length = str(order_items.aggregate(
+            Max('product_variant__product__dimension__length')
+        )['product_variant__product__dimension__length__max'])
+
+        breadth = str(order_items.aggregate(
+            Max('product_variant__product__dimension__breadth')
+        )['product_variant__product__dimension__breadth__max'])
+
+        height = str(order_items.aggregate(
+            Max('product_variant__product__dimension__height')
+        )['product_variant__product__dimension__height__max'])
+
+        weight = str(order_items.aggregate(
+            Max('product_variant__product__dimension__weight')
+        )['product_variant__product__dimension__weight__max'])
+
+        post_order_items = []
+
+        for i in order_items:
+            post_order_items.append({
+                'name': i.product_variant.product.name,
+                'selling_price': str(i.price),
+                'sku': i.product_variant.product.sku,
+                'units': i.quantity,
+                'price': str(i.price),
+            })
 
         payload = {
             'order_id': obj.order_id,
@@ -78,7 +97,7 @@ class ShiprocketUtility:
             'shipping_state': "",
             'shipping_email': "",
             'shipping_phone': "",
-            'order_items': order_items,
+            'order_items': post_order_items,
             'payment_method': "Prepaid",
             'shipping_charges': 0,
             'giftwrap_charges': 0,
@@ -91,19 +110,12 @@ class ShiprocketUtility:
             'weight': str(weight)
         }
 
-        print('length : ', length)
-        # print('breadth : ', breadth)
-        # print('height : ', height)
-        # print('weight : ', weight)
+        ship_rocket = ShipRocket()
 
-        shiprocket = Shiprocket()
-
-        data = shiprocket.create_order(payload)
-        print('data : ', data)
-        shipping_id = data.get('shipping_id')
-        obj.shipping_id = shipping_id
-        obj.save()
-        shiprocket.request_for_shipment(shipping_id)
+        data = ship_rocket.create_order(payload)
+        shipment_id = data.get('shipment_id')
+        obj.shipping_id = shipment_id
+        ship_rocket.request_for_shipment(shipment_id)
         return data
 
 

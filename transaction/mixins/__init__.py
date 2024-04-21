@@ -1,3 +1,3 @@
 from .phonepe import PhonePe
-from .shiprocket import Shiprocket
+from .shiprocket import ShipRocket
 

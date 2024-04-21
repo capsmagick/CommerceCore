@@ -61,6 +61,14 @@ class AddressRegisterModelSerializer(serializers.ModelSerializer):
     def get_user(self, attrs):
         return UserDataModelSerializer(attrs.user).data
 
+    def create(self, validated_data):
+        from setup.middleware.request import CurrentRequestMiddleware
+        user = CurrentRequestMiddleware.get_request().user
+        obj = AddressRegister.objects.create(**validated_data)
+        obj.user = user
+        obj.save()
+        return obj
+
     class Meta:
         model = AddressRegister
         exclude = (

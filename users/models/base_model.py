@@ -46,9 +46,9 @@ class BaseModel(models.Model):
             self.created_by = user
             self.updated_by = user
         else:
-            self.updated_by = user
+            if user.is_authenticated:
+                self.updated_by = user
         super().save(*args, **kwargs)
-
 
     class Meta:
         abstract = True

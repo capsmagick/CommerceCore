@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 from transaction.utils import base64_encode
-from transaction.utils import calculate_sha256_string
+from transaction.utils import hash_with_sha256
 
 from transaction.models import Transaction
 
@@ -19,12 +19,13 @@ class PhonePe:
 
     CHECK_SUM_FORMAT = '{}###{}'
 
-    POST_ACTION_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay'
+    PROD_POST_ACTION_URL = 'https://api.phonepe.com/apis/hermes'
+    POST_ACTION_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox'
     GET_ACTION_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/PGTESTPAYUAT/{}'
-
+    END_POINT = '/pg/v1/pay'
 
     def generate_headers(self, input_string):
-        sha256_value = calculate_sha256_string(input_string)
+        sha256_value = hash_with_sha256(input_string)
         check_sum = self.CHECK_SUM_FORMAT.format(sha256_value, self.KEY_INDEX)
 
         headers = {
@@ -36,15 +37,14 @@ class PhonePe:
         return headers
 
     def make_request(self, transaction):
+        amount = transaction.amount * 100
         payload = {
-            'keyINDEX': self.KEY_INDEX,
-            'apiKey': self.API_KEY,
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
             "merchantUserId": self.USER_ID,
-            "amount": str(transaction.amount),
+            "amount": str(amount),
             "redirectUrl": self.REDIRECT_URL,
-            "redirectMode": "REDIRECT",
+            "redirectMode": "POST",
             "callbackUrl": self.S2S_CALLBACK_URL,
             "mobileNumber": transaction.order.address.contact_number,
             "paymentInstrument": {
@@ -53,14 +53,15 @@ class PhonePe:
         }
 
         base64_string = base64_encode(payload)
-        main_string = base64_string + '/pg/v1/pay' + self.API_KEY
+        main_string = base64_string + self.END_POINT + self.API_KEY
 
         headers = self.generate_headers(main_string)
 
         return {
-            'payload': payload,
-            'post_data': { 'request': base64_string},
-            'headers': headers
+            'headers': headers,
+            'post_data': {'request': base64_string},
+            'action': self.POST_ACTION_URL + self.END_POINT,
+            'method': 'post'
         }
 
     def payment(self, order):
@@ -68,9 +69,9 @@ class PhonePe:
         return self.make_request(transaction)
 
     def check_payment_status(self, transaction_id):
-        request_url = self.GET_ACTION_URL.format('transaction_id')
+        request_url = self.GET_ACTION_URL.format(transaction_id)
 
-        sha256_pay_load_string = '/pg/v1/status/PGTESTPAYUAT/' + transaction_id + self.API_KEY
+        sha256_pay_load_string = f'/pg/v1/status/PGTESTPAYUAT/{transaction_id}{self.API_KEY}'
 
         headers = self.generate_headers(sha256_pay_load_string)
         headers['X-MERCHANT-ID'] = transaction_id

@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.db.models import Sum
 from django_fsm import transition
@@ -13,10 +11,19 @@ from product.models import Products
 from masterdata.models import ReturnReason
 
 
-def generate_order_id():
-    now = datetime.datetime.now()
-    order_key = "".join(now.strftime("%Y%b%d%H%M%S%f"))
-    return f"RET{order_key}"
+def generate_return_id():
+    return_last = Return.objects.all().order_by('-id')
+    if return_last.count() > 0:
+        last_return = return_last[0].return_id
+        number = int(last_return[6:]) + 1
+    else:
+        number = 1
+    return_key = f"{number:06}"
+    return_id = f"SC-RET{return_key}"
+
+    if Return.objects.filter(return_id=return_id).exists():
+        return generate_return_id()
+    return return_id
 
 
 class WishList(BaseModel):
@@ -82,7 +89,6 @@ class CartItem(BaseModel):
         self.total_amount = total_amount
         super().save(*args, **kwargs)
         self.cart.calculate_total()
-
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -162,7 +168,6 @@ class Return(BaseModel):
     tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Tracking ID')
     shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Shipping Agent')
 
-
     status = models.CharField(
         choices=STATUS_CHOICES, max_length=25, default='Submitted', verbose_name='Status'
     )
@@ -191,7 +196,7 @@ class Return(BaseModel):
 
     def save(self, *args, **kwargs):
         if not self.return_id:
-            self.return_id = generate_order_id()
+            self.return_id = generate_return_id()
         super().save(*args, **kwargs)
 
     @transition(field=status, source=['Submitted'], target='In Review')

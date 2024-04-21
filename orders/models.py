@@ -9,9 +9,14 @@ from django_fsm import transition
 
 
 def generate_order_id():
-    now = datetime.datetime.now()
-    order_key = "".join(now.strftime("%Y%b%d%H%M%S%f"))
-    order_id = f"ORD{order_key}"
+    order_last = Order.objects.all().order_by('-id')
+    if order_last.count() > 0:
+        last_order_id = order_last[0].order_id
+        number = int(last_order_id[6:]) + 1
+    else:
+        number = 1
+    order_key = f"{number:06}"
+    order_id = f"SC-ORD{order_key}"
 
     if Order.objects.filter(order_id=order_id).exists():
         return generate_order_id()
