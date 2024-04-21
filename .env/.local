@@ -22,11 +22,6 @@ PHONE_PAY_S2S_CALLBACK_URL=http://localhost:8000/api/transaction/payment/callbac
 PHONE_PAY_REDIRECT_URL=http://localhost:8000/api/transaction/payment/callback/
 
 # Shipping Details
-# Shiprocket
-# -------------------------
-SHIPROCKET_EMAIL=rmuwork51@gmail.com
-SHIPROCKET_PASSWORD=rmuKnowbinTech
-
 # Delhivery
 # -------------------------
 DELHIVERY_API_KEY=0bfed08bd7addb834c690f45f9ff5e005adf3191

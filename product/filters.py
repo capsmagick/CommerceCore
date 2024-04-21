@@ -11,13 +11,13 @@ from product.models import LookBook
 class ProductFilter(filters.FilterSet):
     class Meta:
         model = Products
-        fields = ['condition', 'categories', 'brand', 'is_disabled', 'tags']
+        fields = ['condition', 'categories', 'brand', 'is_disabled']
 
 
 class VariantFilter(filters.FilterSet):
     class Meta:
         model = Variant
-        fields = ['product', 'product__brand', 'product__categories', 'product__tags']
+        fields = ['product', 'product__brand', 'product__categories']
 
 
 class ProductImageFilter(filters.FilterSet):
@@ -29,7 +29,7 @@ class ProductImageFilter(filters.FilterSet):
 class CollectionFilter(filters.FilterSet):
     class Meta:
         model = Collection
-        fields = ['name', 'tags',]
+        fields = ['name']
 
 
 class LookBookFilter(filters.FilterSet):

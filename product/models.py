@@ -1,8 +1,8 @@
 from django.db import models
-
 from masterdata.models import Category, Brand, Dimension
 from users.models.base_model import BaseModel
-from masterdata.models import Tag, Attribute
+from masterdata.models import Attribute
+from django.contrib.postgres.fields import ArrayField
 
 
 class Products(BaseModel):
@@ -26,16 +26,15 @@ class Products(BaseModel):
 
     is_disabled = models.BooleanField(default=False, verbose_name='Disabled')
     hsn_code = models.CharField(max_length=20, blank=True, null=True, verbose_name='HSN Code')
-    tags = models.ManyToManyField(Tag, related_name='tags', blank=True, null=True, verbose_name='Tags')
+    tags = ArrayField(models.CharField(max_length=100, blank=True, null=True), blank=True, null=True, default=list, verbose_name='Tags')
 
-    dimension = models.ForeignKey(Dimension, related_name='product_dimensions',
-                                  on_delete=models.SET_NULL,
-                                  blank=True, null=True,
-                                  verbose_name='Dimension')
+    dimension = models.ForeignKey(
+        Dimension, related_name='product_dimensions', on_delete=models.SET_NULL,
+        blank=True, null=True, verbose_name='Dimension'
+    )
 
     rating = models.CharField(max_length=120, verbose_name='Rating', blank=True, null=True)
     no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
-
 
     def __str__(self):
         return self.name
@@ -121,7 +120,7 @@ class Collection(BaseModel):
     description = models.TextField(verbose_name='Description', blank=True, null=True)
     feature_image = models.FileField(upload_to='collections/image', blank=True, null=True,
                                   verbose_name='Feature Image')
-    tags = models.ManyToManyField(Tag, related_name='collection_tags', blank=True, null=True, verbose_name='Tags')
+    tags = ArrayField(models.CharField(max_length=100, blank=True, null=True), blank=True, null=True, default=list, verbose_name='Tags')
     is_in_home_page = models.BooleanField(default=False, verbose_name='Display In Home Page')
 
     def __str__(self):
