@@ -29,6 +29,7 @@ class ProductsModelSerializer(serializers.ModelSerializer):
         child=serializers.FileField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True, required=False
     )
+    tags = serializers.ListField(child=serializers.CharField(), required=False, allow_null=True, allow_empty=True)
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -183,6 +184,7 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializer(serializers.ModelSerializer):
+    tags = serializers.ListField(child=serializers.CharField(), required=False, allow_null=True, allow_empty=True)
 
     def validate(self, attrs):
         name = attrs.get('name')

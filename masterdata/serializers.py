@@ -46,6 +46,7 @@ class BrandModelSerializer(serializers.ModelSerializer):
     logo = serializers.FileField(required=False)
     description = serializers.CharField(required=True)
     is_active = serializers.BooleanField(default=True)
+    tags = serializers.ListField(child=serializers.CharField(), required=False, allow_null=True, allow_empty=True)
 
     class Meta:
         model = Brand
@@ -202,7 +203,7 @@ class CategoryModelSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     handle = serializers.CharField()
-    tags = serializers.ListField(child=serializers.CharField(required=False), allow_empty=True, required=False)
+    tags = serializers.ListField(child=serializers.CharField(), required=False, allow_null=True, allow_empty=True)
 
     def validate(self, attrs):
         name = attrs.get('name')
