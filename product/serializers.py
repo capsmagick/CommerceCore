@@ -237,6 +237,10 @@ class CollectionModelSerializer(serializers.ModelSerializer):
 class CollectionModelSerializerGET(serializers.ModelSerializer):
     collections = VariantModelSerializerGET(many=True, read_only=True)
     tags = TagModelSerializerGET(many=True, read_only=True)
+    feature_image = serializers.SerializerMethodField()
+
+    def get_feature_image(self, attrs):
+        return attrs.feature_image.url if attrs.feature_image else ''
 
     class Meta:
         model = Collection

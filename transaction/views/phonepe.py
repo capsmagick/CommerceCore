@@ -2,13 +2,13 @@ import datetime
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -56,47 +56,46 @@ class TransactionAPIView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-@csrf_exempt
-def transaction_call_back(request):
-    """
-        API For Payment Callback by Payment Partner
+class TransactionCallBackAPIView(APIView):
+    permission_classes = (AllowAny,)
 
-        Parameters:
-            request (HttpRequest): The HTTP request object containing model data.
+    def post(self, request, *args, **kwargs):
+        """
+            API For Payment Callback by Payment Partner
 
-        Returns:
-            Response: A Template Response object indicating success or failure and a message with payment request details.
-    """
-    print('request : ', request.POST)
-    print('request : ', request.GET)
-    form_data = dict(request.POST)
-    print('form_data : ', form_data)
-    transaction_id = form_data.get('transactionId', None)
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
 
-    if transaction_id:
-        response = PhonePe().check_payment_status(transaction_id)
+            Returns:
+                Response: A Template Response object indicating success or failure and a message with payment request details.
+        """
+        form_data = request.data
+        transaction_id = form_data.get('transactionId', None)
 
-        if response.status_code == 200:
-            obj = Transaction.objects.get(transaction_id=transaction_id)
-            obj.status = "Success"
-            obj.response = response.json()
-            obj.response_received_date = datetime.datetime.now()
-            obj.save()
-            obj.order.order_placed()
-            obj.order.save()
-            return render(request, 'payment_success.html', context={'output': response.text, 'main_request': form_data})
+        if transaction_id:
+            response = PhonePe().check_payment_status(transaction_id)
 
-        else:
-            obj = Transaction.objects.get(transaction_id=transaction_id)
-            obj.status = "Failed"
-            obj.error = response.json()
-            obj.response_received_date = datetime.datetime.now()
-            obj.order.order_pending()
-            obj.order.save()
-            obj.save()
-            return render(request, 'payment_failed.html', context={'output': response.text, 'main_request': form_data})
+            if response.status_code == 200:
+                obj = Transaction.objects.get(transaction_id=transaction_id)
+                obj.status = "Success"
+                obj.response = response.json()
+                obj.response_received_date = datetime.datetime.now()
+                obj.save()
+                obj.order.order_placed()
+                obj.order.save()
+                return render(request, 'payment_success.html', context={'output': response.text, 'main_request': form_data})
 
-    return render(request, 'payment_failed.html', context={'output': 'response.text', 'main_request': form_data})
+            else:
+                obj = Transaction.objects.get(transaction_id=transaction_id)
+                obj.status = "Failed"
+                obj.error = response.json()
+                obj.response_received_date = datetime.datetime.now()
+                obj.order.order_pending()
+                obj.order.save()
+                obj.save()
+                return render(request, 'payment_failed.html', context={'output': response.text, 'main_request': form_data})
+
+        return render(request, 'payment_failed.html', context={'output': 'response.text', 'main_request': form_data})
 
 
 class TransactionModelViewSet(GenericViewSet, ListModelMixin):

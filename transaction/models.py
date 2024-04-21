@@ -6,7 +6,7 @@ from orders.models import Order
 def generate_transaction_id():
     user_txn = Transaction.objects.all().order_by('-id')
     if user_txn.count() > 0:
-        last_txn_id = user_txn[0].customer_id
+        last_txn_id = user_txn[0].transaction_id
         number = int(last_txn_id[6:]) + 1
     else:
         number = 1

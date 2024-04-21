@@ -13,7 +13,7 @@ from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
 from setup.utils import generate_column
 
-from transaction.views import ShiprocketUtility
+from transaction.views import ShipRocketUtility
 
 from customer.models import Cart
 
@@ -208,7 +208,7 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin):
         message = obj.ready_for_dispatch()
 
         """Creating order in shiprocket"""
-        ShiprocketUtility().create_order(obj)
+        ShipRocketUtility().create_order(obj)
 
         obj.save()
 

@@ -3,7 +3,7 @@ import json
 from django.conf import settings
 
 
-class Shiprocket:
+class ShipRocket:
 
     GENERATE_TOKEN = 'https://apiv2.shiprocket.in/v1/external/auth/login/'
 
@@ -12,6 +12,7 @@ class Shiprocket:
     UPDATE_ORDER = 'https://apiv2.shiprocket.in/v1/external/orders/update/adhoc/'
     CANCEL_ORDER = 'https://apiv2.shiprocket.in/v1/external/orders/cancel/'
 
+    GENERATE_AWB_FOR_SHIPMENT = 'https://apiv2.shiprocket.in/v1/external/courier/assign/awb/'
     REQUEST_FOR_SHIPMENT = 'https://apiv2.shiprocket.in/v1/external/courier/generate/pickup/'
 
     COURIER_LIST = 'https://apiv2.shiprocket.in/v1/external/courier/serviceability/'
@@ -156,9 +157,7 @@ class Shiprocket:
             data=json.dumps(payload),
             headers=self.headers
         )
-        print('response.json() : ', response.json())
         response.raise_for_status()
-        print('response.json() : ', response.json())
         return response.json()
 
     def update_order(self, payload):
@@ -187,18 +186,34 @@ class Shiprocket:
         response.raise_for_status()
         return response.json()
 
-    def request_for_shipment(self, shipment_id):
+    def generate_awb(self, data):
         """
-            This function to request shiprocket for shipment
+            This Function is to create AWB for Shipment (It is mandatory to create AWB before request an shipment)
         """
 
         response = requests.post(
-            self.REQUEST_FOR_SHIPMENT,
+            self.GENERATE_AWB_FOR_SHIPMENT,
             headers=self.headers,
-            data=json.dumps({'shipment_id': [shipment_id]})
+            data=json.dumps(data)
         )
         response.raise_for_status()
         return response.json()
+
+    def request_for_shipment(self, shipment_id):
+        """
+            This function to request Ship Rocket for shipment
+        """
+
+        awb_response = self.generate_awb({'shipment_id': shipment_id})
+
+        if awb_response:
+            response = requests.post(
+                self.REQUEST_FOR_SHIPMENT,
+                headers=self.headers,
+                data=json.dumps({'shipment_id': [shipment_id]})
+            )
+            response.raise_for_status()
+            return response.json()
 
     def get_all_shipment(self):
         """

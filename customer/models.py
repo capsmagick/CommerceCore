@@ -90,7 +90,6 @@ class CartItem(BaseModel):
         super().save(*args, **kwargs)
         self.cart.calculate_total()
 
-
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         self.product_variant.restore_stock(self.quantity)
@@ -168,7 +167,6 @@ class Return(BaseModel):
 
     tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Tracking ID')
     shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Shipping Agent')
-
 
     status = models.CharField(
         choices=STATUS_CHOICES, max_length=25, default='Submitted', verbose_name='Status'

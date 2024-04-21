@@ -11,13 +11,13 @@ else:
 
 router.register('details', views.TransactionModelViewSet)
 
-# Shiprocket
-router.register('shiprocket', views.ShiprocketViewSet, basename='shiprocket')
+# ShipRocket
+router.register('shiprocket', views.ShipRocketViewSet, basename='shiprocket')
 
 
 urlpatterns = [
     path('payment/initiate/', views.TransactionAPIView.as_view(), name='transaction-initiate'),
-    path('payment/callback/', views.transaction_call_back, name='transaction-callback'),
+    path('payment/callback/', views.TransactionCallBackAPIView.as_view(), name='transaction-callback'),
 ]
 urlpatterns += router.urls
 

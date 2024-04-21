@@ -90,6 +90,10 @@ class BrandModelSerializer(serializers.ModelSerializer):
 
 class BrandModelSerializerGET(serializers.ModelSerializer):
     tags = TagModelSerializerGET(many=True)
+    logo = serializers.SerializerMethodField()
+
+    def get_logo(self, attrs):
+        return attrs.logo.url if attrs.logo else ''
 
     class Meta:
         model = Brand
@@ -270,6 +274,10 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
     tags = TagModelSerializerGET(many=True)
     sub_category = serializers.SerializerMethodField()
     attribute_group = RetrieveAttributeGroupModelSerializer()
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, attrs):
+        return attrs.image.url if attrs.image else ''
 
     def get_sub_category(self, attrs):
         return CategoryModelSerializerGET(attrs.subcategory.all(), many=True).data

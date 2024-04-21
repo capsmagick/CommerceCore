@@ -37,13 +37,14 @@ class PhonePe:
         return headers
 
     def make_request(self, transaction):
+        amount = transaction.amount * 100
         payload = {
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
             "merchantUserId": self.USER_ID,
-            "amount": round(transaction.amount),
+            "amount": str(amount),
             "redirectUrl": self.REDIRECT_URL,
-            "redirectMode": "REDIRECT",
+            "redirectMode": "POST",
             "callbackUrl": self.S2S_CALLBACK_URL,
             "mobileNumber": transaction.order.address.contact_number,
             "paymentInstrument": {
@@ -51,19 +52,11 @@ class PhonePe:
             }
         }
 
-        print('------------------------------------------')
-        print('payload : ', payload)
-        print('------------------------------------------')
-
         base64_string = base64_encode(payload)
         main_string = base64_string + self.END_POINT + self.API_KEY
 
         headers = self.generate_headers(main_string)
 
-        print('-------------------------------------------')
-        print('headers : ', headers)
-        print('base64_string : ', base64_string)
-        print('-------------------------------------------')
         return {
             'headers': headers,
             'post_data': {'request': base64_string},
@@ -76,9 +69,9 @@ class PhonePe:
         return self.make_request(transaction)
 
     def check_payment_status(self, transaction_id):
-        request_url = self.GET_ACTION_URL.format('transaction_id')
+        request_url = self.GET_ACTION_URL.format(transaction_id)
 
-        sha256_pay_load_string = '/pg/v1/status/PGTESTPAYUAT/' + transaction_id + self.API_KEY
+        sha256_pay_load_string = f'/pg/v1/status/PGTESTPAYUAT/{transaction_id}{self.API_KEY}'
 
         headers = self.generate_headers(sha256_pay_load_string)
         headers['X-MERCHANT-ID'] = transaction_id

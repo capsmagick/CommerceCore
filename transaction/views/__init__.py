@@ -1,7 +1,7 @@
 from .phonepe import TransactionAPIView
-from .phonepe import transaction_call_back
+from .phonepe import TransactionCallBackAPIView
 from .phonepe import TransactionModelViewSet
 
-from .shiprocket import ShiprocketViewSet
-from .shiprocket import ShiprocketUtility
+from .shiprocket import ShipRocketViewSet
+from .shiprocket import ShipRocketUtility
 

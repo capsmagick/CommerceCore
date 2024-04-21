@@ -65,7 +65,20 @@ class AddToCartSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         cart = validated_data.pop('cart')
-        obj = CartItem.objects.create(cart=cart, **validated_data)
+        product_variant = validated_data.get('product_variant')
+        validated_quantity = validated_data.get('quantity')
+        price = validated_data.get('price')
+        try:
+            obj = CartItem.objects.get(
+                cart=cart, product_variant=product_variant
+            )
+            quantity = obj.quantity if obj.quantity else 0
+            obj.quantity = quantity + validated_quantity
+            obj.price = price
+            obj.save()
+        except CartItem.DoesNotExist:
+            obj = CartItem.objects.create(cart=cart, **validated_data)
+
         return obj
 
 
