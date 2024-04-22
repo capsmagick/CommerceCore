@@ -10,7 +10,10 @@ from inventory.models import Inventory
 class TaxModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tax
-        fields = '__all__'
+        fields = (
+            'name',
+            'slab',
+        )
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -29,6 +32,12 @@ class TaxModelSerializer(serializers.ModelSerializer):
                     })
 
         return attrs
+
+
+class TaxModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = Tax
+        fields = '__all__'
 
 
 class WarehouseModelSerializer(serializers.ModelSerializer):

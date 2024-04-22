@@ -1,19 +1,21 @@
 from setup.views import BaseModelViewSet
 
-from inventory.models import Inventory
-from inventory.models import Batch
-from inventory.models import Tax
-from inventory.models import Warehouse
+from .models import Inventory
+from .models import Batch
+from .models import Tax
+from .models import Warehouse
 
-from inventory.serializers import InventoryModelSerializer
-from inventory.serializers import BatchModelSerializer
-from inventory.serializers import TaxModelSerializer
-from inventory.serializers import WarehouseModelSerializer
+from .serializers import InventoryModelSerializer
+from .serializers import BatchModelSerializer
+from .serializers import TaxModelSerializer
+from .serializers import TaxModelSerializerGET
+from .serializers import WarehouseModelSerializer
 
 
 class TaxModelViewSet(BaseModelViewSet):
     queryset = Tax.objects.all()
     serializer_class = TaxModelSerializer
+    retrieve_serializer_class = TaxModelSerializerGET
     search_fields = ['name']
     default_fields = [
         'name',
