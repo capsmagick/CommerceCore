@@ -7,13 +7,11 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import CollectionItems
 from product.models import LookBook
-from orders.models import Order
-# from masterdata.models import Tag
+from product.models import LookBookItems
 
 from customer.models import WishList
 
 from customer.serializers.serializers import ReviewSerializer
-# from masterdata.serializers import TagModelSerializerGET
 from masterdata.serializers import CategoryGET
 from masterdata.serializers import BrandModelSerializerGET
 from masterdata.serializers import RetrieveDimensionModelSerializer
@@ -253,18 +251,8 @@ class LookBookModelSerializer(serializers.ModelSerializer):
         model = LookBook
         fields = (
             'name',
-            'variants',
+            'is_in_home_page',
         )
-
-    def create(self, validated_data):
-        variants = validated_data.pop('variants', None)
-
-        obj = LookBook.objects.create(**validated_data)
-
-        if variants:
-            obj.variants.set(variants)
-
-        return obj
 
 
 class LookBookModelSerializerGET(serializers.ModelSerializer):
@@ -278,6 +266,12 @@ class LookBookModelSerializerGET(serializers.ModelSerializer):
 class AddToCollectionSerializer(serializers.Serializer):
     collection = serializers.PrimaryKeyRelatedField(
         queryset=Collection.objects.all()
+    )
+
+
+class AddToLookBookSerializer(serializers.Serializer):
+    look_book = serializers.PrimaryKeyRelatedField(
+        queryset=LookBook.objects.all()
     )
 
 
@@ -302,7 +296,18 @@ class CollectionItemsModelSerializerGET(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderItemsModelSerializerGET(serializers.ModelSerializer):
+class LookBookItemsModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
+        model = LookBookItems
+        fields = (
+            'look_book',
+            'product',
+        )
+
+
+class LookBookItemsModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = LookBookItems
         fields = '__all__'
+
+

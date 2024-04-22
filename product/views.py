@@ -12,6 +12,7 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import CollectionItems
 from product.models import LookBook
+from product.models import LookBookItems
 
 from product.serializers import ProductsModelSerializer
 from product.serializers import ProductsModelSerializerGET
@@ -22,9 +23,12 @@ from product.serializers import CollectionModelSerializer
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import CollectionItemsModelSerializer
 from product.serializers import CollectionItemsModelSerializerGET
+from product.serializers import LookBookItemsModelSerializer
+from product.serializers import LookBookItemsModelSerializerGET
 from product.serializers import LookBookModelSerializer
 from product.serializers import LookBookModelSerializerGET
 from product.serializers import AddToCollectionSerializer
+from product.serializers import AddToLookBookSerializer
 from product.serializers import AddProductCollectionSerializer
 
 from product.filters import ProductFilter
@@ -33,6 +37,7 @@ from product.filters import ProductImageFilter
 from product.filters import CollectionFilter
 from product.filters import LookBookFilter
 from product.filters import CollectionItemsFilter
+from product.filters import LookBookItemsFilter
 
 
 class ProductsModelViewSet(BaseModelViewSet):
@@ -120,6 +125,31 @@ class ProductsModelViewSet(BaseModelViewSet):
 
         return Response({
             'message': f'{obj.name} successfully added to the collection.!'
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='add-to-lookbook', serializer_class=AddToLookBookSerializer)
+    def add_to_look_book(self, request, *args, **kwargs):
+        """
+            API For Add the product to the lookbook
+
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): The primary key of the product table
+
+            Data:
+                collection (int): The primary key of the collection table
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+        serializer = AddToLookBookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        look_book = serializer.validated_data.get('look_book')
+        LookBookItems.objects.create(look_book_id=look_book, product=obj)
+
+        return Response({
+            'message': f'{obj.name} successfully added to the look book.!'
         }, status=status.HTTP_200_OK)
 
 
@@ -237,6 +267,18 @@ class CollectionModelViewSet(BaseModelViewSet):
         }, status=status.HTTP_200_OK)
 
 
+class CollectionItemsModelViewSet(BaseModelViewSet):
+    queryset = CollectionItems.objects.all()
+    serializer_class = CollectionItemsModelSerializer
+    retrieve_serializer_class = CollectionItemsModelSerializerGET
+    search_fields = ['product__name', 'collection__name']
+    default_fields = [
+        'collection',
+        'product',
+    ]
+    filterset_class = CollectionItemsFilter
+
+
 class LookBookModelViewSet(BaseModelViewSet):
     queryset = LookBook.objects.all()
     serializer_class = LookBookModelSerializer
@@ -248,14 +290,37 @@ class LookBookModelViewSet(BaseModelViewSet):
     ]
     filterset_class = LookBookFilter
 
+    @action(detail=True, methods=['POST'], url_path='add-product', serializer_class=AddProductCollectionSerializer)
+    def add_product(self, request, *args, **kwargs):
+        """
+            API For Add the product to the loo book
 
-class CollectionItemsModelViewSet(BaseModelViewSet):
-    queryset = CollectionItems.objects.all()
-    serializer_class = CollectionItemsModelSerializer
-    retrieve_serializer_class = CollectionItemsModelSerializerGET
-    search_fields = ['product__name', 'collection__name']
-    default_fields = [
-        'collection',
-        'product',
-    ]
-    filterset_class = CollectionItemsFilter
+            Parameters:
+                request (HttpRequest): The HTTP request object containing model data.
+                pk (int): The primary key of the collection table
+
+            Data:
+                product (int): The primary key of the product table
+
+            Returns:
+                Response: A DRF Response object indicating success or failure and a message.
+        """
+        obj = self.get_object()
+        serializer = AddToCollectionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product = serializer.validated_data.get('product')
+        LookBookItems.objects.create(look_book=obj, product_id=product)
+
+        return Response({
+            'message': f'{obj.name} successfully added to the look book.!'
+        }, status=status.HTTP_200_OK)
+
+
+class LookBookItemsModelViewSet(BaseModelViewSet):
+    queryset = LookBookItems.objects.all()
+    serializer_class = LookBookItemsModelSerializer
+    retrieve_serializer_class = LookBookItemsModelSerializerGET
+    search_fields = ['product__name', 'look_book__name']
+    default_fields = ['look_book', 'product']
+    filterset_class = LookBookItemsFilter
+

@@ -8,6 +8,7 @@ from .manager import VariantManager
 from .manager import VariantAttributesManager
 from .manager import ProductImageManager
 from .manager import CollectionItemsManager
+from .manager import LooBookItemsManager
 
 
 class Products(BaseModel):
@@ -156,8 +157,18 @@ class CollectionItems(BaseModel):
 
 class LookBook(BaseModel):
     name = models.CharField(max_length=100, verbose_name='Name')
-
-    variants = models.ManyToManyField(Variant,
-                                      related_name='variants',
-                                      verbose_name='Variants')
     is_in_home_page = models.BooleanField(default=False, verbose_name='Display In Home Page')
+
+
+class LookBookItems(BaseModel):
+    look_book = models.ForeignKey(
+        LookBook, on_delete=models.CASCADE,
+        related_name='look_book_items', verbose_name='Look Book'
+    )
+
+    product = models.ForeignKey(
+        Products, on_delete=models.CASCADE, related_name='look_book_product',
+        verbose_name='Product', null=True
+    )
+
+    objects = LooBookItemsManager()

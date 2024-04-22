@@ -31,3 +31,9 @@ class CollectionItemsManager(models.Manager):
         return queryset.filter(deleted=False, collection__deleted=False, product__deleted=False)
 
 
+class LooBookItemsManager(models.Manager):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(deleted=False, look_book__deleted=False, product__deleted=False)
+
+
