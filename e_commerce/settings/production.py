@@ -38,6 +38,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # X_FRAME_OPTIONS = 'DENY'
 
+CSRF_COOKIE_NAME = 'csrftoken'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
