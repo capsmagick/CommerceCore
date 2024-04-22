@@ -33,17 +33,18 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-SECURE_SSL_REDIRECT = False
+# SECURE_SSL_REDIRECT = False
 
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = False
+# SECURE_CONTENT_TYPE_NOSNIFF = False
 
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
-# SECURE_BROWSER_XSS_FILTER = True
+SECURE_BROWSER_XSS_FILTER = True
+# SECURE_REFERRER_POLICY = None
 
 # X_FRAME_OPTIONS = 'DENY'
 
@@ -85,6 +86,3 @@ KEY_INDEX = os.environ.get('PHONE_PE_KEY_INDEX')
 
 PHONE_PAY_S2S_CALLBACK_URL = os.environ.get('PHONE_PAY_S2S_CALLBACK_URL')
 PHONE_PAY_REDIRECT_URL = os.environ.get('PHONE_PAY_REDIRECT_URL')
-
-# SECURE_BROWSER_XSS_FILTER = False
-# SECURE_REFERRER_POLICY = None
