@@ -60,7 +60,7 @@ class BaseModelViewSet(
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_db_action(serializer)
+        self.perform_db_action(serializer, 'create')
         return Response(
             {
                 'data': serializer.data,
@@ -83,7 +83,7 @@ class BaseModelViewSet(
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_db_action(serializer)
+        self.perform_db_action(serializer, 'update')
         return Response(
             {
                 'data': serializer.data,
@@ -113,7 +113,7 @@ class BaseModelViewSet(
             status=status.HTTP_200_OK
         )
 
-    def perform_db_action(self, serializer):
+    def perform_db_action(self, serializer, action='create'):
         return serializer.save()
 
     def perform_delete(self, instance):
