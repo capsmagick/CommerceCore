@@ -48,6 +48,6 @@ class CollectionItemsFilter(filters.FilterSet):
 class LookBookItemsFilter(filters.FilterSet):
     class Meta:
         model = LookBookItems
-        fields = ['collection', 'product']
+        fields = ['look_book', 'product']
 
 
