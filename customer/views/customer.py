@@ -24,7 +24,7 @@ from product.serializers import ProductsModelSerializerGET
 from product.serializers import VariantModelSerializerGET
 from product.serializers import CollectionModelSerializerGET
 from product.serializers import LookBookModelSerializerGET
-from product.serializers import OrderItemsModelSerializerGET
+from orders.serializers import OrderItemsModelSerializerGET
 
 from masterdata.serializers import CategoryModelSerializerGET
 

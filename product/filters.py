@@ -6,6 +6,7 @@ from product.models import ProductImage
 from product.models import Collection
 from product.models import CollectionItems
 from product.models import LookBook
+from product.models import LookBookItems
 
 
 class ProductFilter(filters.FilterSet):
@@ -35,12 +36,18 @@ class CollectionFilter(filters.FilterSet):
 class LookBookFilter(filters.FilterSet):
     class Meta:
         model = LookBook
-        fields = ['variants']
+        fields = ['name']
 
 
 class CollectionItemsFilter(filters.FilterSet):
     class Meta:
         model = CollectionItems
         fields = ['collection', 'product']
+
+
+class LookBookItemsFilter(filters.FilterSet):
+    class Meta:
+        model = LookBookItems
+        fields = ['look_book', 'product']
 
 

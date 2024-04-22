@@ -56,7 +56,7 @@ class CustomerCollectionFilter(filters.FilterSet):
 class CustomerLookBookFilter(filters.FilterSet):
     class Meta:
         model = LookBook
-        fields = ['variants']
+        fields = ['name']
 
 
 class CustomerCategoryFilter(filters.FilterSet):

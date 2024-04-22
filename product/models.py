@@ -3,6 +3,12 @@ from masterdata.models import Category, Brand, Dimension
 from users.models.base_model import BaseModel
 from masterdata.models import Attribute
 from django.contrib.postgres.fields import ArrayField
+from .manager import ProductsManager
+from .manager import VariantManager
+from .manager import VariantAttributesManager
+from .manager import ProductImageManager
+from .manager import CollectionItemsManager
+from .manager import LooBookItemsManager
 
 
 class Products(BaseModel):
@@ -36,6 +42,8 @@ class Products(BaseModel):
     rating = models.CharField(max_length=120, verbose_name='Rating', blank=True, null=True)
     no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
 
+    objects = ProductsManager()
+
     def __str__(self):
         return self.name
 
@@ -55,6 +63,8 @@ class Variant(BaseModel):
     )
     stock = models.IntegerField(default=0, verbose_name='Stock')
     selling_price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2, verbose_name='Selling Price')
+
+    objects = VariantManager()
 
     def __str__(self):
         return f"{self.product.name}"
@@ -90,6 +100,8 @@ class VariantAttributes(BaseModel):
     )
     value = models.CharField(max_length=256, verbose_name='Value')
 
+    objects = VariantAttributesManager()
+
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(
@@ -109,6 +121,8 @@ class ProductImage(BaseModel):
                                   verbose_name='Thumbnail')
     alt_text = models.CharField(max_length=255, verbose_name='Alt Text')
     name = models.CharField(max_length=250, blank=True, null=True)
+
+    objects = ProductImageManager()
 
     def __str__(self):
         return self.alt_text
@@ -138,11 +152,23 @@ class CollectionItems(BaseModel):
         verbose_name='Product', null=True
     )
 
+    objects = CollectionItemsManager()
+
 
 class LookBook(BaseModel):
     name = models.CharField(max_length=100, verbose_name='Name')
-
-    variants = models.ManyToManyField(Variant,
-                                      related_name='variants',
-                                      verbose_name='Variants')
     is_in_home_page = models.BooleanField(default=False, verbose_name='Display In Home Page')
+
+
+class LookBookItems(BaseModel):
+    look_book = models.ForeignKey(
+        LookBook, on_delete=models.CASCADE,
+        related_name='look_book_items', verbose_name='Look Book'
+    )
+
+    product = models.ForeignKey(
+        Products, on_delete=models.CASCADE, related_name='look_book_product',
+        verbose_name='Product', null=True
+    )
+
+    objects = LooBookItemsManager()

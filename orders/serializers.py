@@ -55,4 +55,9 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OrderItemsModelSerializerGET(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
 
