@@ -22,7 +22,8 @@ class VariantAttributesManager(models.Manager):
 class ProductImageManager(models.Manager):
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(deleted=False, variant__deleted=False, product__deleted=False)
+        queryset = queryset.filter(deleted=False)
+        return queryset.filter(models.Q(variant__deleted=False) | models.Q(product__deleted=False))
 
 
 class CollectionItemsManager(models.Manager):
