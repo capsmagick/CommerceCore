@@ -121,7 +121,7 @@ class ProductsModelViewSet(BaseModelViewSet):
         serializer = AddToCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         collection = serializer.validated_data.get('collection')
-        CollectionItems.objects.create(collection_id=collection, product=obj)
+        product, created = CollectionItems.objects.get_or_create(collection_id=collection, product=obj)
 
         return Response({
             'message': f'{obj.name} successfully added to the collection.!'
@@ -146,7 +146,7 @@ class ProductsModelViewSet(BaseModelViewSet):
         serializer = AddToLookBookSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         look_book = serializer.validated_data.get('look_book')
-        LookBookItems.objects.create(look_book_id=look_book, product=obj)
+        product, created = LookBookItems.objects.get_or_create(look_book=look_book, product=obj)
 
         return Response({
             'message': f'{obj.name} successfully added to the look book.!'
@@ -260,10 +260,10 @@ class CollectionModelViewSet(BaseModelViewSet):
         serializer = AddProductCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = serializer.validated_data.get('product')
-        CollectionItems.objects.create(collection=obj, product_id=product)
+        product_obj, created = CollectionItems.objects.get_or_create(collection=obj, product=product)
 
         return Response({
-            'message': f'{obj.name} successfully added to the collection.!'
+            'message': f'{product.name} successfully added to the collection.!'
         }, status=status.HTTP_200_OK)
 
 
@@ -309,10 +309,10 @@ class LookBookModelViewSet(BaseModelViewSet):
         serializer = AddToCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = serializer.validated_data.get('product')
-        LookBookItems.objects.create(look_book=obj, product_id=product)
+        product_obj, created = LookBookItems.objects.create(look_book=obj, product=product)
 
         return Response({
-            'message': f'{obj.name} successfully added to the look book.!'
+            'message': f'{product.name} successfully added to the look book.!'
         }, status=status.HTTP_200_OK)
 
 
