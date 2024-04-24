@@ -20,6 +20,7 @@ from masterdata.serializers import RetrieveAttributeModelSerializer
 
 class ProductsModelSerializer(serializers.ModelSerializer):
     short_description = serializers.CharField()
+    sku = serializers.CharField()
     price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     selling_price = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=1.00)
     condition = serializers.CharField(required=False, default='New')
@@ -31,6 +32,7 @@ class ProductsModelSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         name = attrs.get('name')
+        sku = attrs.get('sku')
 
         if not self.instance:
             if Products.objects.filter(name=name).exists():
@@ -38,11 +40,22 @@ class ProductsModelSerializer(serializers.ModelSerializer):
                     'name': 'Name is already in use.'
                 })
 
+            if Products.objects.filter(sku=sku).exists():
+                raise serializers.ValidationError({
+                    'name': 'SKU is already in use.'
+                })
+
         else:
             if name != self.instance.name:
                 if Products.objects.filter(name=name).exists():
                     raise serializers.ValidationError({
                         'name': 'Name is already in use.'
+                    })
+
+            if sku != self.instance.sku:
+                if Products.objects.filter(sku=sku).exists():
+                    raise serializers.ValidationError({
+                        'name': 'SKU is already in use.'
                     })
 
         return attrs
