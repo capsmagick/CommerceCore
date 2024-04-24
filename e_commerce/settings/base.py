@@ -271,7 +271,6 @@ DYNAMIC_PREFERENCES = {
 
 SITE_ID = 1
 
-
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -289,6 +288,8 @@ CORS_URLS_REGEX = r"^/api/.*$"
 #     'API_KEY': '9335c56e84ceac681c30904edcff4dae',
 # }
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://manage.signupcasuals.com/',
+]
+
 URL_PREFIX = 'api/'
-
-
