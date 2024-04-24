@@ -6,6 +6,7 @@ import datetime
 
 class ExportData:
     EXCLUDE_FIELDS = ['deleted', 'deleted_at', 'deleted_by']
+    EMPTY_VALUES = [None, '', ' ', 'undefined']
 
     def generate_headers(self, model, include_deleted):
         row = []
@@ -45,13 +46,13 @@ class ExportData:
                     print('data : ', data)
                     print('type data : ', type(data))
                     if field_type == 'DateTimeField':
-                        data = data.strftime("%Y-%m-%d %I:%M %p") if data else ''
+                        data = data.strftime("%Y-%m-%d %I:%M %p") if not data in self.EMPTY_VALUES else ''
                         row.append(data)
                     elif field_type == 'DateField':
-                        data = data.strftime("%Y-%m-%d") if data else ''
+                        data = data.strftime("%Y-%m-%d") if not data in self.EMPTY_VALUES else ''
                         row.append(data)
                     elif field_type == 'ForeignKey':
-                        row.append(data.__str__())
+                        row.append(data.__str__() if not data in self.EMPTY_VALUES else '')
                     else:
                         row.append(str(getattr(obj, field.name)))
 

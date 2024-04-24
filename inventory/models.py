@@ -8,6 +8,9 @@ class Tax(BaseModel):
     name = models.CharField(max_length=25, blank=True, null=True, verbose_name='Name')
     slab = models.CharField(max_length=25, blank=True, null=True, verbose_name='Slab')
 
+    def __str__(self):
+        return self.name
+
 
 class Warehouse(BaseModel):
     name = models.CharField(max_length=30, blank=True, null=True, verbose_name='Name')

@@ -63,6 +63,9 @@ class Order(BaseModel):
     payment_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Payment ID')
     shipping_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Shipping ID')
 
+    def __str__(self):
+        return f"{self.order_id}"
+
     def calculate_total(self):
         total_amount = OrderItem.objects.filter(order=self).aggregate(Sum('total_amount'))
         self.total_amount = total_amount['total_amount__sum'] if total_amount['total_amount__sum'] else 0.00
