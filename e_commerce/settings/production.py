@@ -45,6 +45,18 @@ CORS_ORIGIN_WHITELIST = [
 # X_FRAME_OPTIONS = 'DENY'
 
 CSRF_COOKIE_NAME = 'csrftoken'
+# Set the CSRF cookie domain
+CSRF_COOKIE_DOMAIN = [
+    'https://manage.signupcasuals.com:8443',
+    'https://manage.signupcasuals.com',
+    'https://signupcasuals.com',
+]
+
+# Set the secure flag for the CSRF cookie (recommended for HTTPS)
+CSRF_COOKIE_SECURE = True
+
+# Set the path for the CSRF cookie
+CSRF_COOKIE_PATH = '/'
 
 DATABASES = {
     'default': {
