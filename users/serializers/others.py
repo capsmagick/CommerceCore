@@ -57,6 +57,11 @@ class UserSignupModelSerializer(serializers.ModelSerializer):
 
 
 class UserDataModelSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.SerializerMethodField()
+
+    def get_profile_picture(self, attrs):
+        return attrs.profile_picture.url if attrs.profile_picture else ''
+
     class Meta:
         model = User
         fields = (
@@ -118,6 +123,11 @@ class AddressRegisterModelSerializerGET(serializers.ModelSerializer):
 
 
 class UserModelSerializerGET(serializers.ModelSerializer):
+    profile_picture = serializers.SerializerMethodField()
+
+    def get_profile_picture(self, attrs):
+        return attrs.profile_picture.url if attrs.profile_picture else ''
+
     class Meta:
         model = User
         exclude = (

@@ -18,6 +18,11 @@ class HeroSectionModelSerializer(serializers.ModelSerializer):
 
 
 class HeroSectionModelSerializerGET(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, attrs):
+        return attrs.image.url if attrs.image else ''
+
     class Meta:
         model = HeroSection
         fields = '__all__'
