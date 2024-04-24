@@ -14,15 +14,16 @@ from orders.models import Order
 
 
 class CustomerProductFilter(filters.FilterSet):
-    categories = filters.CharFilter(method='generate_view')
+    categories = filters.CharFilter(method='generate_categories_view')
 
-    def generate_view(self, queryset, value, *args, **kwargs):
+    def generate_categories_view(self, queryset, value, *args, **kwargs):
         try:
-            categories = json.loads(args[0])
-            if categories:
-                queryset = queryset.filter(categories__in=categories)
+            elements = args[0].split(',')
+            categories_value = [int(num) for num in elements]
+            if categories_value:
+                queryset = queryset.filter(categories__in=categories_value)
         except Exception as e:
-            print('Exception occurred at the hero section filter : ', str(e))
+            print('Exception occurred at the product section filter : ', str(e))
         return queryset
 
     class Meta:
@@ -31,15 +32,16 @@ class CustomerProductFilter(filters.FilterSet):
 
 
 class CustomerVariantFilter(filters.FilterSet):
-    categories = filters.CharFilter(method='generate_view')
+    categories = filters.CharFilter(method='generate_categories_view')
 
-    def generate_view(self, queryset, value, *args, **kwargs):
+    def generate_categories_view(self, queryset, value, *args, **kwargs):
         try:
-            categories = json.loads(args[0])
-            if categories:
-                queryset = queryset.filter(product__categories__in=categories)
+            elements = args[0].split(',')
+            categories_value = [int(num) for num in elements]
+            if categories_value:
+                queryset = queryset.filter(categories__in=categories_value)
         except Exception as e:
-            print('Exception occurred at the hero section filter : ', str(e))
+            print('Exception occurred at the product section filter : ', str(e))
         return queryset
 
     class Meta:
