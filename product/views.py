@@ -309,7 +309,7 @@ class LookBookModelViewSet(BaseModelViewSet):
         serializer = AddProductCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = serializer.validated_data.get('product')
-        product_obj, created = LookBookItems.objects.create(look_book=obj, product=product)
+        product_obj, created = LookBookItems.objects.get_or_create(look_book=obj, product=product)
 
         return Response({
             'message': f'{product.name} successfully added to the look book.!'
