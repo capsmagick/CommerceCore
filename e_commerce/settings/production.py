@@ -5,11 +5,13 @@ DEBUG = os.environ.get('DEBUG')
 INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 ALLOWED_HOSTS = [
+    "localhost:3000",
     "manage.signupcasuals.com",
     "signupcasuals.com",
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
     'http://manage.signupcasuals.com',
     'https://manage.signupcasuals.com',
     'http://signupcasuals.com',
@@ -17,12 +19,14 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
     'https://manage.signupcasuals.com:8443',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com',
 ]
 
 CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
     'https://manage.signupcasuals.com:8443',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com'
