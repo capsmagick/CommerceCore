@@ -41,12 +41,13 @@ class ExportData:
 
         headers = self.generate_headers(model, include_deleted)
 
-        ws.append(headers)
         # Write headers to the worksheet and apply styling
         header_row = ws.append(headers)
-        for cell in header_row:
-            cell.font = Font(bold=True)  # Make headers bold
-            cell.border = Border(bottom=Side(style='thin'))  # Add border to the bottom of header cells
+        for excel_row in ws.iter_rows():
+            for cell in excel_row:
+                cell.font = Font(bold=True)  # Make headers bold
+                cell.border = Border(bottom=Side(style='thin'))  # Add border to the bottom of header cells
+                ws.column_dimensions[cell].hieght = 30
 
         for obj in queryset:
             row = []

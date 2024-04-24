@@ -121,7 +121,13 @@ class ProductsModelViewSet(BaseModelViewSet, ExportData):
         serializer = AddToCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         collection = serializer.validated_data.get('collection')
-        product, created = CollectionItems.objects.get_or_create(collection_id=collection, product=obj)
+
+        try:
+            product, created = CollectionItems.objects.get_or_create(collection_id=collection, product=obj)
+        except CollectionItems.MultipleObjectsReturned:
+            return Response({
+                'message': f'{obj.name} already added to the collection.!'
+            }, status=status.HTTP_200_OK)
 
         return Response({
             'message': f'{obj.name} successfully added to the collection.!'
@@ -146,7 +152,12 @@ class ProductsModelViewSet(BaseModelViewSet, ExportData):
         serializer = AddToLookBookSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         look_book = serializer.validated_data.get('look_book')
-        product, created = LookBookItems.objects.get_or_create(look_book=look_book, product=obj)
+        try:
+            product, created = LookBookItems.objects.get_or_create(look_book=look_book, product=obj)
+        except LookBookItems.MultipleObjectsReturned:
+            return Response({
+                'message': f'{obj.name} already added to the look book.!'
+            }, status=status.HTTP_200_OK)
 
         return Response({
             'message': f'{obj.name} successfully added to the look book.!'
@@ -217,7 +228,7 @@ class ProductImageModelViewSet(BaseModelViewSet):
     ]
     filterset_class = ProductImageFilter
 
-    def perform_db_action(self, serializer):
+    def perform_db_action(self, serializer, action='create'):
         obj = serializer.save()
 
         if obj.image:
@@ -260,7 +271,12 @@ class CollectionModelViewSet(BaseModelViewSet):
         serializer = AddProductCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = serializer.validated_data.get('product')
-        product_obj, created = CollectionItems.objects.get_or_create(collection=obj, product=product)
+        try:
+            product_obj, created = CollectionItems.objects.get_or_create(collection=obj, product=product)
+        except CollectionItems.MultipleObjectsReturned:
+            return Response({
+                'message': f'{product.name} already added to the collection.!'
+            }, status=status.HTTP_200_OK)
 
         return Response({
             'message': f'{product.name} successfully added to the collection.!'
@@ -309,7 +325,12 @@ class LookBookModelViewSet(BaseModelViewSet):
         serializer = AddProductCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = serializer.validated_data.get('product')
-        product_obj, created = LookBookItems.objects.get_or_create(look_book=obj, product=product)
+        try:
+            product_obj, created = LookBookItems.objects.get_or_create(look_book=obj, product=product)
+        except LookBookItems.MultipleObjectsReturned:
+            return Response({
+                'message': f'{product.name} already added to the look book.!'
+            }, status=status.HTTP_200_OK)
 
         return Response({
             'message': f'{product.name} successfully added to the look book.!'
