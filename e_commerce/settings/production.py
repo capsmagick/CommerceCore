@@ -22,6 +22,12 @@ CSRF_TRUSTED_ORIGINS = [
     'https://signupcasuals.com',
 ]
 
+CORS_ORIGIN_WHITELIST = [
+    'https://manage.signupcasuals.com:8443',
+    'https://manage.signupcasuals.com',
+    'https://signupcasuals.com'
+]
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 

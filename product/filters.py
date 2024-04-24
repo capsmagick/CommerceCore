@@ -10,15 +10,39 @@ from product.models import LookBookItems
 
 
 class ProductFilter(filters.FilterSet):
+    categories = filters.CharFilter(method='generate_categories_view')
+
+    def generate_categories_view(self, queryset, value, *args, **kwargs):
+        try:
+            elements = args[0].split(',')
+            categories_value = [int(num) for num in elements]
+            if categories_value:
+                queryset = queryset.filter(categories__in=categories_value)
+        except Exception as e:
+            print('Exception occurred at the product section filter : ', str(e))
+        return queryset
+
     class Meta:
         model = Products
         fields = ['condition', 'categories', 'brand', 'is_disabled']
 
 
 class VariantFilter(filters.FilterSet):
+    categories = filters.CharFilter(method='generate_categories_view')
+
+    def generate_categories_view(self, queryset, value, *args, **kwargs):
+        try:
+            elements = args[0].split(',')
+            categories_value = [int(num) for num in elements]
+            if categories_value:
+                queryset = queryset.filter(product__categories__in=categories_value)
+        except Exception as e:
+            print('Exception occurred at the variant section filter : ', str(e))
+        return queryset
+
     class Meta:
         model = Variant
-        fields = ['product', 'product__brand', 'product__categories']
+        fields = ['product', 'product__brand', 'categories']
 
 
 class ProductImageFilter(filters.FilterSet):
