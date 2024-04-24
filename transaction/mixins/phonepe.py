@@ -37,7 +37,7 @@ class PhonePe:
         return headers
 
     def make_request(self, transaction):
-        amount = transaction.amount * 100
+        amount = int(transaction.amount * 100)
         payload = {
             "merchantId": self.MERCHANT_KEY,
             "merchantTransactionId": transaction.transaction_id,
@@ -71,12 +71,18 @@ class PhonePe:
     def check_payment_status(self, transaction_id):
         request_url = self.GET_ACTION_URL.format(transaction_id)
 
-        sha256_pay_load_string = f'/pg/v1/status/PGTESTPAYUAT/{transaction_id}{self.API_KEY}'
+        print('request_url : ', request_url)
+
+        sha256_pay_load_string = f'/pg/v1/status/{self.MERCHANT_KEY}/{transaction_id}{self.API_KEY}'
 
         headers = self.generate_headers(sha256_pay_load_string)
-        headers['X-MERCHANT-ID'] = transaction_id
+        headers['X-MERCHANT-ID'] = self.MERCHANT_KEY
+
+        print('headers : ', headers)
 
         response = requests.get(request_url, headers=headers)
+
+        print('response : ', response.status_code)
 
         return response
 

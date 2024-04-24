@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from django_fsm import transition
+from django_fsm import FSMIntegerField
 
 from setup.middleware.request import CurrentRequestMiddleware
 
@@ -34,6 +35,9 @@ class WishList(BaseModel):
         Variant, on_delete=models.CASCADE, related_name='wishlist_product', verbose_name='Product'
     )
 
+    def __str__(self):
+        return f"{self.user.get_full_name()}"
+
 
 class Cart(BaseModel):
     session_key = models.CharField(max_length=70, blank=True, null=True)
@@ -44,6 +48,9 @@ class Cart(BaseModel):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
     currency = models.CharField(max_length=10, default='INR', null=True, blank=True, verbose_name='Currency')
     is_completed = models.BooleanField(default=False, verbose_name='Cart Completed')
+
+    def __str__(self):
+        return f"{self.user.get_full_name()}"
 
     def calculate_total(self):
         total_amount = CartItem.objects.filter(cart=self, deleted=False).aggregate(Sum('total_amount'))
@@ -126,11 +133,18 @@ class ReviewImage(BaseModel):
 
 
 class Return(BaseModel):
+    PENDING = 0
+    SUBMITTED = 1
+    IN_REVIEW = 2
+    APPROVED = 3
+    REJECTED = 4
+
     STATUS_CHOICES = (
-        ('Submitted', 'Submitted'),
-        ('In Review', 'In Review'),
-        ('Approved', 'Approved'),
-        ('Rejected', 'Rejected'),
+        (PENDING, 'PENDING'),
+        (SUBMITTED, 'SUBMITTED'),
+        (IN_REVIEW, 'IN REVIEW'),
+        (APPROVED, 'APPROVED'),
+        (REJECTED, 'REJECTED'),
     )
 
     REFUND_METHOD = (
@@ -138,12 +152,22 @@ class Return(BaseModel):
         ('Refund', 'Refund'),
     )
 
+    REFUND_IN_REVIEW = 0
+    REFUND_PENDING = 1
+
+    EXCHANGE_IN_TRANSIT = 2
+    EXCHANGE_DELIVERED = 3
+
+    REFUND_INITIATED = 4
+    REFUND_REIMBURSED = 5
+
     REFUND_CHOICES = (
-        ('Pending', 'Pending'),
-        ('In Transit', 'In Transit'),
-        ('Delivered', 'Delivered'),
-        ('Refund Initiated', 'Refund Initiated'),
-        ('Refunded', 'Refunded'),
+        (REFUND_PENDING, 'PENDING'),
+        (REFUND_IN_REVIEW, 'IN REVIEW'),
+        (EXCHANGE_IN_TRANSIT, 'IN TRANSIT'),
+        (EXCHANGE_DELIVERED, 'DELIVERED'),
+        (REFUND_INITIATED, 'REFUND INITIATED'),
+        (REFUND_REIMBURSED, 'REIMBURSED'),
     )
 
     return_id = models.CharField(max_length=100, verbose_name='Return Id', null=True, blank=True)
@@ -168,9 +192,7 @@ class Return(BaseModel):
     tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Tracking ID')
     shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Shipping Agent')
 
-    status = models.CharField(
-        choices=STATUS_CHOICES, max_length=25, default='Submitted', verbose_name='Status'
-    )
+    status = FSMIntegerField(default=PENDING, choices=STATUS_CHOICES, verbose_name='Status', protected=True)
 
     approved_user = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name='approved_user',
@@ -187,9 +209,8 @@ class Return(BaseModel):
     rejected_at = models.DateTimeField(blank=True, null=True, verbose_name='Rejected Date')
 
     # Refund
-    refund_status = models.CharField(
-        choices=REFUND_CHOICES, max_length=25, blank=True, null=True, verbose_name='Refund Status'
-    )
+    refund_status = FSMIntegerField(default=REFUND_PENDING, choices=REFUND_CHOICES, verbose_name='Refund Status', protected=True)
+
     refund_tracking_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Tracking ID')
     refund_shipping_agent = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Shipping Agent')
     refund_transaction_id = models.CharField(max_length=256, blank=True, null=True, verbose_name='Refund Tracking ID')

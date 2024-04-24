@@ -69,7 +69,7 @@ class PlaceOrder(GenericViewSet, RetrieveModelMixin):
             total_amount=cart.total_amount,
             user=cart.user.username,
             address=serializer.validated_data.get('address'),
-            status='Pending'
+            status=Order.PENDING
         )
 
         cart_items = cart.cartitems.filter(deleted=False)

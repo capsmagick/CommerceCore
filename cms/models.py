@@ -9,3 +9,6 @@ class HeroSection(BaseModel):
     link = models.CharField(max_length=512, verbose_name='CTA Button Link')
     image = models.ImageField(upload_to='hero/images', verbose_name='Image')
 
+    def __str__(self):
+        return f"{self.title}"
+
