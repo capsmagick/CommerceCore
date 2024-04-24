@@ -1,4 +1,5 @@
 import django_filters as filters
+from django.db.models import Q
 
 from product.models import Products
 from product.models import Variant
@@ -17,7 +18,10 @@ class ProductFilter(filters.FilterSet):
             elements = args[0].split(',')
             categories_value = [int(num) for num in elements]
             if categories_value:
-                queryset = queryset.filter(categories__in=categories_value)
+                queryset = queryset.filter(
+                    Q(categories__in=categories_value) |
+                    Q(categories__parent_category__in=categories_value)
+                )
         except Exception as e:
             print('Exception occurred at the product section filter : ', str(e))
         return queryset
@@ -35,7 +39,10 @@ class VariantFilter(filters.FilterSet):
             elements = args[0].split(',')
             categories_value = [int(num) for num in elements]
             if categories_value:
-                queryset = queryset.filter(product__categories__in=categories_value)
+                queryset = queryset.filter(
+                    Q(product__categories__in=categories_value) |
+                    Q(product__categories__parent_category__in=categories_value)
+                )
         except Exception as e:
             print('Exception occurred at the variant section filter : ', str(e))
         return queryset
