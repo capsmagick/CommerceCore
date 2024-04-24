@@ -23,6 +23,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
+    'https://manage.signupcasuals.com:8443',
     'https://manage.signupcasuals.com',
     'https://signupcasuals.com'
 ]
