@@ -9,6 +9,7 @@ from rest_framework.mixins import RetrieveModelMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
+from setup.export import ExportData
 from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
 from setup.utils import generate_column
@@ -130,7 +131,7 @@ class PlaceOrder(GenericViewSet, RetrieveModelMixin):
         }, status=status.HTTP_200_OK)
 
 
-class OrderModelViewSet(GenericViewSet, ListModelMixin):
+class OrderModelViewSet(GenericViewSet, ListModelMixin, ExportData):
     """
         API for Order details for Admin user
     """

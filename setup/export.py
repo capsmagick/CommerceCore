@@ -8,16 +8,15 @@ import datetime
 class ExportData:
     EXCLUDE_FIELDS = ['deleted', 'deleted_at', 'deleted_by']
     EMPTY_VALUES = [None, '', ' ', 'undefined', '[]']
+    INCLUDE_DELETED = False
 
     def generate_headers(self, model, include_deleted):
         headers = []
         for field in model._meta.fields:
-            if include_deleted or field.name not in self.EXCLUDE_FIELDS:
+            if self.INCLUDE_DELETED or field.name not in self.EXCLUDE_FIELDS:
                 headers.append(field.verbose_name)
 
         # Include many-to-many field headers
-        print('model._meta.related_objects : ', model._meta.many_to_many)
-        print('model._meta.related_objects : ', model._meta.related_objects)
         for field in model._meta.many_to_many:
             if field.many_to_many:
                 headers.append(field.verbose_name)
@@ -27,6 +26,7 @@ class ExportData:
     @action(detail=False, methods=['GET'], url_path='export')
     def generate_excel(self, request, *args, **kwargs):
         include_deleted = request.GET.get('includeDeleted', False)
+        self.INCLUDE_DELETED = include_deleted
 
         queryset = self.filter_queryset(self.get_queryset())
         model = queryset.model
@@ -41,13 +41,18 @@ class ExportData:
 
         headers = self.generate_headers(model, include_deleted)
 
-        # Write headers to the worksheet and apply styling
-        header_row = ws.append(headers)
-        for excel_row in ws.iter_rows():
-            for cell in excel_row:
-                cell.font = Font(bold=True)  # Make headers bold
-                cell.border = Border(bottom=Side(style='thin'))  # Add border to the bottom of header cells
-                ws.column_dimensions[cell].hieght = 30
+        for col, value in enumerate(headers, start=1):
+            cell = ws.cell(row=1, column=col, value=value)
+            cell.font = Font(bold=True)
+            cell.border = Border(
+                top=Side(style='thin'), bottom=Side(style='thin'),
+                right=Side(style='thin'), left=Side(style='thin'),
+            )
+            ws.column_dimensions[
+                ws.cell(row=1, column=col).column_letter
+            ].width = len(value) + 2
+            ws.row_dimensions[1].height = 30
+            ws.freeze_panes = 'A2'
 
         for obj in queryset:
             row = []
@@ -73,8 +78,8 @@ class ExportData:
                 if relation.many_to_many:
                     related_data = getattr(obj, relation.name).all()
                     data = ', '.join(str(item) for item in related_data) if related_data else ''
-                    print('data : ', data)
                     row.append(data)
+
             ws.append(row)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

@@ -241,7 +241,7 @@ class ProductImageModelViewSet(BaseModelViewSet):
                 print('Exception e : ', str(e))
 
 
-class CollectionModelViewSet(BaseModelViewSet):
+class CollectionModelViewSet(BaseModelViewSet, ExportData):
     queryset = Collection.objects.all()
     serializer_class = CollectionModelSerializer
     retrieve_serializer_class = CollectionModelSerializerGET
@@ -295,7 +295,7 @@ class CollectionItemsModelViewSet(BaseModelViewSet):
     filterset_class = CollectionItemsFilter
 
 
-class LookBookModelViewSet(BaseModelViewSet):
+class LookBookModelViewSet(BaseModelViewSet, ExportData):
     queryset = LookBook.objects.all()
     serializer_class = LookBookModelSerializer
     retrieve_serializer_class = LookBookModelSerializerGET

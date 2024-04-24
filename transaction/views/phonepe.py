@@ -13,6 +13,7 @@ from django.shortcuts import render
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
+from setup.export import ExportData
 from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
 
@@ -111,7 +112,7 @@ class TransactionCallBackAPIView(APIView):
         return render(request, 'payment_failed.html', context={'output': 'response.text', 'main_request': form_data})
 
 
-class TransactionModelViewSet(GenericViewSet, ListModelMixin):
+class TransactionModelViewSet(GenericViewSet, ListModelMixin, ExportData):
     """
         API For Transaction List
     """

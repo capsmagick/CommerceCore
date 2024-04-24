@@ -5,6 +5,7 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
 from setup.views import BaseModelViewSet
+from setup.export import ExportData
 
 from .models import HeroSection
 from .filters import HeroSectionFilter
@@ -12,7 +13,7 @@ from .serializers import HeroSectionModelSerializer
 from .serializers import HeroSectionModelSerializerGET
 
 
-class HeroSectionModelViewSet(BaseModelViewSet):
+class HeroSectionModelViewSet(BaseModelViewSet, ExportData):
     queryset = HeroSection.objects.all().order_by('-id')
     serializer_class = HeroSectionModelSerializer
     retrieve_serializer_class = HeroSectionModelSerializerGET

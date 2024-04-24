@@ -9,10 +9,11 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
-from setup.utils import generate_column
 from setup.views import BaseModelViewSet
+from setup.export import ExportData
 from setup.permissions import IsCustomer
 from setup.permissions import IsSuperUser
+from setup.utils import generate_column
 
 from customer.models import Return
 
@@ -92,7 +93,7 @@ class CustomerReturnViewSet(BaseModelViewSet):
         }, status=status.HTTP_201_CREATED)
 
 
-class ManageCustomerReturn(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+class ManageCustomerReturn(GenericViewSet, ListModelMixin, RetrieveModelMixin, ExportData):
     permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = Return.objects.all()
     serializer_class = ReturnModelSerializerGET
