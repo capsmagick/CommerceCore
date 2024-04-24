@@ -32,6 +32,9 @@ class Transaction(BaseModel):
 
     response_received_date = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.transaction_id}"
+
     def save(self, *args, **kwargs):
         if not self.transaction_id:
             transaction_id = generate_transaction_id()

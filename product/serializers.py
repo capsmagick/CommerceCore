@@ -254,6 +254,9 @@ class LookBookModelSerializer(serializers.ModelSerializer):
         model = LookBook
         fields = (
             'name',
+            'description',
+            'feature_image',
+            'tags',
             'is_in_home_page',
         )
 
