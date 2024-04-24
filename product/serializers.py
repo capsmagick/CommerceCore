@@ -216,8 +216,11 @@ class CollectionModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionModelSerializerGET(serializers.ModelSerializer):
-    collections = VariantModelSerializerGET(many=True, read_only=True)
     feature_image = serializers.SerializerMethodField()
+    collection_items = serializers.SerializerMethodField()
+
+    def get_collection_items(self, attrs):
+        return CollectionItemsModelSerializerGET(attrs.collection_items.all(), many=True).data
 
     def get_feature_image(self, attrs):
         return attrs.feature_image.url if attrs.feature_image else ''
@@ -256,7 +259,10 @@ class LookBookModelSerializer(serializers.ModelSerializer):
 
 
 class LookBookModelSerializerGET(serializers.ModelSerializer):
-    variants = VariantModelSerializerGET(many=True, read_only=True)
+    look_book_items = serializers.SerializerMethodField()
+
+    def get_look_book_items(self, attrs):
+        return LookBookItemsModelSerializerGET(attrs.look_book_items.all(), many=True).data
 
     class Meta:
         model = LookBook
@@ -291,6 +297,8 @@ class CollectionItemsModelSerializer(serializers.ModelSerializer):
 
 
 class CollectionItemsModelSerializerGET(serializers.ModelSerializer):
+    product = ProductsModelSerializerGET(read_only=True)
+
     class Meta:
         model = CollectionItems
         fields = '__all__'
@@ -306,6 +314,8 @@ class LookBookItemsModelSerializer(serializers.ModelSerializer):
 
 
 class LookBookItemsModelSerializerGET(serializers.ModelSerializer):
+    product = ProductsModelSerializerGET(read_only=True)
+
     class Meta:
         model = LookBookItems
         fields = '__all__'
