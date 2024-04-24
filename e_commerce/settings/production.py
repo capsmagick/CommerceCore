@@ -5,14 +5,14 @@ DEBUG = os.environ.get('DEBUG')
 INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 ALLOWED_HOSTS = [
-    "manage.signupcasuals.com:8443",
     "manage.signupcasuals.com",
     "signupcasuals.com",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://manage.signupcasuals.com:8443',
+    'http://manage.signupcasuals.com',
     'https://manage.signupcasuals.com',
+    'http://signupcasuals.com',
     'https://signupcasuals.com',
 ]
 

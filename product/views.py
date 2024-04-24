@@ -2,9 +2,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from setup.utils import compress_image
-
 from setup.views import BaseModelViewSet
+from setup.export import ExportData
+from setup.utils import compress_image
 
 from product.models import Products
 from product.models import Variant
@@ -40,7 +40,7 @@ from product.filters import CollectionItemsFilter
 from product.filters import LookBookItemsFilter
 
 
-class ProductsModelViewSet(BaseModelViewSet):
+class ProductsModelViewSet(BaseModelViewSet, ExportData):
     queryset = Products.objects.all()
     serializer_class = ProductsModelSerializer
     retrieve_serializer_class = ProductsModelSerializerGET

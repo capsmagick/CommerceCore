@@ -5,9 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from django.apps import apps
-
 from setup.serializer import ImportSerializer
-
 
 
 class ImportTableData(APIView):
@@ -39,7 +37,6 @@ class ImportTableData(APIView):
             print('--------------------------------------------')
             print('row : ', row)
             print('--------------------------------------------')
-
 
         return Response({
             'message': 'Success'

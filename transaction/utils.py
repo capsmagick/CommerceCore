@@ -3,13 +3,17 @@ import base64
 import hashlib
 
 
-def hash_with_sha256(data):
+def hash_with_sha256(data, data_encode=True):
     """
         Function to hash the string into SHA-256 format
     """
     sha256 = hashlib.sha256()
-    sha256.update(data.encode('utf-8'))
-    hashed_data = sha256.hexdigest()
+    if data_encode:
+        sha256.update(data.encode('utf-8'))
+        hashed_data = sha256.hexdigest()
+    else:
+        sha256.update(data)
+        hashed_data = sha256.hexdigest()
     return hashed_data
 
 

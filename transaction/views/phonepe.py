@@ -72,13 +72,23 @@ class TransactionCallBackAPIView(APIView):
         form_data = request.data
         transaction_id = form_data.get('transactionId', None)
 
+        print('------------------------------------------')
+        print('form_data : ', form_data)
+        print('------------------------------------------')
+
         if transaction_id:
             response = PhonePe().check_payment_status(transaction_id)
+            print('response : ', response.status_code)
+            print('response : ', response.text)
+            print('response : ', response.json())
 
             if response.status_code == 200:
                 obj = Transaction.objects.get(transaction_id=transaction_id)
                 obj.status = "Success"
-                obj.response = response.json()
+                try:
+                    obj.response = response.json()
+                except Exception as e:
+                    obj.response = response.text
                 obj.response_received_date = datetime.datetime.now()
                 obj.save()
                 obj.order.order_placed()
@@ -88,7 +98,10 @@ class TransactionCallBackAPIView(APIView):
             else:
                 obj = Transaction.objects.get(transaction_id=transaction_id)
                 obj.status = "Failed"
-                obj.error = response.json()
+                try:
+                    obj.response = response.json()
+                except Exception as e:
+                    obj.response = response.text
                 obj.response_received_date = datetime.datetime.now()
                 obj.order.order_pending()
                 obj.order.save()

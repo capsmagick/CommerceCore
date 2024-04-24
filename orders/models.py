@@ -5,6 +5,7 @@ from product.models import Variant
 from customer.models import Cart
 from django.db.models import Sum
 import datetime
+from django_fsm import FSMIntegerField
 from django_fsm import transition
 
 
@@ -23,18 +24,27 @@ def generate_order_id():
     return order_id
 
 
-
 class Order(BaseModel):
+    PENDING = 0
+    PAYMENT_INITIATED = 1
+    ORDER_PLACED = 2
+    ORDER_PROCESSING = 3
+    PACKED = 4
+    READY_FOR_DISPATCH = 5
+    SHIPPED = 6
+    DELIVERED = 7
+    CANCELLED = 14
+
     STATUS_CHOICES = (
-        ('Pending', 'Pending'),
-        ('Payment Initiated', 'Payment Initiated'),
-        ('Order Placed', 'Order Placed'),
-        ('Order Processing', 'Order Processing'),
-        ('Packed', 'Packed'),
-        ('Ready For Dispatch', 'Ready For Dispatch'),
-        ('Shipped', 'Shipped'),
-        ('Delivered', 'Delivered'),
-        ('Cancelled', 'Cancelled'),
+        (PENDING, 'PENDING'),
+        (PAYMENT_INITIATED, 'PAYMENT INITIATED'),
+        (ORDER_PLACED, 'ORDER PLACED'),
+        (ORDER_PROCESSING, 'ORDER PROCESSING'),
+        (PACKED, 'PACKED'),
+        (READY_FOR_DISPATCH, 'READY FOR DISPATCH'),
+        (SHIPPED, 'SHIPPED'),
+        (DELIVERED, 'DELIVERED'),
+        (CANCELLED, 'CANCELLED'),
     )
     cart = models.ForeignKey(
         Cart, related_name='cart_order', null=True, blank=True,
@@ -48,7 +58,7 @@ class Order(BaseModel):
     user = models.CharField(max_length=150, verbose_name='User')
     address = models.ForeignKey(AddressRegister, related_name='order_address', null=True, verbose_name='Address', on_delete=models.SET_NULL)
 
-    status = models.CharField(choices=STATUS_CHOICES, max_length=20, default='Pending', verbose_name='Status')
+    status = FSMIntegerField(default=PENDING, choices=STATUS_CHOICES, verbose_name='Status', protected=True)
 
     payment_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Payment ID')
     shipping_id = models.CharField(max_length=256, null=True, blank=True, verbose_name='Shipping ID')
@@ -63,50 +73,42 @@ class Order(BaseModel):
             self.order_id = generate_order_id()
         super().save(*args, **kwargs)
 
-    # @transition(field=status, source=['Pending'], target='Payment Initiated')
+    @transition(field=status, source=[PENDING], target=PAYMENT_INITIATED)
     def order_payment(self):
-        self.status = 'Payment Initiated'
         return f"{self.order_id} moved to Payment Initiated"
 
-    # @transition(field=status, source=['Payment Initiated'], target='Pending')
+    @transition(field=status, source=[PAYMENT_INITIATED], target=PENDING)
     def order_pending(self):
-        self.status = 'Pending'
         return f"{self.order_id} moved to Pending"
 
-    # @transition(field=status, source=['Payment Initiated'], target='Order Placed')
+    @transition(field=status, source=[PAYMENT_INITIATED], target=ORDER_PLACED)
     def order_placed(self):
-        self.status = 'Order Placed'
         return f"{self.order_id} moved to Order Placed"
 
-    # @transition(field=status, source=['Order Placed'], target='Order Processing')
+    @transition(field=status, source=[ORDER_PLACED], target=ORDER_PROCESSING)
     def order_processing(self):
-        self.status = 'Order Processing'
         return f"{self.order_id} moved to Order Processing"
 
-    # @transition(field=status, source=['Order Processing'], target='Packed')
+    @transition(field=status, source=ORDER_PROCESSING, target=PACKED)
     def packing(self):
-        self.status = 'Packed'
         return f"{self.order_id} moved Packed"
 
-    # @transition(field=status, source=['Packed'], target='Ready For Dispatch')
+    @transition(field=status, source=[PACKED], target=READY_FOR_DISPATCH)
     def ready_for_dispatch(self):
-        self.status = 'Ready For Dispatch'
         return f"{self.order_id} moved to Ready For Dispatch"
 
-    # @transition(field=status, source=['Ready For Dispatch'], target='Shipped')
+    @transition(field=status, source=[READY_FOR_DISPATCH], target=SHIPPED)
     def shipped(self):
-        self.status = 'Shipped'
         return f"{self.order_id} moved to Shipped"
     
-    # @transition(field=status, source=['Shipped'], target='Delivered')
+    @transition(field=status, source=[SHIPPED], target=DELIVERED)
     def delivered(self):
-        self.status = 'Delivered'
         return f"{self.order_id} moved Delivered"
 
     # @transition(field=status, source=['Order Placed', 'Packed', 'Delivered'], target='Cancelled')
-    def cancelled(self):
-        self.status = 'Cancelled'
-        return f"{self.order_id} moved to Cancelled"
+    # def cancelled(self):
+    #     self.status = 'Cancelled'
+    #     return f"{self.order_id} moved to Cancelled"
 
 
 class OrderItem(BaseModel):

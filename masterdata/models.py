@@ -46,6 +46,9 @@ class Dimension(BaseModel):
     weight_unit = models.CharField(max_length=20, choices=WEIGHT_UNIT, verbose_name='Weight Unit', null=True,
                                    blank=True)
 
+    def __str__(self):
+        return f"{self.length}-{self.breadth}-{self.height}-{self.dimension_unit} {self.weight}{self.weight_unit}"
+
 
 class Brand(BaseModel):
     name = models.CharField(max_length=75, blank=True, null=True, verbose_name='Name', db_index=True)
