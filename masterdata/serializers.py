@@ -9,38 +9,6 @@ from .models import Dimension
 from .models import ReturnReason
 
 
-# class TagModelSerializer(serializers.ModelSerializer):
-#     name = serializers.CharField(required=True)
-#
-#     def validate(self, attrs):
-#         name = attrs.get('name')
-#
-#         if not self.instance:
-#             if Tag.objects.filter(name=name).exists():
-#                 raise serializers.ValidationError({
-#                     'name': 'Name is already in use.'
-#                 })
-#
-#         else:
-#             if name != self.instance.name:
-#                 if Tag.objects.filter(name=name).exists():
-#                     raise serializers.ValidationError({
-#                         'name': 'Name is already in use.'
-#                     })
-#
-#         return attrs
-#
-#     class Meta:
-#         model = Tag
-#         fields = '__all__'
-
-
-# class TagModelSerializerGET(serializers.ModelSerializer):
-#     class Meta:
-#         model = Tag
-#         fields = '__all__'
-
-
 class BrandModelSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     logo = serializers.FileField(required=False)
