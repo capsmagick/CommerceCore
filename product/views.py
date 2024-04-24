@@ -306,7 +306,7 @@ class LookBookModelViewSet(BaseModelViewSet):
                 Response: A DRF Response object indicating success or failure and a message.
         """
         obj = self.get_object()
-        serializer = AddToCollectionSerializer(data=request.data)
+        serializer = AddProductCollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = serializer.validated_data.get('product')
         product_obj, created = LookBookItems.objects.create(look_book=obj, product=product)
