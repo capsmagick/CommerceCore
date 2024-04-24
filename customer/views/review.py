@@ -7,6 +7,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
+from setup.export import ExportData
 from setup.permissions import IsSuperUser
 from setup.utils import generate_column
 
@@ -30,7 +31,7 @@ class ReviewModelView(APIView):
         }, status=HTTP_201_CREATED)
 
 
-class ReviewModelViewSet(GenericViewSet, ListModelMixin):
+class ReviewModelViewSet(GenericViewSet, ListModelMixin, ExportData):
     permission_classes = (IsAuthenticated, IsSuperUser,)
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer

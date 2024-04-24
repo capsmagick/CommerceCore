@@ -5,6 +5,7 @@ from customer.models import Return
 from users.serializers import UserDataModelSerializer
 from masterdata.serializers import ReturnReasonModelSerializerGET
 
+
 class ReturnModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Return

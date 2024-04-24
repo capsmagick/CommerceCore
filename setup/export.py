@@ -1,4 +1,5 @@
 from openpyxl import Workbook
+from openpyxl.styles import Font, Border, Side
 from rest_framework.decorators import action
 from django.http import HttpResponse
 import datetime
@@ -6,18 +7,26 @@ import datetime
 
 class ExportData:
     EXCLUDE_FIELDS = ['deleted', 'deleted_at', 'deleted_by']
-    EMPTY_VALUES = [None, '', ' ', 'undefined']
+    EMPTY_VALUES = [None, '', ' ', 'undefined', '[]']
+    INCLUDE_DELETED = False
 
     def generate_headers(self, model, include_deleted):
-        row = []
+        headers = []
         for field in model._meta.fields:
-            if include_deleted or field.name not in self.EXCLUDE_FIELDS:
-                row.append(field.verbose_name)
-        return row
+            if self.INCLUDE_DELETED or field.name not in self.EXCLUDE_FIELDS:
+                headers.append(field.verbose_name)
+
+        # Include many-to-many field headers
+        for field in model._meta.many_to_many:
+            if field.many_to_many:
+                headers.append(field.verbose_name)
+
+        return headers
 
     @action(detail=False, methods=['GET'], url_path='export')
     def generate_excel(self, request, *args, **kwargs):
         include_deleted = request.GET.get('includeDeleted', False)
+        self.INCLUDE_DELETED = include_deleted
 
         queryset = self.filter_queryset(self.get_queryset())
         model = queryset.model
@@ -32,29 +41,44 @@ class ExportData:
 
         headers = self.generate_headers(model, include_deleted)
 
-        ws.append(headers)
+        for col, value in enumerate(headers, start=1):
+            cell = ws.cell(row=1, column=col, value=value)
+            cell.font = Font(bold=True)
+            cell.border = Border(
+                top=Side(style='thin'), bottom=Side(style='thin'),
+                right=Side(style='thin'), left=Side(style='thin'),
+            )
+            ws.column_dimensions[
+                ws.cell(row=1, column=col).column_letter
+            ].width = len(value) + 2
+            ws.row_dimensions[1].height = 30
+            ws.freeze_panes = 'A2'
 
         for obj in queryset:
             row = []
             for field in model._meta.fields:
-                print('field : ', field.get_internal_type())
                 field_type = field.get_internal_type()
                 if include_deleted or field.name not in self.EXCLUDE_FIELDS:
                     data = getattr(obj, field.name)
-                    print('field.name : ', field.name)
-                    print('data.__str__() : ', data.__str__())
-                    print('data : ', data)
-                    print('type data : ', type(data))
                     if field_type == 'DateTimeField':
-                        data = data.strftime("%Y-%m-%d %I:%M %p") if not data in self.EMPTY_VALUES else ''
-                        row.append(data)
+                        data = data.strftime("%Y-%m-%d %I:%M %p") if data not in self.EMPTY_VALUES else ''
                     elif field_type == 'DateField':
-                        data = data.strftime("%Y-%m-%d") if not data in self.EMPTY_VALUES else ''
-                        row.append(data)
+                        data = data.strftime("%Y-%m-%d") if data not in self.EMPTY_VALUES else ''
                     elif field_type == 'ForeignKey':
-                        row.append(data.__str__() if not data in self.EMPTY_VALUES else '')
+                        data = str(data) if data not in self.EMPTY_VALUES else ''
+                    elif field_type == 'BooleanField':
+                        data = 'Yes' if data else 'No'
                     else:
-                        row.append(str(getattr(obj, field.name)))
+                        data = str(data) if data not in self.EMPTY_VALUES else ''
+
+                    row.append(data)
+
+            # Include many-to-many field data
+            for relation in model._meta.many_to_many:
+                if relation.many_to_many:
+                    related_data = getattr(obj, relation.name).all()
+                    data = ', '.join(str(item) for item in related_data) if related_data else ''
+                    row.append(data)
 
             ws.append(row)
 
