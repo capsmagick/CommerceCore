@@ -42,7 +42,7 @@ class ProductsModelSerializer(serializers.ModelSerializer):
 
             if Products.objects.filter(sku=sku).exists():
                 raise serializers.ValidationError({
-                    'name': 'SKU is already in use.'
+                    'sku': 'SKU is already in use.'
                 })
 
         else:
@@ -55,7 +55,7 @@ class ProductsModelSerializer(serializers.ModelSerializer):
             if sku != self.instance.sku:
                 if Products.objects.filter(sku=sku).exists():
                     raise serializers.ValidationError({
-                        'name': 'SKU is already in use.'
+                        'sku': 'SKU is already in use.'
                     })
 
         return attrs
