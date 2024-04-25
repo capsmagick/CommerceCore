@@ -276,6 +276,10 @@ class LookBookModelSerializer(serializers.ModelSerializer):
 
 class LookBookModelSerializerGET(serializers.ModelSerializer):
     look_book_items = serializers.SerializerMethodField()
+    feature_image = serializers.SerializerMethodField()
+
+    def get_feature_image(self, attrs):
+        return attrs.feature_image.url if attrs.feature_image else ''
 
     def get_look_book_items(self, attrs):
         return LookBookItemsModelSerializerGET(attrs.look_book_items.all(), many=True).data
