@@ -123,7 +123,7 @@ class ProductsModelViewSet(BaseModelViewSet, ExportData):
         collection = serializer.validated_data.get('collection')
 
         try:
-            product, created = CollectionItems.objects.get_or_create(collection_id=collection, product=obj)
+            product, created = CollectionItems.objects.get_or_create(collection=collection, product=obj)
         except CollectionItems.MultipleObjectsReturned:
             return Response({
                 'message': f'{obj.name} already added to the collection.!'
