@@ -15,6 +15,7 @@ router.register('product-image', views.ProductImageModelViewSet)
 router.register('collection', views.CollectionModelViewSet)
 router.register('collection-items', views.CollectionItemsModelViewSet)
 router.register('look-book', views.LookBookModelViewSet)
+router.register('look-book-items', views.LookBookItemsModelViewSet)
 
 urlpatterns = []
 urlpatterns += router.urls
