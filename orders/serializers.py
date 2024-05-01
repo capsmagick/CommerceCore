@@ -56,6 +56,7 @@ class BuyNowSerializer(serializers.Serializer):
 
 
 class OrderRetrieveSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(source='get_status_display')
     orderitems = OrderItemRetrieveModelSerializer(many=True, read_only=True)
     created_by = serializers.SerializerMethodField()
     updated_by = serializers.SerializerMethodField()
