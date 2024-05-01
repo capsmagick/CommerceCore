@@ -113,6 +113,14 @@ class AddressRegisterModelSerializer(serializers.ModelSerializer):
 
 class AddressRegisterModelSerializerGET(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(read_only=True)
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_user(self, attrs):
         return UserDataModelSerializer(attrs.user).data
@@ -124,6 +132,14 @@ class AddressRegisterModelSerializerGET(serializers.ModelSerializer):
 
 class UserModelSerializerGET(serializers.ModelSerializer):
     profile_picture = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_profile_picture(self, attrs):
         return attrs.profile_picture.url if attrs.profile_picture else ''

@@ -102,6 +102,14 @@ class ProductsModelSerializerGET(serializers.ModelSerializer):
     brand = BrandModelSerializerGET(read_only=True)
     dimension = RetrieveDimensionModelSerializer(read_only=True)
     images = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_images(self, attrs):
         return ProductImageModelSerializer(attrs.product_images.all(), many=True).data
@@ -161,6 +169,14 @@ class VariantModelSerializerGET(serializers.ModelSerializer):
     attributes = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     wish_listed = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_attributes(self, attrs):
         return VariantAttributeModelSerializerGET(attrs.variant.all(), many=True).data
@@ -180,6 +196,14 @@ class VariantModelSerializerGET(serializers.ModelSerializer):
 
 class VariantAttributeModelSerializerGET(serializers.ModelSerializer):
     attributes = RetrieveAttributeModelSerializer()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = VariantAttributes
@@ -188,6 +212,14 @@ class VariantAttributeModelSerializerGET(serializers.ModelSerializer):
 
 class ProductImageModelSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = ProductImage
@@ -231,6 +263,14 @@ class CollectionModelSerializer(serializers.ModelSerializer):
 class CollectionModelSerializerGET(serializers.ModelSerializer):
     feature_image = serializers.SerializerMethodField()
     collection_items = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_collection_items(self, attrs):
         return CollectionItemsModelSerializerGET(attrs.collection_items.all(), many=True).data
@@ -277,6 +317,14 @@ class LookBookModelSerializer(serializers.ModelSerializer):
 class LookBookModelSerializerGET(serializers.ModelSerializer):
     look_book_items = serializers.SerializerMethodField()
     feature_image = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_feature_image(self, attrs):
         return attrs.feature_image.url if attrs.feature_image else ''
@@ -318,6 +366,14 @@ class CollectionItemsModelSerializer(serializers.ModelSerializer):
 
 class CollectionItemsModelSerializerGET(serializers.ModelSerializer):
     product = ProductsModelSerializerGET(read_only=True)
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = CollectionItems
@@ -335,6 +391,14 @@ class LookBookItemsModelSerializer(serializers.ModelSerializer):
 
 class LookBookItemsModelSerializerGET(serializers.ModelSerializer):
     product = ProductsModelSerializerGET(read_only=True)
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = LookBookItems

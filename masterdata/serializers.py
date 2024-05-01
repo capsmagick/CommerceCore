@@ -49,6 +49,14 @@ class BrandModelSerializer(serializers.ModelSerializer):
 
 class BrandModelSerializerGET(serializers.ModelSerializer):
     logo = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_logo(self, attrs):
         return attrs.logo.url if attrs.logo else ''
@@ -89,6 +97,15 @@ class AttributeModelSerializer(serializers.ModelSerializer):
 
 
 class RetrieveAttributeModelSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Attribute
         fields = '__all__'
@@ -135,6 +152,14 @@ class AttributeGroupModelSerializer(serializers.ModelSerializer):
 
 class RetrieveAttributeGroupModelSerializer(serializers.ModelSerializer):
     attributes = RetrieveAttributeModelSerializer(many=True)
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = AttributeGroup
@@ -162,6 +187,15 @@ class DimensionModelSerializer(serializers.ModelSerializer):
 
 
 class RetrieveDimensionModelSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Dimension
         fields = '__all__'
@@ -223,6 +257,14 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
     sub_category = serializers.SerializerMethodField()
     attribute_group = RetrieveAttributeGroupModelSerializer()
     image = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_image(self, attrs):
         return attrs.image.url if attrs.image else ''
@@ -237,6 +279,14 @@ class CategoryModelSerializerGET(serializers.ModelSerializer):
 
 class CategoryGET(serializers.ModelSerializer):
     attribute_group = RetrieveAttributeGroupModelSerializer()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = Category
@@ -256,6 +306,15 @@ class ReturnReasonModelSerializer(serializers.ModelSerializer):
 
 
 class ReturnReasonModelSerializerGET(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = ReturnReason
         fields = '__all__'

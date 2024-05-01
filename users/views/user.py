@@ -14,7 +14,7 @@ from users.models import User
 
 from users.serializers import UserDataModelSerializer
 
-from .utils import get_userdata
+from users.utils import get_userdata
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')

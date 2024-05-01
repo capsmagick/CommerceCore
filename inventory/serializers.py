@@ -35,12 +35,30 @@ class TaxModelSerializer(serializers.ModelSerializer):
 
 
 class TaxModelSerializerGET(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Tax
         fields = '__all__'
 
 
 class WarehouseModelSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Warehouse
         fields = '__all__'
@@ -65,6 +83,15 @@ class WarehouseModelSerializer(serializers.ModelSerializer):
 
 
 class BatchModelSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Batch
         fields = '__all__'
@@ -89,6 +116,15 @@ class BatchModelSerializer(serializers.ModelSerializer):
 
 
 class InventoryModelSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Inventory
         fields = '__all__'
