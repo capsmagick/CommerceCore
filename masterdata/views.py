@@ -31,7 +31,7 @@ from .filters import AttributeGroupFilter
 
 
 class CategoryModelViewSet(BaseModelViewSet, ExportData):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('id')
     serializer_class = CategoryModelSerializer
     retrieve_serializer_class = CategoryModelSerializerGET
     search_fields = ['name', 'parent_category__name', 'description']
