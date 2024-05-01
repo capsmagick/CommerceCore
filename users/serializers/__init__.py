@@ -9,5 +9,6 @@ from . token import LoginTokenSerializer
 from .others import AddressRegisterModelSerializer
 from .others import AddressRegisterModelSerializerGET
 from .others import UserModelSerializerGET
+from .others import ProfileUpdateSerializer
 
 from .store_manager import StoreManagerModelSerializer

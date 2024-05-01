@@ -36,6 +36,7 @@ urlpatterns += [
     path(f'{settings.URL_PREFIX}orders/', include('orders.urls')),
     path(f'{settings.URL_PREFIX}transaction/', include('transaction.urls')),
     path(f'{settings.URL_PREFIX}cms/', include('cms.urls')),
+    path(f'{settings.URL_PREFIX}home/', include('home.urls')),
 ]
 
 if settings.DEBUG:

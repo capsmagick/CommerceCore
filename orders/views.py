@@ -1,10 +1,12 @@
 from rest_framework import status
+from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
+from django_filters.rest_framework import DjangoFilterBackend
 
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -24,6 +26,8 @@ from .models import OrderItem
 from .serializers import PlaceOrderSerializer
 from .serializers import BuyNowSerializer
 from .serializers import OrderRetrieveSerializer
+
+from .filters import OrderFiler
 
 
 class PlaceOrder(GenericViewSet, RetrieveModelMixin):
@@ -143,6 +147,9 @@ class OrderModelViewSet(GenericViewSet, ListModelMixin, ExportData):
         'order_id', 'total_amount', 'user', 'address',
         'status', 'payment_id', 'shipping_id'
     ]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_class = OrderFiler
+    search_fields = ['order_id', 'status', 'cart__user__first_name', 'cart__user__last_name']
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)

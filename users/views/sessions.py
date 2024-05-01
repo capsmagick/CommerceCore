@@ -9,7 +9,7 @@ from users.serializers import UserSignupModelSerializer
 from users.serializers import LoginSerializer
 from users.serializers import ResetPassword
 
-from .utils import get_userdata
+from users.utils import get_userdata
 
 
 class Signup(APIView):

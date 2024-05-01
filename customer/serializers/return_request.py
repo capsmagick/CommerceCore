@@ -32,6 +32,14 @@ class ReturnModelSerializerGET(serializers.ModelSerializer):
     product = serializers.SerializerMethodField()
     approved_user = UserDataModelSerializer()
     rejected_user = UserDataModelSerializer()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_product(self, attrs):
         from product.serializers import VariantModelSerializer

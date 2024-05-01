@@ -13,6 +13,14 @@ from users.serializers import UserDataModelSerializer
 class CartModelSerializer(serializers.ModelSerializer):
     user = UserDataModelSerializer()
     items = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_items(self, attrs):
         items = attrs.cartitems.all()
@@ -25,6 +33,14 @@ class CartModelSerializer(serializers.ModelSerializer):
 
 class CartItemModelSerializer(serializers.ModelSerializer):
     product_variant = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_product_variant(self, attrs):
         from product.serializers import VariantModelSerializerGET
@@ -122,6 +138,14 @@ class WishListModelSerializer(serializers.ModelSerializer):
 class WishListGETSerializer(serializers.ModelSerializer):
     user = UserDataModelSerializer()
     product_variant = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_product_variant(self, attrs):
         from product.serializers import VariantModelSerializerGET
@@ -161,8 +185,15 @@ class ReviewSerializerPOST(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    created_by = UserDataModelSerializer()
     images = serializers.SerializerMethodField()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     def get_images(self, attrs):
         return ReviewImageSerializer(ReviewImage.objects.filter(review_id=attrs.id), many=True).data
@@ -173,6 +204,14 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ReviewImageSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = ReviewImage

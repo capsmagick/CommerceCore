@@ -28,6 +28,14 @@ class OrderItemModelSerializer(serializers.ModelSerializer):
 
 class OrderItemRetrieveModelSerializer(serializers.ModelSerializer):
     product_variant = VariantModelSerializerGET()
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = OrderItem
@@ -48,7 +56,16 @@ class BuyNowSerializer(serializers.Serializer):
 
 
 class OrderRetrieveSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(source='get_status_display')
     orderitems = OrderItemRetrieveModelSerializer(many=True, read_only=True)
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
 
     class Meta:
         model = Order
@@ -56,6 +73,15 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
 
 
 class OrderItemsModelSerializerGET(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    updated_by = serializers.SerializerMethodField()
+
+    def get_created_by(self, attrs):
+        return str(attrs.created_by if attrs.created_by else '')
+
+    def get_updated_by(self, attrs):
+        return str(attrs.updated_by if attrs.updated_by else '')
+
     class Meta:
         model = Order
         fields = '__all__'

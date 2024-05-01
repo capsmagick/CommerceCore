@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from users.serializers import LoginTokenSerializer
-from .utils import get_userdata
+from users.utils import get_userdata
 
 
 class TokenLoginAPTView(GenericAPIView):

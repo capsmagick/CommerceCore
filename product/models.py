@@ -12,6 +12,14 @@ from .manager import LooBookItemsManager
 
 
 class Products(BaseModel):
+    PREFERRED_GENDER = (
+        ('Men', 'Men'),
+        ('Women', 'Women'),
+        ('Unisex', 'Unisex'),
+        ('Boys', 'Boys'),
+        ('Girls', 'Girls'),
+    )
+
     name = models.CharField(max_length=50, verbose_name='Name')
     short_description = models.CharField(max_length=200, null=True, verbose_name='Short Description')
     description = models.TextField(verbose_name='Description', blank=True, null=True)
@@ -41,6 +49,7 @@ class Products(BaseModel):
 
     rating = models.CharField(max_length=120, verbose_name='Rating', blank=True, null=True)
     no_of_reviews = models.IntegerField(verbose_name='No. of Reviews', blank=True, null=True)
+    # preferred_gender = models.CharField(choices=PREFERRED_GENDER, max_length=50, blank=True, null=True)
 
     objects = ProductsManager()
 

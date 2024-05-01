@@ -13,8 +13,9 @@ from setup.permissions import IsSuperUser
 from users.models import User
 
 from users.serializers import UserDataModelSerializer
+from users.serializers import ProfileUpdateSerializer
 
-from .utils import get_userdata
+from users.utils import get_userdata
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -50,6 +51,24 @@ class CustomerViewSet(GenericViewSet, ListModelMixin):
     permission_classes = (IsAuthenticated, IsSuperUser)
     queryset = User.objects.filter(deleted=False, is_customer=True)
     serializer_class = UserDataModelSerializer
+
+
+class ProfileUpdate(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileUpdateSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        user = request.user
+
+        serializer = self.serializer_class(data=request.data, instance=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            'message': 'Successfully updated your profile..!',
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
 
 
 
