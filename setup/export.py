@@ -12,7 +12,7 @@ class ExportData:
     EMPTY_VALUES = [None, '', ' ', 'undefined', '[]']
     INCLUDE_DELETED = False
 
-    def generate_headers(self, request, model):
+    def generate_headers(self, model):
         headers = []
         for field in model._meta.fields:
             if self.INCLUDE_DELETED or field.name not in self.EXCLUDE_FIELDS:
@@ -61,7 +61,7 @@ class ExportData:
         wb = Workbook()
         ws = wb.active
 
-        headers = self.generate_headers(request, model)
+        headers = self.generate_headers(model)
 
         for col, value in enumerate(headers, start=1):
             cell = ws.cell(row=1, column=col, value=value)
