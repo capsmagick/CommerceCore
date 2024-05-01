@@ -293,3 +293,5 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 URL_PREFIX = 'api/'
+
+DATE_FORMAT = ['%Y-%m-%d', '%d-%m-%Y']
