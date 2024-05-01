@@ -146,6 +146,8 @@ class DashboardAPIView(APIView):
 
 
 class CustomerGrowthAPIView(APIView):
+    permission_classes = (IsAuthenticated, IsSuperUser,)
+
     def get(self, request):
         # Get current month's start date and last month's start date
         current_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)

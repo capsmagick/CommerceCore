@@ -150,3 +150,21 @@ class UserModelSerializerGET(serializers.ModelSerializer):
             'password',
         )
 
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False)
+    gender = serializers.ChoiceField(choices=User.GENDER, required=False)
+
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+            'mobile_number',
+            'date_of_birth',
+            'gender',
+            'profile_picture',
+            'email',
+        )
+

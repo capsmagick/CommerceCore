@@ -20,6 +20,7 @@ urlpatterns = [
     path('user/sign-up/', views.Signup.as_view(), name='user-signup'),
     path('user/change-password/', views.ChangePassword.as_view(), name='change-password'),
     path('user/me/', views.Me.as_view(), name='me'),
+    path('user/prolile-update/', views.ProfileUpdate.as_view(), name='prolile-update'),
 
     path(
         'session/', include(([
@@ -38,13 +39,6 @@ urlpatterns = [
     path('user/logout/', views.Logout.as_view(), name='user-logout'),
 
     path('social/', include('allauth.urls')),
-
-    # path(
-    #     'jwt/', include(([
-    #         path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    #         path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    #     ])), name='jwt-login'
-    # )
 ]
 
 urlpatterns += router.urls
