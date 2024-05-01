@@ -11,6 +11,7 @@ else:
 
 urlpatterns = [
     path('dashboard/', views.DashboardAPIView.as_view(), name='dashboard'),
+    path('customer-growth/', views.CustomerGrowthAPIView.as_view(), name='customer-growth'),
 ]
 
 urlpatterns += router.urls

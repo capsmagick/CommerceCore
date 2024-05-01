@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from setup.permissions import IsSuperUser
 from django.db.models import Sum
+from django.utils import timezone
 
 from .serializers import DashboardSerializer
 
@@ -115,7 +116,7 @@ class DashboardAPIView(APIView):
         )
 
         return Response({
-            'message': 'Success',
+            'message': 'success',
             'data': {
                 'sales': sales,
                 'customers': customers_details,
@@ -141,6 +142,41 @@ class DashboardAPIView(APIView):
                     'order_return_rate': order_return_rate(),
                 }
             }
+        }, status=status.HTTP_200_OK)
+
+
+class CustomerGrowthAPIView(APIView):
+    def get(self, request):
+        # Get current month's start date and last month's start date
+        current_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_start = (current_month_start - timezone.timedelta(days=1)).replace(day=1)
+
+        # Count customers registered this month and last month
+        current_month_customers = User.objects.filter(
+            is_customer=True,
+            created_at__gte=current_month_start
+        ).count()
+        last_month_customers = User.objects.filter(
+            is_customer=True,
+            created_at__gte=last_month_start,
+            created_at__lt=current_month_start
+        ).count()
+
+        # Calculate growth and percentage growth
+        growth = current_month_customers - last_month_customers
+        percentage_growth = (growth / last_month_customers) * 100 if last_month_customers != 0 else 0
+
+        # Prepare response data
+        data = {
+            'current_month_customers': current_month_customers,
+            'last_month_customers': last_month_customers,
+            'growth': growth,
+            'percentage_growth': round(percentage_growth, 2)  # Round percentage to 2 decimal places
+        }
+
+        return Response({
+            'message': 'success',
+            'data': data
         }, status=status.HTTP_200_OK)
 
 
