@@ -4,7 +4,9 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from setup.permissions import IsSuperUser
 from django.db.models import Sum
+from django.db.models import Count
 from django.utils import timezone
+from django.db.models.functions import TruncMonth
 
 from .serializers import DashboardSerializer
 
@@ -205,6 +207,73 @@ class CustomerOrderAnalysisAPIView(APIView):
             'last_month_customers_with_orders': last_month_customers,
             'growth': growth,
             'percentage_growth': round(percentage_growth, 2)  # Round percentage to 2 decimal places
+        }
+
+        return Response(data)
+
+
+class CustomerRetentionAPIView(APIView):
+    def get(self, request):
+        # Get current month's start date and last month's start date
+        current_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_start = (current_month_start - timezone.timedelta(days=1)).replace(day=1)
+
+        # Get active customer IDs from last month
+        active_customers_last_month = User.objects.filter(
+            is_customer=True,
+            created_at__lt=current_month_start,
+            is_active=True
+        ).values_list('id', flat=True)
+
+        # Count active customers from last month who are still active this month
+        retained_customers_count = User.objects.filter(
+            is_customer=True,
+            id__in=active_customers_last_month,
+            is_active=True
+        ).count()
+
+        # Count total active customers last month
+        total_active_customers_last_month = User.objects.filter(
+            is_customer=True,
+            created_at__lt=current_month_start,
+            is_active=True
+        ).count()
+
+        # Calculate retention rate and percentage retention rate
+        retention_rate = (retained_customers_count / total_active_customers_last_month) * 100 if total_active_customers_last_month != 0 else 0
+
+        # Prepare response data
+        data = {
+            'retained_customers_count': retained_customers_count,
+            'total_active_customers_last_month': total_active_customers_last_month,
+            'retention_rate': round(retention_rate, 2)  # Round retention rate to 2 decimal places
+        }
+
+        return Response(data)
+
+
+class MonthlyCustomerCountAPIView(APIView):
+    def get(self, request):
+        # Get current year
+        current_year = timezone.now().year
+
+        # Filter customers created within the current year
+        customers = User.objects.filter(is_customer=True, created_at__year=current_year)
+
+        # Annotate customers count by month
+        monthly_counts = customers.annotate(
+            month=TruncMonth('created_at')  # Truncate datetime to month
+        ).values(
+            'month'
+        ).annotate(
+            count=Count('id')
+        ).order_by(
+            'month'
+        )
+
+        # Prepare response data
+        data = {
+            'monthly_customer_counts': list(monthly_counts)
         }
 
         return Response(data)
