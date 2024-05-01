@@ -53,7 +53,7 @@ class Order(BaseModel):
 
     order_id = models.CharField(max_length=70, verbose_name='Order Id')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name='Total Amount')
-    currency = models.CharField(max_length=10,default='INR', null=True, blank=True, verbose_name='Currency')
+    currency = models.CharField(max_length=10, default='INR', null=True, blank=True, verbose_name='Currency')
 
     user = models.CharField(max_length=150, verbose_name='User')
     address = models.ForeignKey(AddressRegister, related_name='order_address', null=True, verbose_name='Address', on_delete=models.SET_NULL)

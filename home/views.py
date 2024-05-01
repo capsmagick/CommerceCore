@@ -182,3 +182,30 @@ class CustomerGrowthAPIView(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class CustomerOrderAnalysisAPIView(APIView):
+    def get(self, request):
+        # Get current month's start date and last month's start date
+        current_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_start = (current_month_start - timezone.timedelta(days=1)).replace(day=1)
+
+        # Count customers who placed orders this month and last month
+        current_month_orders = Order.objects.filter(order_date__gte=current_month_start).values_list('customer_id', flat=True).distinct()
+        last_month_orders = Order.objects.filter(order_date__gte=last_month_start, order_date__lt=current_month_start).values_list('customer_id', flat=True).distinct()
+
+        current_month_customers = len(set(current_month_orders))
+        last_month_customers = len(set(last_month_orders))
+
+        # Calculate growth and percentage growth
+        growth = current_month_customers - last_month_customers
+        percentage_growth = (growth / last_month_customers) * 100 if last_month_customers != 0 else 0
+
+        # Prepare response data
+        data = {
+            'current_month_customers_with_orders': current_month_customers,
+            'last_month_customers_with_orders': last_month_customers,
+            'growth': growth,
+            'percentage_growth': round(percentage_growth, 2)  # Round percentage to 2 decimal places
+        }
+
+        return Response(data)
+
